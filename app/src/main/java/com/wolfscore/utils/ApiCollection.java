@@ -18,4 +18,5 @@ public static final String ADD_FAVOURITES = "users/ADD_FAVOURITES";
     public static final String SINGLE_FAVORITE_UNFAVORITE_API = "users/single_favorite_unfavorite";
     public static final String GET_LEAGUE_LIST_API = "leagues/get_league_list";
     public static final String GET_POPULAR_TEAMS_API = "teams/get_popular_teams";
+    public static final String ADD_REMOVE_FILTERED_LEAGUE_API = "leagues/add_remove_filtered_league";
 }

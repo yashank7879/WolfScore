@@ -74,25 +74,25 @@
 
         </RelativeLayout>
 
-     <!--   <TextView
-            android:id="@+id/tv_popular"
-            style="@style/mediumRobotoMediumStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/popular"
-            android:layout_below="@id/rl_filter"
-            android:layout_margin="@dimen/_8sdp"
-            android:textColor="@color/colorlightGray"
-            />
--->
+        <!--   <TextView
+               android:id="@+id/tv_popular"
+               style="@style/mediumRobotoMediumStyle"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/popular"
+               android:layout_below="@id/rl_filter"
+               android:layout_margin="@dimen/_8sdp"
+               android:textColor="@color/colorlightGray"
+               />
+   -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ll_selct_deselect"
             android:layout_below="@id/rl_filter"
-            android:padding="@dimen/_8sdp"
             android:background="@color/colorExtraDarkGray"
+            android:padding="@dimen/_8sdp"
 
             >
 
@@ -104,33 +104,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
             android:background="@color/colorBalck1"
-            >
+            android:gravity="center">
+
             <TextView
                 android:id="@+id/tv_deselect"
                 style="@style/SmallRobotoRegularStyle"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/deselect_all"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"
                 android:padding="@dimen/_10sdp"
-                />
+                android:text="@string/deselect_all"
+                android:textColor="@color/colorWhite" />
 
             <TextView
                 android:id="@+id/tv_select"
                 style="@style/SmallRobotoRegularStyle"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/select_all"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"
                 android:padding="@dimen/_10sdp"
-
-                />
+                android:text="@string/select_all"
+                android:textColor="@color/colorWhite"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </RelativeLayout>
