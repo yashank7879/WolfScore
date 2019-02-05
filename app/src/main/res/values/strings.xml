@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">WolfScore</string>
+    <string name="i_m_new_to_wolfscore">I\'m new to WolfScore!</string>
+    <string name="log_me_in">Log me in</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--//setup screen 1 to 3 strings-->
+    <string name="previous">Previous</string>
+    <string name="next">NEXT</string>
+    <string name="select_favorites">Select Favorites</string>
+    <string name="skip">SKIP</string>
+    <string name="search">Search</string>
+    <string name="popular_teams">Popular teams</string>
+    <string name="select_your_favorite_clubs_and_national_teams_to_follow">Select your favorite clubs and national teams to follow</string>
+    <string name="local_teams">Local Teams</string>
+    <string name="added_as_favorite"> added as favorite</string>
+    <string name="top_players">TOP PLAYERS</string>
+    <string name="no_result_found">No Result Found</string>
+
+
+
+
+    <!--Notifications -->
+    <string name="notifications">Notifications</string>
+    <string name="notificationsCapital">NOTIFICATIONS</string>
+    <string name="choose_when_you_want_us_to_notify_you_when_things_happen">Choose when you want us to notify you when things happen</string>
+    <string name="notification_types">NOTIFICATION TYPES</string>
+    <string name="all_events">All events</string>
+    <string name="red_cards">Red Cards</string>
+    <string name="yellow_cards">Yellow Cards</string>
+    <string name="started">Started</string>
+    <string name="transfers">Transfers</string>
+    <string name="goals">Goals</string>
+
+    <string name="favrouit">Favorite</string>
+    <string name="following">FOLLOWING</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="done">Done</string>
+    /////
+    <string name="yesterday">YESTERDAY</string>
+    <string name="today">TODAY</string>
+    <string name="Tomorrow">TOMORROW</string>
+
+    <!--About match-->
+    <string name="match_facts">MATCH FACTS</string>
+    <string name="media">MEDIA</string>
+    <string name="head_to_head">HEAD TO HEAD</string>
+    <string name="line_up">LINE UP</string>
+    <string name="live_tracker">LIVE TRACKER</string>
+    <string name="table">TABLE</string>
+    <string name="statistics">STATISTICS</string>
+    <string name="man_of_the_match">MAN OF THE MATCH</string>
+    <string name="tournament">Tournament</string>
+    <string name="stadium">Stadium</string>
+    <string name="referees">Referees</string>
+    <string name="attendance">Attendance</string>
+    <string name="cancel">Cancel</string>
+    <string name="popular_teams1">Popular Teams</string>
+
+    <!--Filter tournament -->
+    <string name="filter_tournaments">Filter tournaments</string>
+    <string name="popular">Popular</string>
+    <string name="deselect_all">Deselect all</string>
+    <string name="select_all">Select all</string>
+    <string name="sorting">Sorting</string>
+
+
+
+</resources>

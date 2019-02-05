@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        tools:context="com.wolfscore.activity.LeagueFilteringActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_8sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_toEndOf="@id/tv_done"
+                android:layout_toLeftOf="@id/tv_sorting"
+                android:layout_toRightOf="@id/tv_done"
+                android:layout_toStartOf="@id/tv_sorting"
+                android:background="@drawable/search_bg">
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    style="@style/SmallRobotoRegularStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_search"
+                    android:layout_toRightOf="@id/iv_search"
+                    android:background="@null"
+                    android:hint="@string/filter_tournaments"
+                    android:inputType="text"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_sorting"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:text="@string/sorting"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_done"
+                style="@style/SmallRobotoMediumStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:text="@string/done"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+
+     <!--   <TextView
+            android:id="@+id/tv_popular"
+            style="@style/mediumRobotoMediumStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popular"
+            android:layout_below="@id/rl_filter"
+            android:layout_margin="@dimen/_8sdp"
+            android:textColor="@color/colorlightGray"
+            />
+-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_filter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_selct_deselect"
+            android:layout_below="@id/rl_filter"
+            android:padding="@dimen/_8sdp"
+            android:background="@color/colorExtraDarkGray"
+
+            >
+
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/ll_selct_deselect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:background="@color/colorBalck1"
+            >
+            <TextView
+                android:id="@+id/tv_deselect"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/deselect_all"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:padding="@dimen/_10sdp"
+                />
+
+            <TextView
+                android:id="@+id/tv_select"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/select_all"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"
+                android:padding="@dimen/_10sdp"
+
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

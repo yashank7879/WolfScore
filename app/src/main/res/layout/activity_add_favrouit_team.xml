@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.wolfscore.activity.AddFavrouitTeamActivity">
+
+
+        <RelativeLayout
+            android:id="@+id/action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:visibility="gone"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                style="@style/largeRobotoMediumStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/select_favorites"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+
+
+        <include
+            android:id="@+id/layout_popular_team"
+            layout="@layout/fragment_popular_team"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!--this user in add favrouit player activity and fragment-->
+        <RelativeLayout
+            android:id="@+id/rl_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@color/colorBalck1"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/btn_done"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_6sdp"
+                android:text="@string/done"
+                android:textColor="@color/colorBlue" />
+
+            <TextView
+                android:id="@+id/tv_favroit_team"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorBalck1"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/_10sdp"
+                android:textColor="@color/colorLightWhite"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</layout>

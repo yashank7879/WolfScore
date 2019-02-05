@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        tools:context="com.wolfscore.activity.SearchActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_10sdp"
+            android:padding="@dimen/_10sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_toLeftOf="@id/tv_cancel_search"
+                android:layout_toStartOf="@id/tv_cancel_search"
+                android:background="@drawable/search_bg">
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    style="@style/SmallRobotoRegularStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_search"
+                    android:layout_toRightOf="@id/iv_search"
+                    android:background="@null"
+                    android:hint="@string/search"
+                    android:inputType="text"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_cancel_search"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_4sdp"
+                android:text="@string/cancel"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+
+<!--
+        <TextView
+            android:id="@+id/tv_popular_team"
+            style="@style/mediumRobotoMediumStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_search"
+           android:layout_margin="@dimen/_10sdp"
+            android:text="@string/popular_teams1"
+            android:textColor="@color/colorlightGray"
+            />
+-->
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_search_teams"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorExtraDarkGray"
+            android:layout_below="@+id/rl_search"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</layout>

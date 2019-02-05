@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1f2024</color>
+    <color name="colorPrimaryDark">#1f2024</color>
+    <color name="colorAccent">#cccccc</color>
+
+    <color name="colorBalck">#000000</color>
+    <color name="colorBalck1">#0e0f12</color>
+    <color name="colorBlue">#049ce0</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorLightWhite">#cccccc</color>
+
+    ///////////
+    <color name="home_screen_bg">#1f2024</color>
+    <color name="active_text">#ffffff</color>
+    <color name="inactive_txt">#8396a5</color>
+    <color name="Header_bg">#1e2024</color>
+    <color name="list_header_bg">#232d33</color>
+    <color name="list_item_bg">#23282c</color>
+    <color name="search_bg">#0e0f12</color>
+    <color name="colorDarkGray">#434343</color>
+
+    <color name="colorExtraDarkGray">#23282c</color>
+
+    <color name="colorGreen">#1cc744</color>
+    <color name="colorRed">#ce0000</color>
+    <color name="colorYellow">#d2c469</color>
+</resources>
