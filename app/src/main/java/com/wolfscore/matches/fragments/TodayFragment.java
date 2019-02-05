@@ -89,6 +89,7 @@ public class TodayFragment  extends Fragment {
                 return Galaxy.getHeaderId() - nextGalaxy.getHeaderId();
             }
         });
+
     }
 
 /*
