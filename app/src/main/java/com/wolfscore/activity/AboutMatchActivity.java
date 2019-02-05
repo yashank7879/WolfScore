@@ -20,6 +20,8 @@ public class AboutMatchActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
+
+
         binding.viewPager.setCurrentItem(1);
     }
 }
