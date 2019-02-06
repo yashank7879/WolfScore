@@ -21,13 +21,13 @@ import com.wolfscore.matches.fragments.MatchListFragment;
 import com.wolfscore.matches.fragments.YesterdayFragment;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
-    LinearLayout match_layout, live_score_layout, league_layout, news_layout, highlight_layout;
-    ImageView match_img, live_score_img, league_img, news_img, highlight_img;
-    TextView match, live_score, league, news, highlight;
-    RelativeLayout rl_search;
-    FrameLayout search_fragment;
+    private LinearLayout match_layout, live_score_layout, league_layout, news_layout, highlight_layout;
+    private ImageView match_img, live_score_img, league_img, news_img, highlight_img;
+    private TextView match, live_score, league, news, highlight;
+    private RelativeLayout rl_search;
+    private FrameLayout search_fragment;
     private Typeface robotoregular;
-    ImageView filter;
+    private ImageView filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +54,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         league = findViewById(R.id.league);
         news = findViewById(R.id.news);
         highlight = findViewById(R.id.highlight);
-        rl_search=findViewById(R.id.rl_search);
+        search_fragment = findViewById(R.id.search_fragment);
+
+        /*rl_search=findViewById(R.id.rl_search);
         search_fragment=findViewById(R.id.search_fragment);
-        filter=findViewById(R.id.filter);
+        filter=findViewById(R.id.filter);*/
+
+        View toolBar = findViewById(R.id.toolbar);
+        rl_search = toolBar.findViewById(R.id.rl_search);
+        filter = toolBar.findViewById(R.id.filter);
+
         match_layout.setOnClickListener(this);
         live_score_layout.setOnClickListener(this);
         league_layout.setOnClickListener(this);
@@ -175,10 +182,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.rl_search:
                 search_fragment.setVisibility(View.VISIBLE);
-            replacesearchFragment(new SearchTeamFragment());
-            break;
+                replacesearchFragment(new SearchTeamFragment());
+                break;
             case R.id.filter:
-                startActivity(new Intent(this,LeagueFilteringActivity.class));
+                startActivity(new Intent(this, LeagueFilteringActivity.class));
                 break;
             default:
         }
@@ -192,7 +199,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             if (!fragmentPopped) { //fragment not in back stack, create it.
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.add(R.id.search_fragment, fragment);
-               if (backStateName.equals("com.wolfscore.matches.fragments.MatchListFragment")) {
+                if (backStateName.equals("com.wolfscore.matches.fragments.MatchListFragment")) {
                     ft.addToBackStack(backStateName);
                 } else {
                     ft.addToBackStack(null);

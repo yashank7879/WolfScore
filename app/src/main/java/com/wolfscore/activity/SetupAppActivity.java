@@ -261,8 +261,8 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
     private StringBuffer getLocalSelectedTeam() {
 
-        String joined = TextUtils.join(", ", tempLocalTeamList.toArray());
-        Log.e("getSelectedTeam: ", joined);
+       // String joined = TextUtils.join(", ", tempLocalTeamList.toArray());
+      ///  Log.e("getSelectedTeam: ", joined);
         StringBuffer stringBuffer = new StringBuffer();
         for (LocalTeamResponce.DataBean.TeamListBean teamListBean : tempLocalTeamList) {
             if (teamListBean.getIs_favorite().equals("1")) {

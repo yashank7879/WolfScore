@@ -8,6 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,13 +68,19 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
                 public void onClick(View view) {
                     //"""""""" check / Uncheck  """""""""//
                     if (team.getIs_favorite().equals("0")) {
+                        // holder.ivStar.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.start_animation));
+                       // holder.ivStar.startAnimation(holder.animation);
                         holder.ivStar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
 
                         listener.favrouitSelectUnselect(teamList.get(holder.getAdapterPosition()), "1", holder.ivStar);
+                         holder.ivStar.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.start_animation));
+
                     } else {
                         holder.ivStar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_white_star3x));
 
-                        listener.favrouitSelectUnselect(teamList.get(holder.getAdapterPosition()), "0",holder.ivStar);
+                        listener.favrouitSelectUnselect(teamList.get(holder.getAdapterPosition()), "0", holder.ivStar);
+                        holder.ivStar.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.start_animation));
+
                     }
                 }
             });
@@ -86,12 +96,22 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
         private TextView tvTeamName;
         private ImageView ivStar;
         private ImageView ivTeam;
+        Animation animation = new AlphaAnimation((float) 0.5, 0); // Change alpha from fully visible to invisible
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
             ivTeam = (CircleImageView) itemView.findViewById(R.id.iv_team);
             tvTeamName = (TextView) itemView.findViewById(R.id.tv_team_name);
             ivStar = (ImageView) itemView.findViewById(R.id.iv_star);
+
+            animation.setDuration(500); // duration - half a second
+            animation.setInterpolator(new LinearInterpolator()); // do not alter
+            // animation
+            // rate
+            animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+            // infinitely
+            animation.setRepeatMode(Animation.REVERSE);
         }
     }
 

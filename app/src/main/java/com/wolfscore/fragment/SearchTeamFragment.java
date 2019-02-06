@@ -245,6 +245,7 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_cancel_search:
+                Constant.hideSoftKeyBoard(mContext,binding.etSearch);
                 getActivity().onBackPressed();
                 break;
         }

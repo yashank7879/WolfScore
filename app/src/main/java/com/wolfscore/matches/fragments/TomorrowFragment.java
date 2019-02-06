@@ -22,10 +22,13 @@ import com.wolfscore.matches.modal.Matches;
 import com.wolfscore.matches.modal.Score;
 import com.wolfscore.matches.modal.Time;
 import com.wolfscore.matches.modal.VisitorTeam;
+import com.wolfscore.model.SelectedLeagueModel;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +59,7 @@ public class TomorrowFragment   extends Fragment {
     Calendar cal = Calendar.getInstance();
     String tomorrow_date="";
     StickyListHeadersListView stickyList;
+    private String leagueId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class TomorrowFragment   extends Fragment {
 
     private void initialise(View rootView)
     {
+       EventBus.getDefault().register(this);
          stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
         adapter = new StickyHeaderAdapter(getActivity(),matchesArrayList);
         stickyList.setAdapter(adapter);
@@ -101,6 +106,17 @@ public class TomorrowFragment   extends Fragment {
         });
     }
 
+    @Subscribe
+    public void onEvent(SelectedLeagueModel event) {
+        //Log.e( "onEvent: ",event.toString() );
+        matchesArrayList.clear();
+        adapter.notifyDataSetChanged();
+        leagueId = event.toString();
+        getMatchData();
+        //check if login was successful
+
+    }
+
     private void getMatchData() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("please wait...");
@@ -114,7 +130,7 @@ public class TomorrowFragment   extends Fragment {
                     .addQueryParameter("page", "1")
                     .addQueryParameter("date", tomorrow_date)
                     .addQueryParameter("team_id", "")
-                    .addQueryParameter("league_id", "")
+                    .addQueryParameter("league_id", leagueId)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {

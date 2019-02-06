@@ -17,11 +17,13 @@ import com.google.gson.Gson;
 import com.wolfscore.R;
 import com.wolfscore.adapter.FilterTournamentAdapter;
 import com.wolfscore.databinding.ActivityLeagueFilteringBinding;
+import com.wolfscore.model.SelectedLeagueModel;
 import com.wolfscore.responce.GetLeagueResponce;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +37,7 @@ import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
 import static com.wolfscore.utils.ApiCollection.GET_LEAGUE_LIST_API;
 
-public class LeagueFilteringActivity extends AppCompatActivity implements View.OnClickListener ,FilterTournamentAdapter.FilterTournamentListenr {
+public class LeagueFilteringActivity extends AppCompatActivity implements View.OnClickListener, FilterTournamentAdapter.FilterTournamentListenr {
     ActivityLeagueFilteringBinding binding;
     private ProgressDialog progressDialog;
     private FilterTournamentAdapter adapter;
@@ -57,7 +59,7 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
         progressDialog = new ProgressDialog(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvFilter.setLayoutManager(layoutManager);
-        adapter = new FilterTournamentAdapter(this, leagueList,this);
+        adapter = new FilterTournamentAdapter(this, leagueList, this);
         binding.rvFilter.setAdapter(adapter);
 
 
@@ -107,10 +109,16 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
-                                   leagueList.clear();
+                                    leagueList.clear();
                                     GetLeagueResponce leagueResponce = new Gson().fromJson(String.valueOf(response), GetLeagueResponce.class);
                                     leagueList.addAll(leagueResponce.getData().getLeague_list());
                                     adapter.notifyDataSetChanged();
+
+                                    for (GetLeagueResponce.DataBean.LeagueListBean listBean : leagueList) {
+                                        if (listBean.getIs_selected().equals("1")) {
+                                            tempList.add(listBean);
+                                        }
+                                    }
 
                                     if (leagueResponce.getData().getTotal_records().equals("0")) {
                                        /* teamList.clear();
@@ -119,7 +127,6 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
                                     } else {
                                         //  binding.tvNoResult.setVisibility(View.GONE);
                                     }
-
 
 
                                     //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();
@@ -148,41 +155,56 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
 
                 break;
             case R.id.tv_done:
-
+                Constant.hideSoftKeyBoard(this, binding.etSearch);
                 onBackPressed();
+
+                EventBus.getDefault().post(new SelectedLeagueModel(StringBuffer().toString()));
                 break;
             case R.id.tv_select:
 
                 break;
             case R.id.tv_deselect:
-                AddRemoveLeagueApi("","remove_all");
+                AddRemoveLeagueApi("", "remove_all");
                 break;
         }
     }
 
+    private StringBuffer StringBuffer() {
+        StringBuffer sb = new StringBuffer();
+        for (GetLeagueResponce.DataBean.LeagueListBean list : tempList) {
+            sb.append(list.getLeague_id()).append(",");
+        }
+
+        if (!sb.toString().isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);
+            // Log.e("favroit team", stringBuffer.toString());
+        }
+        return sb;
+    }
+
     @Override
     public void filterTournamentOnClick(GetLeagueResponce.DataBean.LeagueListBean bean, String value) {
-        if (value.equals("1")){
+        if (value.equals("1")) {
             bean.setIs_selected("1");
             adapter.notifyDataSetChanged();
             tempList.add(bean);
-            AddRemoveLeagueApi(bean.getLeague_id(),"add");
-        }else {
+            AddRemoveLeagueApi(bean.getLeague_id(), "add");
+        } else {
             bean.setIs_selected("0");
             adapter.notifyDataSetChanged();
             tempList.remove(bean);
-            AddRemoveLeagueApi(bean.getLeague_id(),"remove");
+            AddRemoveLeagueApi(bean.getLeague_id(), "remove");
         }
     }
 
     private void AddRemoveLeagueApi(String league_id, final String value) {
         if (Constant.isNetworkAvailable(this, binding.mainLayout)) {
-           // progressDialog.show();
+            // progressDialog.show();
             AndroidNetworking.post(BASE_URL + ADD_REMOVE_FILTERED_LEAGUE_API)
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(this, PreferenceConnector.AUTH_TOKEN, ""))
-                    .addBodyParameter("type",value)
-                    .addBodyParameter("league_id",league_id)
+                    .addBodyParameter("type", value)
+                    .addBodyParameter("league_id", league_id)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -194,7 +216,7 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
 
-                                    if (value.equals("remove_all")){
+                                    if (value.equals("remove_all")) {
                                         getLeagueList();
                                     }
                                     //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();

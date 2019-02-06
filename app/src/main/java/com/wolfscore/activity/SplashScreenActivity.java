@@ -8,29 +8,37 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.wolfscore.R;
+import com.wolfscore.utils.PreferenceConnector;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private Runnable mRunable;
-    private Handler mHandler  = new Handler();
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen
         );
 
-         mRunable= new Runnable() {
+        mRunable = new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this,SetupWolfScoreScreenOne.class);
-                startActivity(intent);
-                finish();
+                if (PreferenceConnector.readBoolean(SplashScreenActivity.this, PreferenceConnector.IS_LOGIN, false)) {
+                    Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(SplashScreenActivity.this, SetupWolfScoreScreenOne.class);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         };
-         mHandler.postDelayed(mRunable,2000);
+        mHandler.postDelayed(mRunable, 2000);
     }
 
     @Override
