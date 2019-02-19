@@ -1,6 +1,9 @@
 package com.wolfscore.responce;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mindiii on 1/22/19.
@@ -189,6 +192,37 @@ public class LocalTeamResponce {
             public void setFavorite(boolean favorite) {
                 this.favorite = favorite;
             }
+
+
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+
+                TeamListBean myObject = (TeamListBean) o;
+
+                if (Double.compare(Double.parseDouble(myObject.getId()), Double.parseDouble(id)) != 0) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            private List<TeamListBean> unique(List<TeamListBean> list) {
+                List<TeamListBean> uniqueList = new ArrayList<>();
+                Set<TeamListBean> uniqueSet = new HashSet<>();
+                for (TeamListBean obj : list) {
+                    if (uniqueSet.add(obj)) {
+                        uniqueList.add(obj);
+                    }
+                }
+                return uniqueList;
+            }
+
+
         }
     }
+
+
 }

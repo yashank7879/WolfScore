@@ -2,6 +2,7 @@ package com.wolfscore.matches.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.wolfscore.R;
 import com.wolfscore.activity.AboutMatchActivity;
+import com.wolfscore.activity.ActivityMatchDetail;
+import com.wolfscore.activity.HomeActivity;
 import com.wolfscore.matches.adapter.StickyHeaderAdapter;
 import com.wolfscore.matches.modal.LocalTeam;
 import com.wolfscore.matches.modal.MatchHeader;
@@ -24,6 +27,7 @@ import com.wolfscore.matches.modal.Score;
 import com.wolfscore.matches.modal.Time;
 import com.wolfscore.matches.modal.VisitorTeam;
 import com.wolfscore.pagination.EndlessRecyclerViewScrollListener;
+import com.wolfscore.pagination.EndlessScrollListener;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
@@ -47,71 +51,87 @@ import static com.wolfscore.utils.ApiCollection.GET_FIXTURES;
  */
 
 public class TodayFragment  extends Fragment {
-    ArrayList<Matches> matchesArrayList = new ArrayList<>();
+  //  public ArrayList<Matches> matchesArrayList = new ArrayList<>();
 
     private ProgressDialog progressDialog;
     StickyHeaderAdapter adapter;
-    StickyListHeadersListView stickyList;
+   public StickyListHeadersListView stickyList;
+    int page=1;
+    String league_id="";
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
-        getMatchData();
         initialise(rootView);
+        if (HomeActivity.homeActivity.event!=null&&HomeActivity.homeActivity.event.getLeague_id()
+                !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()&&
+                HomeActivity.homeActivity.current_item==1){
+            league_id= HomeActivity.homeActivity.event.getLeague_id();
+            HomeActivity.homeActivity.todayMatchesArrayList.clear();
+            page=1;
+            getMatchData(page);
+        }
+        else {
+            if (HomeActivity.homeActivity.todayMatchesArrayList.size()>0){
+                adapter.notifyDataSetChanged();
+            }
+            else {
+                page=1;
+                getMatchData(page);
+            }
+
+        }
+
+
         return rootView;
     }
 
     private void initialise(View rootView)
     {
+       // matchesArrayList.clear();
          stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
 
-        adapter = new StickyHeaderAdapter(getActivity(),matchesArrayList);
+        adapter = new StickyHeaderAdapter(getActivity(),HomeActivity.homeActivity.todayMatchesArrayList);
         stickyList.setAdapter(adapter);
         stickyList.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
             public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-                Toast.makeText(getActivity(),"Header", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(),"Header", Toast.LENGTH_SHORT).show();
             }
         });
 
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      startActivity(new Intent(getActivity(), AboutMatchActivity.class));
+       startActivity(new Intent(getActivity(), AboutMatchActivity.class).putExtra("obj",HomeActivity.homeActivity.todayMatchesArrayList.get(position)));
+                getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
+        });
+
+
+        stickyList.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                getMatchData(page);
+                // or loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
     }
 
     private void bindData() {
-        Collections.sort(matchesArrayList, new Comparator<Matches>() {
-            public int compare(Matches Galaxy, Matches nextGalaxy) {
-                return Galaxy.getHeaderId() - nextGalaxy.getHeaderId();
+        Collections.sort(HomeActivity.homeActivity.todayMatchesArrayList, new Comparator<Matches>() {
+            public int compare(Matches matches, Matches nextMatches) {
+                return matches.getHeaderId() - nextMatches.getHeaderId();
             }
         });
 
     }
 
-/*
-    EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener() {
-        @Override
-        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-            if (Constant.isNetworkAvailable(getActivity(), stickyList)) {
-                if (page != 1) {
-                    progressDialog.show();
-                }
-               // offset = offset + 20; //load 5 items in recyclerview
-                // progressDialog.show();
-                getMatchData();
-
-            }
-        }
-    };
-*/
-
-
-
-    private void getMatchData() {
+    private void getMatchData(int page) {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("please wait...");
         progressDialog.show();
@@ -121,10 +141,10 @@ public class TodayFragment  extends Fragment {
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""))
                     .addQueryParameter("type", "today")
-                    .addQueryParameter("page", "1")
+                    .addQueryParameter("page", page+"")
                     .addQueryParameter("date", "")
                     .addQueryParameter("team_id", "")
-                    .addQueryParameter("league_id", "")
+                    .addQueryParameter("league_id", league_id)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -135,7 +155,7 @@ public class TodayFragment  extends Fragment {
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
-                                    matchesArrayList.clear();
+                               //     matchesArrayList.clear();
                                     Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
                                     JSONObject data_obj= response.getJSONObject("data");
                                     JSONArray data_array= data_obj.getJSONArray("data");
@@ -147,7 +167,12 @@ public class TodayFragment  extends Fragment {
                                             league_data_obj.getInt("id");
                                             league_data_obj.getString("name");
 
-                                            MatchHeader matchHeader = new MatchHeader( league_data_obj.getInt("id"), league_data_obj.getString("name"));
+                                         //   MatchHeader matchHeader = new MatchHeader( league_data_obj.getInt("id"), league_data_obj.getString("name"));
+
+                                            MatchHeader matchHeader = new MatchHeader();
+                                            matchHeader.setId(league_data_obj.getInt("id"));
+                                            matchHeader.setName(league_data_obj.getString("name"));
+                                            matchHeader.setMatch_id(object.getInt("id"));
 
                                             JSONObject localTeam_obj=object.getJSONObject("localTeam");
                                             JSONObject localteam_data=localTeam_obj.getJSONObject("data");
@@ -177,12 +202,20 @@ public class TodayFragment  extends Fragment {
 
                                             Matches matches=new Matches(matchHeader,localTeam,visitorTeam,time,score);
                                             // Matches matches = new Matches(localTeam, matchHeader);
-                                            matchesArrayList.add(matches);
+                                            HomeActivity.homeActivity.todayMatchesArrayList.add(matches);
 
                                         }
                                         //  addRecyclerHeaders();
                                         bindData();
                                         adapter.notifyDataSetChanged();
+                                      JSONObject meta_obj=  data_obj.getJSONObject("meta");
+                                     JSONObject pagination_obj=   meta_obj.getJSONObject("pagination");
+                                     int current_page=   pagination_obj.getInt("current_page");
+                                     int total_pages=pagination_obj.getInt("total_pages");
+                                    /* if (current_page<total_pages){
+                                         page=current_page+1;
+                                        // getMatchData();
+                                     }*/
                                     }
 
                                 } else {

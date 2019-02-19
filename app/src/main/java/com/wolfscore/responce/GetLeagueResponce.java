@@ -85,6 +85,15 @@ public class GetLeagueResponce {
             private String country_id;
             private String league_name;
             private String league_flag;
+
+            public boolean isChecked() {
+                return isChecked;
+            }
+
+            public void setChecked(boolean checked) {
+                isChecked = checked;
+            }
+
             private String is_cup;
             private String current_season_id;
             private String current_round_id;
@@ -92,6 +101,8 @@ public class GetLeagueResponce {
             private String live_standings;
             private String is_selected;
             private String country_name;
+
+            boolean isChecked=false;
 
             public String getLeague_id() {
                 return league_id;

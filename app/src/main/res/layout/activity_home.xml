@@ -11,30 +11,47 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:background="@color/Header_bg"
-        android:minHeight="?attr/actionBarSize">
+        android:minHeight="?attr/actionBarSize"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/navigation_icon"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:src="@drawable/ic_football"
-                android:visibility="gone" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_menu"
+                android:visibility="visible" />
+
             <RelativeLayout
                 android:id="@+id/rl_search"
-                android:layout_toLeftOf="@+id/right_layout"
                 android:layout_width="match_parent"
-                android:layout_centerVertical="true"
                 android:layout_height="@dimen/_25sdp"
+                android:layout_centerVertical="true"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
+                android:layout_toLeftOf="@+id/right_layout"
+                android:layout_toRightOf="@+id/navigation_icon"
                 android:background="@drawable/search_bg">
 
                 <ImageView
@@ -52,8 +69,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/iv_search"
                     android:layout_toRightOf="@id/iv_search"
-                    android:text="@string/search"
                     android:inputType="text"
+                    android:text="@string/search"
                     android:textColor="@color/colorWhite"
                     android:textColorHint="@color/colorWhite" />
 
@@ -62,7 +79,6 @@
 
 
             <EditText
-                android:visibility="gone"
                 android:id="@+id/search_edt"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
@@ -71,36 +87,55 @@
                 android:background="@drawable/search_edt_bg"
                 android:drawableLeft="@drawable/search_icon"
                 android:hint="search"
-                android:textSize="@dimen/_14sdp"
                 android:paddingLeft="@dimen/_8sdp"
-                android:textColorHint="@color/colorWhite" />
+                android:textColorHint="@color/colorWhite"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:layout_marginTop="@dimen/_4sdp"
                 android:id="@+id/right_layout"
                 android:layout_width="@dimen/_60sdp"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                >
+                android:layout_marginTop="@dimen/_4sdp"
+                android:gravity="center">
+
+
 
                 <ImageView
                     android:id="@+id/calender"
-                    android:layout_width="@dimen/_22sdp"
-                    android:layout_height="@dimen/_22sdp"
-                    android:layout_toLeftOf="@+id/filter"
-                    android:src="@drawable/ic_calendar"
-                    android:padding="@dimen/_4sdp"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_26sdp"
                     android:layout_marginRight="@dimen/_4sdp"
+                    android:layout_toLeftOf="@+id/filter"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_calendar"
                     android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/current_date"
+                    android:layout_width="@dimen/_13sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_11sdp"
+                    android:layout_toLeftOf="@+id/filter"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="12"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_7sdp"
+                    android:visibility="visible"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    />
+
 
                 <ImageView
                     android:id="@+id/filter"
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_filter"
                     android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_filter"
                     android:visibility="visible" />
 
                 <TextView
@@ -110,9 +145,9 @@
                     android:layout_centerVertical="true"
                     android:gravity="center"
                     android:text="Cancel"
-                    android:visibility="gone"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_16sdp" />
+                    android:textSize="@dimen/_16sdp"
+                    android:visibility="gone" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -125,17 +160,18 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:background="@color/Header_bg"
+        android:layout_marginBottom="@dimen/_45sdp"
 
         >
 
     </FrameLayout>
 
     <FrameLayout
-        android:visibility="gone"
         android:id="@+id/search_fragment"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/ll"
-        android:layout_height="match_parent">
+        android:visibility="gone">
 
     </FrameLayout>
 
@@ -165,9 +201,8 @@
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
-                    android:tint="@color/colorBlue"
                     android:src="@drawable/soccer_match"
-                    />
+                    android:tint="@color/colorBlue" />
 
                 <TextView
                     android:id="@+id/match"
@@ -195,9 +230,8 @@
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
-                    android:tint="@color/inactive_txt"
                     android:src="@drawable/live_score"
-                    />
+                    android:tint="@color/inactive_txt" />
 
                 <TextView
                     android:id="@+id/live_score"
@@ -225,9 +259,8 @@
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
-                    android:tint="@color/inactive_txt"
                     android:src="@drawable/league"
-                    />
+                    android:tint="@color/inactive_txt" />
 
                 <TextView
                     android:id="@+id/league"
@@ -241,6 +274,7 @@
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/news_layout"
                 android:layout_width="0dp"
@@ -254,9 +288,8 @@
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
-                    android:tint="@color/inactive_txt"
                     android:src="@drawable/newspaper"
-                    />
+                    android:tint="@color/inactive_txt" />
 
                 <TextView
                     android:id="@+id/news"
@@ -285,9 +318,8 @@
                     android:layout_width="@dimen/_22sdp"
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
-                    android:tint="@color/inactive_txt"
                     android:src="@drawable/highlight"
-                    />
+                    android:tint="@color/inactive_txt" />
 
                 <TextView
                     android:id="@+id/highlight"
@@ -304,5 +336,24 @@
         </LinearLayout>
     </LinearLayout>
 
+    <RelativeLayout xmlns:exp="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calander_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="invisible">
+
+        <com.mikesu.horizontalexpcalendar.HorizontalExpCalendar
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            exp:bottom_container_height="40dp"
+            exp:center_container_expanded_height="250dp"
+            exp:top_container_height="50dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

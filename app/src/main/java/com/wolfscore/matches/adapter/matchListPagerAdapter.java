@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import com.wolfscore.R;
 import com.wolfscore.matches.fragments.TodayFragment;
@@ -15,7 +17,7 @@ import com.wolfscore.matches.fragments.YesterdayFragment;
  * Created by mindiii on 4/2/19.
  */
 
-public class matchListPagerAdapter extends FragmentPagerAdapter {
+public class matchListPagerAdapter extends FragmentStatePagerAdapter {
     Context mContext;
     public matchListPagerAdapter(FragmentManager supportFragmentManager, Context mContext) {
         super(supportFragmentManager);
@@ -33,7 +35,6 @@ public class matchListPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return new YesterdayFragment();
         }
-
         else if (position==1){
             return new TodayFragment();
         }
@@ -56,4 +57,6 @@ public class matchListPagerAdapter extends FragmentPagerAdapter {
             return mContext.getString(R.string.Tomorrow);
         }
     }
+
+
 }

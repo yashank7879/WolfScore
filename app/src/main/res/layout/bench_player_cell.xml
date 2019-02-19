@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:baselineAligned="false"
+    android:gravity="center"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_margin="@dimen/_8sdp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:src="@color/colorBalck"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            style="@style/SmallRobotoRegularStyle"
+            android:id="@+id/tv_player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/iv_profile"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_10sdp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+
+            />
+        <TextView
+            style="@style/SmallRobotoLightStyle"
+            android:id="@+id/tv_player_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_player_name"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_8sdp"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+</LinearLayout>

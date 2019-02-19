@@ -1,6 +1,8 @@
 package com.wolfscore.matches.modal;
 
-public class VisitorTeam {
+import java.io.Serializable;
+
+public class VisitorTeam implements Serializable {
 
     int id;
     int legacy_id;

@@ -11,7 +11,10 @@ import android.view.View;
 
 import com.wolfscore.R;
 import com.wolfscore.activity.AboutMatchActivity;
+import com.wolfscore.fragment.HeadToHeadMatchFragment;
+import com.wolfscore.fragment.LineUpFragment;
 import com.wolfscore.fragment.MatchFactsFragment;
+import com.wolfscore.fragment.TableFragment;
 
 /**
  * Created by mindiii on 2/2/19.
@@ -32,10 +35,21 @@ public class AboutMatchPagerAdpter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return new MatchFactsFragment();
-        }else {
+
+        if (position==1)
+        {
             return  new MatchFactsFragment();
+
+        }
+        else if (position == 2) {
+            return new HeadToHeadMatchFragment();
+        }
+        else if (position==4)
+        {
+            return new LineUpFragment();
+        }
+        else {
+            return  new TableFragment();
         }
     }
 
@@ -49,9 +63,11 @@ public class AboutMatchPagerAdpter extends FragmentPagerAdapter {
         } else if (position == 2){
             return mContext.getString(R.string.head_to_head );
         } else if (position == 3){
-            return mContext.getString(R.string.line_up );
-        } else if (position == 4){
             return mContext.getString(R.string.live_tracker );
+
+        } else if (position == 4){
+            return mContext.getString(R.string.line_up );
+
         } else if (position == 5){
             return mContext.getString(R.string.table );
         }else {

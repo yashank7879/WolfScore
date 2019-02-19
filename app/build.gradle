@@ -40,7 +40,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-  //  implementation 'com.jaychang:simplerecyclerview:2.0.5'
+    //  implementation 'com.jaychang:simplerecyclerview:2.0.5'
 
     implementation 'se.emilsjolander:stickylistheaders:2.4.0+'
+    implementation project(':horizontalexpcalendar')
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
+
 }

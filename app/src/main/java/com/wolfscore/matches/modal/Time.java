@@ -1,10 +1,12 @@
 package com.wolfscore.matches.modal;
 
+import java.io.Serializable;
+
 /**
  * Created by mindiii on 5/2/19.
  */
 
-public class Time {
+public class Time implements Serializable {
     String status = "";
     String starting_at = "";
     String date_time = "";

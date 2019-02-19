@@ -38,10 +38,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
+import static com.wolfscore.utils.Constant.CurrentPage;
 
 
 public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.TeamOnClick, View.OnClickListener {
@@ -49,6 +52,7 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
     private Context mContext;
     private ProgressDialog progressDialog;
     private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
+    private List<LocalTeamResponce.DataBean.TeamListBean> noRepeatList;
     private LocalTeamAdapter adapter;
     private int limit = 200;
     private int offset = 0;
@@ -57,14 +61,6 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
     private String countryCodeValue = "";
     private GetTeamListener listener;
     private NextOnClick nextListener;
-
-
-  /*  @SuppressLint("ValidFragment")
-    public LocalTeamFragment(GetTeamListener listener) {
-        // Required empty public constructor
-        this.listener = listener;
-    }
-*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,12 +88,25 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
 
       }*/
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         teamList = new ArrayList<>();
+        noRepeatList=new ArrayList<>();
         countryLookupMap = new HashMap<>();
 
 
@@ -105,7 +114,8 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
         progressDialog = new ProgressDialog(mContext);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         binding.rvLocalTeam.setLayoutManager(layoutManager);
-        adapter = new LocalTeamAdapter(mContext, teamList, this);
+     //   adapter = new LocalTeamAdapter(mContext, teamList, this);
+        adapter = new LocalTeamAdapter(mContext, noRepeatList, this);
         binding.rvLocalTeam.setAdapter(adapter);
 
         //"""""""""" Get current country """""""""""//
@@ -121,17 +131,25 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
-                    if (page != 1) {
-                        progressDialog.show();
+                    if (search.isEmpty()) {
+                        if (page != 0 && page != 1) {
+                            progressDialog.show();
+                        }
+                        offset = offset + 50; //load 5 items in recyclerview
+                        getLocalTeam();
                     }
-
-                    offset = offset + 50; //load 5 items in recyclerview
-                    // progressDialog.show();
-                    getLocalTeam(search);
+/*
+                    boolean flag = true;
+                    if (!search.isEmpty() && teamList.size() < limit) {
+                        flag = false;
+                    }
+                    if (flag)  getLocalTeam();*/
 
                 }
             }
         };
+
+
 
 
         binding.etSearch.addTextChangedListener(new TextWatcher() {
@@ -148,20 +166,37 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
             @Override
             public void afterTextChanged(Editable editable) {
                 teamList.clear();
+                noRepeatList.clear();
                 offset = 0;
-                adapter.notifyDataSetChanged();
                 search = editable.toString();
-                getLocalTeam(search);
+                getLocalTeam();
+                adapter.notifyDataSetChanged();
             }
         });
 
         binding.rvLocalTeam.addOnScrollListener(scrollListener);
 
-        getLocalTeam(search);
+        getLocalTeam();
 
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+             Log.e( "setUserVisibleHint: ","123" );
+             if (CurrentPage == 1){
+                 search = "";
+                 if (binding!=null&&binding.etSearch!=null){
+                     binding.etSearch.setText("");
+                 }
+                // binding.etSearch.setText("");
+             }
+            // nextListener.nextPopularOnclickListener(null, "Popularteam", true);
+        }
+
+    }
 
     //""""""""""  get the county from the country code """""""""""//
     private void countryCode() {
@@ -406,10 +441,10 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
         countryLookupMap.put("ZW", "Zimbabwe");
     }
 
-    private void getLocalTeam(String search) {
-        if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
+    private void getLocalTeam() {
+        if (Constant.isNetworkAvailable(mContext, binding.mainLayout) ) {
 
-            AndroidNetworking.get(BASE_URL + "teams/get_local_teams?country=" + countryCodeValue + "&search_term=" + this.search + "&limit=" + limit + "&offset=" + offset)
+            AndroidNetworking.get(BASE_URL + "teams/get_local_teams?country=" + countryCodeValue + "&search_term=" + this.search + "&limit=" + 50 + "&offset=" + offset)
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .setPriority(Priority.MEDIUM)
@@ -418,12 +453,38 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+
                                 progressDialog.dismiss();
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
+
+                                   /* if (!search.isEmpty() && offset == 0) {
+                                        teamList.clear();
+                                    }else if (search.isEmpty() && offset == 0){
+                                        teamList.clear();
+                                    }*/
                                     LocalTeamResponce teamResponce = new Gson().fromJson(String.valueOf(response), LocalTeamResponce.class);
                                     teamList.addAll(teamResponce.getData().getTeam_list());
+
+                                    noRepeatList.clear();
+
+                                    //////////// for removing duplicate element
+
+                                    for (LocalTeamResponce.DataBean.TeamListBean event : teamList) {
+                                        boolean isFound = false;
+                                        // check if the event name exists in noRepeat
+                                        for (LocalTeamResponce.DataBean.TeamListBean e : noRepeatList) {
+                                            if (e.getTeam_id().equals(event.getTeam_id()) || (e.equals(event))) {
+                                                isFound = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isFound) noRepeatList.add(event);
+                                    }
+                                    /////////
+
+
                                     adapter.notifyDataSetChanged();
                                     if (teamResponce.getData().getTotal_records().equals("0")) {
                                        /* teamList.clear();
@@ -433,7 +494,7 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
                                         binding.tvNoResult.setVisibility(View.GONE);
                                     }
 
-                                    for (LocalTeamResponce.DataBean.TeamListBean team : teamList) {
+                                    for (LocalTeamResponce.DataBean.TeamListBean team : noRepeatList) {
                                         if (team.getIs_favorite().equals("1")) {
                                             nextListener.nextLocalOnclickListener(team, "Localteam", true);
                                         }
@@ -464,6 +525,8 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
         listener = (GetTeamListener) context;
         nextListener = (NextOnClick) context;
     }
+
+
 
 
     @Override
@@ -499,4 +562,9 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
     }
 
 
+
+
 }
+
+
+

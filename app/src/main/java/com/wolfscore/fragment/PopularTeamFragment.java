@@ -47,16 +47,18 @@ public class PopularTeamFragment extends Fragment implements LocalTeamAdapter.Te
     private Context mContext;
     private ProgressDialog progressDialog;
     private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
+    private List<LocalTeamResponce.DataBean.TeamListBean> noRepeatList;
     private LocalTeamAdapter adapter;
-    private int limit=20;
-    private String search="";
-    private int offset=0;
+    private int limit = 20;
+    private String search = "";
+    private int offset = 0;
     private GetTeamListener listener;
     private NextOnClick nextListener;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     public PopularTeamFragment() {
-     //  this.listener = listener;
+        //  this.listener = listener;
         // Required empty public constructor
     }
 
@@ -98,11 +100,17 @@ public class PopularTeamFragment extends Fragment implements LocalTeamAdapter.Te
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            Log.e( "setUserVisibleHint: ","123" );
+            // Log.e( "setUserVisibleHint: ","123" );
+            nextListener.nextPopularOnclickListener(null, "Popularteam", true);
+            binding.etSearch.setText("");
+            search = "";
             teamList.clear();
-            limit=20;
-            offset=0;
-            getPopularTeam(search);
+          //  noRepeatList.clear();
+            adapter.notifyDataSetChanged();
+            scrollListener.resetState();
+            offset = 0;
+            getPopularTeam();
+
         }
 
     }
@@ -113,27 +121,37 @@ public class PopularTeamFragment extends Fragment implements LocalTeamAdapter.Te
 
         progressDialog = new ProgressDialog(mContext);
         teamList = new ArrayList<>();
+        noRepeatList=new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         binding.rvPopularTeam.setLayoutManager(layoutManager);
-        adapter = new LocalTeamAdapter(mContext, teamList, this);
+     //   adapter = new LocalTeamAdapter(mContext, teamList, this);
+        adapter = new LocalTeamAdapter(mContext, noRepeatList, this);
         binding.rvPopularTeam.setAdapter(adapter);
 
 
         //******  Pagination """""""""""""""//
-        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
-                    if (page != 1) {
-                        progressDialog.show();
+                    if (search.isEmpty()) {
+                        if (page != 0 && page != 1) {
+                            progressDialog.show();
+                        }
+                        offset = offset + 50;
+                        getPopularTeam();
                     }
-                    offset = offset + 20; //load 5 items in recyclerview
-                    // progressDialog.show();
-                    getPopularTeam(search);
+                   /* getPopularTeam();
+                    boolean flag = true;
+                    if (!search.isEmpty() && teamList.size() < limit) {
+                        flag = false;
+                    }
+                    if (flag) getPopularTeam();*/
 
                 }
             }
         };
+
 
 
         binding.etSearch.addTextChangedListener(new TextWatcher() {
@@ -150,21 +168,21 @@ public class PopularTeamFragment extends Fragment implements LocalTeamAdapter.Te
             @Override
             public void afterTextChanged(Editable editable) {
                 teamList.clear();
+                noRepeatList.clear();
                 offset = 0;
-                adapter.notifyDataSetChanged();
                 search = editable.toString();
-                getPopularTeam(search);
+                getPopularTeam();
+                adapter.notifyDataSetChanged();
             }
         });
 
-     //   getPopularTeam(search);
-
+        //   getPopularTeam(search);
         binding.rvPopularTeam.addOnScrollListener(scrollListener);
     }
 
-    private void getPopularTeam(String search) {
+    private void getPopularTeam( ) {
         if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
-            AndroidNetworking.get(BASE_URL + "teams/get_popular_teams?search_term="+ this.search +"&limit="+limit+"&offset="+offset)
+            AndroidNetworking.get(BASE_URL + "teams/get_popular_teams?search_term=" + this.search + "&limit=" + 50 + "&offset=" + offset)
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .setPriority(Priority.MEDIUM)
@@ -174,24 +192,49 @@ public class PopularTeamFragment extends Fragment implements LocalTeamAdapter.Te
                         public void onResponse(JSONObject response) {
                             try {
                                 progressDialog.dismiss();
+                             /*   if (!search.isEmpty() && offset == 0) {
+                                    teamList.clear();
+                                }else if (search.isEmpty() && offset == 0){
+                                    teamList.clear();
+                                }*/
+
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
                                     LocalTeamResponce teamResponce = new Gson().fromJson(String.valueOf(response), LocalTeamResponce.class);
 
                                     teamList.addAll(teamResponce.getData().getTeam_list());
+
+                                  //////////// for removing duplicate element
+
+                                    noRepeatList.clear();
+
+                                    for (LocalTeamResponce.DataBean.TeamListBean event : teamList) {
+                                        boolean isFound = false;
+                                        // check if the event name exists in noRepeat
+                                        for (LocalTeamResponce.DataBean.TeamListBean e : noRepeatList) {
+                                            if (e.getTeam_id().equals(event.getTeam_id()) || (e.equals(event))) {
+                                                isFound = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isFound) noRepeatList.add(event);
+                                    }
+
+                                    //////////
+
                                     adapter.notifyDataSetChanged();
 
-                                    if (teamResponce.getData().getTotal_records().equals("0")){
+                                    if (teamResponce.getData().getTotal_records().equals("0")) {
                                        /*teamList.clear();
                                         adapter.notifyDataSetChanged();*/
                                         binding.tvNoResult.setVisibility(View.VISIBLE);
-                                    }else {
+                                    } else {
                                         binding.tvNoResult.setVisibility(View.GONE);
                                     }
 
-                                    for (LocalTeamResponce.DataBean.TeamListBean team :teamList){
-                                        if (team.getIs_favorite().equals("1")){
+                                    for (LocalTeamResponce.DataBean.TeamListBean team : noRepeatList) {
+                                        if (team.getIs_favorite().equals("1")) {
                                             nextListener.nextPopularOnclickListener(team, "Popularteam", true);
                                         }
                                     }

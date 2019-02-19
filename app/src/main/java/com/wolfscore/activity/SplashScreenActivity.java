@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.wolfscore.R;
+import com.wolfscore.utils.PreferenceConnector;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -25,9 +26,18 @@ public class SplashScreenActivity extends AppCompatActivity {
          mRunable= new Runnable() {
             @Override
             public void run() {
+                if (PreferenceConnector.readBoolean(SplashScreenActivity.this, PreferenceConnector.IS_LOGIN, false)) {
+                    Intent intent = new Intent(SplashScreenActivity.this,HomeActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                    finish();
+
+                }
+                else{
                 Intent intent = new Intent(SplashScreenActivity.this,SetupWolfScoreScreenOne.class);
                 startActivity(intent);
-                finish();
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                finish();}
             }
         };
          mHandler.postDelayed(mRunable,2000);

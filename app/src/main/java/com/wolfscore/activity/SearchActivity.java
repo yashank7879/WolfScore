@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.wolfscore.utils.ApiCollection.APIKEY;
@@ -44,6 +46,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
     private int offset = 0;
     private String search = "";
     private int limit = 40;
+    List<LocalTeamResponce.DataBean.TeamListBean> noRepeat=new ArrayList<>();
 
 
     @Override
@@ -58,7 +61,7 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
         progressDialog = new ProgressDialog(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvSearchTeams.setLayoutManager(layoutManager);
-        adapter = new SearchTeamAdapter(this, teamList, this);
+        adapter = new SearchTeamAdapter(this, noRepeat, this);
         binding.rvSearchTeams.setAdapter(adapter);
         binding.tvCancelSearch.setOnClickListener(this);
 
@@ -68,13 +71,15 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (Constant.isNetworkAvailable(SearchActivity.this, binding.mainLayout)) {
-                    if (page != 1) {
-                        progressDialog.show();
-                    }
+                  if (search.isEmpty()) {
+                      if (page != 1) {
+                          progressDialog.show();
 
-                    offset = offset + 50; //load 5 items in recyclerview
-                    // progressDialog.show();
-                    getPopularTeam();
+                      }
+                      offset = offset + 50; //load 5 items in recyclerview
+                      getPopularTeam();
+                  }
+
 
                 }
             }
@@ -94,10 +99,12 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
             @Override
             public void afterTextChanged(Editable editable) {
                 teamList.clear();
+                noRepeat.clear();
                 offset = 0;
-                adapter.notifyDataSetChanged();
                 search = editable.toString();
                 getPopularTeam();
+                adapter.notifyDataSetChanged();
+
             }
         });
 
@@ -126,6 +133,26 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
                                 if (status.equals("success")) {
                                     LocalTeamResponce teamResponce = new Gson().fromJson(String.valueOf(response), LocalTeamResponce.class);
                                     teamList.addAll(teamResponce.getData().getTeam_list());
+                                   // unique(teamList);
+
+
+                                   // List<LocalTeamResponce.DataBean.TeamListBean> allEvents = // fill with your events.
+                                    noRepeat = new ArrayList<LocalTeamResponce.DataBean.TeamListBean>();
+
+                                    for (LocalTeamResponce.DataBean.TeamListBean event : teamList) {
+                                        boolean isFound = false;
+                                        // check if the event name exists in noRepeat
+                                        for (LocalTeamResponce.DataBean.TeamListBean e : noRepeat) {
+                                            if (e.getTeam_id().equals(event.getTeam_id()) || (e.equals(event))) {
+                                                isFound = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isFound) noRepeat.add(event);
+                                    }
+
+
+
                                     adapter.notifyDataSetChanged();
                                   /*  if (teamResponce.getData().getTotal_records().equals("0")) {
                                        *//* teamList.clear();
@@ -153,6 +180,8 @@ public class SearchActivity extends AppCompatActivity implements SearchTeamAdapt
         }
 
     }
+
+
 
 
     @Override
