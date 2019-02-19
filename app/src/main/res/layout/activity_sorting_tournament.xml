@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        tools:context="com.wolfscore.activity.SortingTournamentActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@color/colorPrimary">
+
+
+            <TextView
+                android:id="@+id/tv_reset"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:text="@string/reset"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                style="@style/largeRobotoMediumStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/sorting"
+                android:textColor="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/iv_back"
+                style="@style/SmallRobotoMediumStyle"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_back"
+                android:text="@string/done"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_drag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_action_bar"
+            android:layout_margin="@dimen/_8sdp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/drag_the_competitions_in_the_order_you_want_in_the_live_window_or_select_them_and_use_the_buttons_to_creat_your_preferred_sorting"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_11sdp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_sorting"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll_move_top_bottom"
+            android:layout_below="@id/tv_drag"
+            android:background="@color/colorPrimary"
+           >
+
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/ll_move_top_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorBalck1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_move_top"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/move_to_top"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_move_bottom"
+                style="@style/SmallRobotoRegularStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/move_to_bottom"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>

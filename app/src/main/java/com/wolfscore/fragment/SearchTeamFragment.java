@@ -54,10 +54,12 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
     private ProgressDialog progressDialog;
     private SearchTeamAdapter adapter;
     private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
+    private List<LocalTeamResponce.DataBean.TeamListBean> noRepeatList;
+
     private int offset = 0;
     private String search = "";
     private Context mContext;
-    private int limit = 40;
+    private int limit = 50;
 
 
 
@@ -83,10 +85,11 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
 
     private void intializeView() {
         teamList = new ArrayList<>();
+        noRepeatList=new ArrayList<>();
         progressDialog = new ProgressDialog(mContext);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         binding.rvSearchTeams.setLayoutManager(layoutManager);
-        adapter = new SearchTeamAdapter(mContext, teamList, this);
+        adapter = new SearchTeamAdapter(mContext, noRepeatList, this);
         binding.rvSearchTeams.setAdapter(adapter);
         binding.tvCancelSearch.setOnClickListener(this);
 
@@ -96,13 +99,29 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
-                    if (page != 1) {
+                    /*if (page != 1) {
                         progressDialog.show();
                     }
 
                     offset = offset + 50; //load 5 items in recyclerview
                     // progressDialog.show();
-                    getPopularTeam();
+                    getPopularTeam();*/
+
+
+                    if (search.isEmpty()) {
+                        if (page != 0 && page != 1) {
+                            progressDialog.show();
+                        }
+                        offset = offset + 50; //load 5 items in recyclerview
+                        getPopularTeam();
+                    }
+
+                 /*   boolean flag = true;
+                    if (!search.isEmpty() && teamList.size() < limit) {
+                        flag = false;
+                    }
+                    if (flag) getPopularTeam();
+*/
 
                 }
             }
@@ -122,10 +141,11 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
             @Override
             public void afterTextChanged(Editable editable) {
                 teamList.clear();
+                noRepeatList.clear();
                 offset = 0;
-                adapter.notifyDataSetChanged();
                 search = editable.toString();
                 getPopularTeam();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -152,8 +172,30 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
+
+
                                     LocalTeamResponce teamResponce = new Gson().fromJson(String.valueOf(response), LocalTeamResponce.class);
                                     teamList.addAll(teamResponce.getData().getTeam_list());
+
+
+                                    //////////// for removing duplicate element
+
+                                    noRepeatList.clear();
+
+                                    for (LocalTeamResponce.DataBean.TeamListBean event : teamList) {
+                                        boolean isFound = false;
+                                        // check if the event name exists in noRepeat
+                                        for (LocalTeamResponce.DataBean.TeamListBean e : noRepeatList) {
+                                            if (e.getTeam_id().equals(event.getTeam_id()) || (e.equals(event))) {
+                                                isFound = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isFound) noRepeatList.add(event);
+                                    }
+                                    /////////
+
+
                                     adapter.notifyDataSetChanged();
                                   /*  if (teamResponce.getData().getTotal_records().equals("0")) {
                                        *//* teamList.clear();

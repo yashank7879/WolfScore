@@ -30,7 +30,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 
-    private String[] countries;
     private LayoutInflater inflater;
     ArrayList<Matches> matchesArrayList;
     Context context;
@@ -42,9 +41,6 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         this.matchesArrayList=matchesArrayList;
         this.context=context;
         robotoMedium = ResourcesCompat.getFont(context, R.font.roboto_medium);
-
-
-        //   countries = context.getResources().getStringArray(R.array.countries);
     }
 
     @Override
@@ -82,7 +78,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
             holder = (ViewHolder) convertView.getTag();
         }
 
-     //   holder.text.setText(countries[position]);
+
         if (matchesArrayList.get(position).getLocalTeam()!=null) {
             holder.local_team.setText(matchesArrayList.get(position).getLocalTeam().getName());
             Picasso.with(context).load(matchesArrayList.get(position).getLocalTeam().getLogo_path())
@@ -104,17 +100,60 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         }
         if (matchesArrayList.get(position).getTime()!=null)
         {
+            String time=   getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
+
             if (matchesArrayList.get(position).getTime().getStatus().equals("NS")){
+                holder.score_layout.setVisibility(View.GONE);
+                holder.time.setVisibility(View.VISIBLE);
+                holder.time.setText(time);
+
+            }
+            else if(matchesArrayList.get(position).getTime().getStatus().equals("TBA"))
+            {
+                holder.score_layout.setVisibility(View.VISIBLE);
+                holder.time.setVisibility(View.GONE);
+                holder.score.setText(time);
+                holder.status.setText("TBA");
+                holder.status.setBackgroundResource(R.drawable.green_bg);
+            }
+            else if(matchesArrayList.get(position).getTime().getStatus().equals("FT"))
+            {
+                holder.score_layout.setVisibility(View.VISIBLE);
+                holder.time.setVisibility(View.GONE);
+              //  holder.score.setText(time);
+                holder.status.setText("FT");
+                holder.status.setBackgroundResource(R.drawable.red_bg);
+
+            }
+            else if(matchesArrayList.get(position).getTime().getStatus().equals("POSTP"))
+            {
+                holder.score_layout.setVisibility(View.VISIBLE);
+                holder.time.setVisibility(View.GONE);
+                holder.score.setText(time);
+                holder.status.setText("POSTP");
+                holder.status.setBackgroundResource(R.drawable.green_bg);
+            }
+            else if(matchesArrayList.get(position).getTime().getStatus().equals("DELAYED"))
+            {
+                holder.score_layout.setVisibility(View.VISIBLE);
+                holder.time.setVisibility(View.GONE);
+                holder.score.setText(time);
+                holder.status.setText("DELAYED");
+                holder.status.setBackgroundResource(R.drawable.green_bg);
+            }
+            else if(matchesArrayList.get(position).getTime().getStatus().equals("LIVE"))
+            {
                 holder.score_layout.setVisibility(View.VISIBLE);
                 holder.time.setVisibility(View.GONE);
                 holder.status.setText("Live");
-
+                holder.status.setBackgroundResource(R.drawable.green_bg);
             }
             else {
-               holder.score_layout.setVisibility(View.GONE);
-               holder.time.setVisibility(View.VISIBLE);
-               String time=   getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
-               holder.time.setText(time);
+                holder.score_layout.setVisibility(View.VISIBLE);
+                holder.time.setVisibility(View.GONE);
+                holder.score.setText(time);
+                holder.status.setText(matchesArrayList.get(position).getTime().getStatus());
+                holder.status.setBackgroundResource(R.drawable.green_bg);
             }
 
         }
@@ -135,8 +174,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         } else {
             holder = (HeaderViewHolder) convertView.getTag();
         }
-        //set header text as first char in name
-   //     String headerText = "" + countries[position].subSequence(0, 1).charAt(0);
+
         String headerText=   matchesArrayList.get(position).getHeaderName();
         holder.text.setText(headerText);
         holder.text.setTypeface(robotoMedium);
@@ -148,8 +186,6 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
 
     @Override
     public long getHeaderId(int position) {
-        //return the first character of the country as ID because this is what headers are based upon
-     //   return countries[position].subSequence(0, 1).charAt(0);
       return   matchesArrayList.get(position).getHeaderId();
     }
 
@@ -165,23 +201,15 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
     }
 
     public static String getFormatedDateTime(String dateStr, String strReadFormat, String strWriteFormat) {
-
         String formattedDate = dateStr;
-
         DateFormat readFormat = new SimpleDateFormat(strReadFormat, Locale.getDefault());
         DateFormat writeFormat = new SimpleDateFormat(strWriteFormat, Locale.getDefault());
-
         Date date = null;
-
         try {
             date = readFormat.parse(dateStr);
         } catch (ParseException e) {
         }
-
-        if (date != null) {
-            formattedDate = writeFormat.format(date);
-        }
-
+        if (date != null) {formattedDate = writeFormat.format(date);}
         return formattedDate;
     }
 

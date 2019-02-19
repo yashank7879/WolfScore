@@ -55,7 +55,7 @@ public class NotificationTypesFragment extends Fragment implements CompoundButto
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notification_types, container, false);
-      return   binding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
@@ -71,19 +71,21 @@ public class NotificationTypesFragment extends Fragment implements CompoundButto
         progressDialog = new ProgressDialog(mContext);
 
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             getNotificationApi();
+            listener.nextNotification("Not", true);
         }
 
     }
 
     private void getNotificationApi() {
-        if (Constant.isNetworkAvailable(mContext,binding.mainLayout)){
+        if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
             progressDialog.show();
-            AndroidNetworking.get(BASE_URL+ "users/get_notification_setting")
+            AndroidNetworking.get(BASE_URL + "users/get_notification_setting")
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .setPriority(Priority.MEDIUM)
@@ -96,12 +98,12 @@ public class NotificationTypesFragment extends Fragment implements CompoundButto
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
-                                    NotificationResponce responce = new Gson().fromJson(response.toString(),NotificationResponce.class);
+                                    NotificationResponce responce = new Gson().fromJson(response.toString(), NotificationResponce.class);
 
                                     binding.setResponce(responce.getData());
                                     setResponceData(responce);
 
-                                }else {
+                                } else {
                                     Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
 
                                 }
@@ -121,86 +123,99 @@ public class NotificationTypesFragment extends Fragment implements CompoundButto
     }
 
     private void setResponceData(NotificationResponce responce) {
-        if (responce.getData().getGoal().equals("1")){
+        if (responce.getData().getGoal().equals("1")) {
             binding.switchGoals.setChecked(true);
-        }else {
+        } else {
             binding.switchGoals.setChecked(false);
         }
 
-        if (responce.getData().getGoal().equals("1")){
+        if (responce.getData().getRed_card().equals("1")) {
             binding.switchRedCard.setChecked(true);
-        }else {
+        } else {
             binding.switchRedCard.setChecked(false);
         }
 
-        if (responce.getData().getGoal().equals("1")){
+        if (responce.getData().getYellow_card().equals("1")) {
             binding.switchYellowCard.setChecked(true);
-        }else {
+        } else {
             binding.switchYellowCard.setChecked(false);
         }
 
-        if (responce.getData().getGoal().equals("1")){
+        if (responce.getData().getMatch_start().equals("1")) {
             binding.switchStarted.setChecked(true);
-        }else {
+        } else {
             binding.switchStarted.setChecked(false);
         }
 
-        if (responce.getData().getGoal().equals("1")){
+        if (responce.getData().getHalf_time().equals("1")) {
             binding.switchTransfer.setChecked(true);
-        }else {
+        } else {
             binding.switchTransfer.setChecked(false);
+        }
+
+
+        allChecke();
+    }
+
+    private void allChecke() {
+        if (binding.switchGoals.isChecked() && binding.switchRedCard.isChecked() && binding.switchYellowCard.isChecked()
+                && binding.switchStarted.isChecked() && binding.switchTransfer.isChecked()) {
+            binding.switchAllEvent.setChecked(true);
+        } else if (!binding.switchGoals.isChecked() && !binding.switchRedCard.isChecked() && !binding.switchYellowCard.isChecked()
+                && !binding.switchStarted.isChecked() && !binding.switchTransfer.isChecked()){
+            binding.switchAllEvent.setChecked(false);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mContext =context;
+        this.mContext = context;
         this.listener = (NextOnClick) context;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.switch_all_event:
-                if (isChecked){
+                if (isChecked) {
                     allCheckedNotification();
-                }else {
+                } else {
                     allUncheckedNotification();
                 }
-                Log.e( "onCheckedChanged1: ", ""+isChecked);
                 break;
 
-                case R.id.switch_goals:
-                    listener.nextNotification("goal",isChecked);
-                      binding.switchGoals.setChecked(isChecked);
-                Log.e( "onCheckedChanged2: ", ""+isChecked);
+            case R.id.switch_goals:
+                listener.nextNotification("goal", isChecked);
+                binding.switchGoals.setChecked(isChecked);
+                allChecke();
                 break;
 
-                case R.id.switch_red_card:
-                    listener.nextNotification("red_card",isChecked);
-                    binding.switchRedCard.setChecked(isChecked);
-                Log.e( "onCheckedChanged3: ", ""+isChecked);
+            case R.id.switch_red_card:
+                listener.nextNotification("red_card", isChecked);
+                binding.switchRedCard.setChecked(isChecked);
+                allChecke();
+
                 break;
 
-                case R.id.switch_yellow_card:
-                    listener.nextNotification("yellow_card",isChecked);
-                    binding.switchYellowCard.setChecked(isChecked);
+            case R.id.switch_yellow_card:
+                listener.nextNotification("yellow_card", isChecked);
+                binding.switchYellowCard.setChecked(isChecked);
+                allChecke();
 
-                    Log.e( "onCheckedChanged4: ", ""+isChecked);
                 break;
 
-                case R.id.switch_started:
-                    listener.nextNotification("match_start",isChecked);
-                    binding.switchStarted.setChecked(isChecked);
+            case R.id.switch_started:
+                listener.nextNotification("match_start", isChecked);
+                binding.switchStarted.setChecked(isChecked);
+                allChecke();
 
-                    Log.e( "onCheckedChanged5: ", ""+isChecked);
                 break;
-                case R.id.switch_transfer:
-                    listener.nextNotification("half_time",isChecked);
-                    binding.switchTransfer.setChecked(isChecked);
+            case R.id.switch_transfer:
+                listener.nextNotification("half_time", isChecked);
+                binding.switchTransfer.setChecked(isChecked);
+                allChecke();
 
-                    Log.e( "onCheckedChanged6: ", ""+isChecked);
                 break;
         }
 

@@ -1,12 +1,13 @@
 package com.wolfscore.matches.modal;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Created by mindiii on 5/2/19.
  */
 
-public class Score {
+public class Score implements Serializable {
        int localteam_score;
     int visitorteam_score;
     int localteam_pen_score;

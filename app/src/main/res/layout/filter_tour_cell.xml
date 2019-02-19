@@ -20,6 +20,7 @@
             android:layout_marginRight="@dimen/_8sdp"
             android:layout_toRightOf="@id/iv_plus"
             android:layout_toEndOf="@id/iv_plus"
+            android:layout_centerVertical="true"
             android:src="@color/colorWhite"/>
 
         <TextView
@@ -31,6 +32,18 @@
             android:layout_toRightOf="@id/iv_team"
             android:text="FCB Montpellier"
             android:textColor="@color/colorWhite" />
+        <TextView
+            android:id="@+id/country_name"
+            android:layout_below="@+id/tv_league_name"
+            style="@style/SmallRobotoRegularStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_team"
+            android:text="FCB Montpellier"
+            android:textSize="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textColor="@color/colorWhite" />
+
 
         <ImageView
             android:id="@+id/iv_plus"

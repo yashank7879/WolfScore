@@ -1,437 +1,396 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        tools:context="com.wolfscore.fragment.MatchFactsFragment">
-
-        <TextView
-            android:id="@+id/tv_man_of_match"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:background="@color/colorPrimary"
-            android:text="@string/man_of_the_match"
-            android:textColor="@color/colorLightWhite" />
+        android:background="@color/list_item_bg">
 
         <RelativeLayout
-            android:id="@+id/rl_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_man_of_match"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/_8sdp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_player"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_8sdp" />
+            android:layout_height="match_parent">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/iv_player">
-
-                <TextView
-                    android:id="@+id/tv_team_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dden Hazards"
-                    android:textColor="@color/colorWhite" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_nation_flag"
-                    android:layout_width="@dimen/_10sdp"
-                    android:layout_height="@dimen/_10sdp"
-                    android:layout_below="@id/tv_team_name"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/australia" />
-
-                <TextView
-                    android:id="@+id/tv_nation_name"
-                    style="@style/SmallRobotoLightStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_team_name"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_toRightOf="@+id/iv_nation_flag"
-                    android:text="south africa"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_8sdp" />
-
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_main1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_view"
-            android:padding="@dimen/_3sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_toLeftOf="@+id/iv_soccer"
-                android:layout_toStartOf="@+id/iv_soccer"
-                android:drawablePadding="@dimen/_5sdp"
-                android:drawableRight="@drawable/ic_soccer_match"
-                android:text="Radamwl falcao, Goal"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/iv_soccer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/_8sdp"
-                android:src="@drawable/ic_soccer_match"
-                android:text="30'"
-                android:textColor="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_main2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_main1"
-            android:padding="@dimen/_3sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_toEndOf="@+id/iv_soccer2"
-                android:layout_toRightOf="@+id/iv_soccer2"
-                android:drawablePadding="@dimen/_5sdp"
-                android:drawableRight="@drawable/ic_soccer_match"
-                android:text="Radamwl falcao, Goal"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/iv_soccer2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:src="@drawable/ic_soccer_match"
-                android:text="30'"
-                android:textColor="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_main3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_main2"
-            android:padding="@dimen/_3sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_toEndOf="@+id/iv_soccer1"
-                android:layout_toRightOf="@+id/iv_soccer1"
-                android:drawablePadding="@dimen/_5sdp"
-                android:drawableRight="@drawable/ic_soccer_match"
-                android:text="Radamwl falcao, Goal"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/iv_soccer1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:src="@drawable/ic_soccer_match"
-                android:text="30'"
-                android:textColor="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_main4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/rl_main3">
-
-            <TextView
-                android:id="@+id/tv_player_name1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D.Terans"
-                android:textColor="@color/colorWhite" />
-
-            <ImageView
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_toRightOf="@id/tv_player_name1"
-                android:padding="@dimen/_2sdp"
-                android:src="@color/colorRed" />
-
-            <TextView
-                android:id="@+id/tv_player_name2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_player_name1"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:text="D.Terans"
-                android:textColor="@color/colorWhite" />
-
-            <ImageView
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
-                android:layout_below="@id/tv_player_name1"
-                android:layout_margin="@dimen/_8sdp"
-                android:layout_toRightOf="@id/tv_player_name2"
-                android:padding="@dimen/_2sdp"
-                android:src="@color/colorGreen" />
-            <!--
-              <TextView
-                  android:id="@+id/tv_goal"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="60'"
-                  android:layout_centerVertical="true"
-                  android:layout_alignParentRight="true"
-                  android:textColor="@color/colorWhite"
-                  />-->
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/rl_main5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_main4"
-            android:padding="@dimen/_3sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_toEndOf="@+id/tv_yellow_card"
-                android:layout_toRightOf="@+id/tv_yellow_card"
-                android:drawableLeft="@drawable/yellow_bg"
-                android:drawablePadding="@dimen/_5sdp"
-                android:drawableStart="@drawable/yellow_bg"
-                android:text="J. Cazares"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_yellow_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:src="@drawable/ic_soccer_match"
-                android:text="30'"
-                android:textColor="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_main6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/rl_main5"
-            android:padding="@dimen/_3sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_toLeftOf="@+id/tv_red_card"
-                android:layout_toStartOf="@+id/tv_red_card"
-                android:drawableEnd="@drawable/yellow_bg"
-                android:drawablePadding="@dimen/_5sdp"
-                android:drawableRight="@drawable/yellow_bg"
-                android:text="Rasamel Falcao"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_red_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_8sdp"
-                android:src="@drawable/ic_soccer_match"
-                android:text="80'"
-                android:textColor="@color/colorWhite" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_match_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rl_main6"
-            android:padding="@dimen/_8sdp">
-
-            <TextView
-                android:id="@+id/tv_tournament"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/tournament"
-                android:textColor="@color/colorLightWhite" />
-
-            <TextView
-                android:id="@+id/tournament"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_toEndOf="@id/tv_tournament"
-                android:layout_toRightOf="@id/tv_tournament"
-                android:background="@drawable/search_bg"
-                android:paddingBottom="@dimen/_2sdp"
-                android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:text="Premier league, Group A - Round 4"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_stadium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_tournament"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/stadium"
-                android:textColor="@color/colorLightWhite" />
-
-            <TextView
-                android:id="@+id/stadium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_tournament"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_toEndOf="@id/tv_tournament"
-                android:layout_toRightOf="@id/tv_tournament"
-                android:background="@drawable/search_bg"
-                android:paddingBottom="@dimen/_2sdp"
-                android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp"
-                android:paddingTop="@dimen/_2sdp"
-                android:text="VELTINS Arena Gelsenkichen"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_refrees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_stadium"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/referees"
-                android:textColor="@color/colorLightWhite" />
-
-            <TextView
-                android:id="@+id/refrees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/stadium"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_toEndOf="@id/tv_refrees"
-                android:layout_toRightOf="@id/tv_refrees"
-                android:text="stuart Attwel"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_attendance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_refrees"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="@string/attendance"
-                android:textColor="@color/colorLightWhite" />
-
-            <TextView
-                android:id="@+id/attendance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tv_attendance"
-                android:layout_alignBottom="@+id/tv_attendance"
-                android:layout_alignLeft="@+id/refrees"
-                android:layout_alignStart="@+id/refrees"
-                android:text="43,000"
-                android:textColor="@color/colorWhite" />
-
-            <TextView
-                android:id="@+id/tv_match_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_attendance"
-                android:layout_margin="@dimen/_5sdp"
-                android:text="Match Date"
-                android:textColor="@color/colorLightWhite" />
-
-            <TextView
-                android:id="@+id/match_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tv_match_date"
-                android:layout_alignBottom="@+id/tv_match_date"
-                android:layout_alignLeft="@+id/stadium"
-                android:layout_alignStart="@+id/stadium"
-                android:text="12/8/2019, 11 AM"
-                android:textColor="@color/colorWhite" />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_match_info"
-            >
-            <TextView
-                android:id="@+id/tv_team_form"
+                android:id="@+id/rl_view1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/_8sdp">
+
+                <TextView
+                    android:id="@+id/man_of_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MAN OF THE MATCH"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_margin="@dimen/_6sdp"
+                    android:textColor="@color/inactive_txt" />
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_player1"
+                    android:layout_below="@+id/man_of_match"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/australia"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_8sdp" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/man_of_match"
+                    android:layout_toRightOf="@id/iv_player1">
+
+                    <TextView
+                        android:id="@+id/tv_team_name1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dden Hazards"
+                        android:textColor="@color/colorWhite" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_nation_flag1"
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:layout_below="@id/tv_team_name1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/australia" />
+
+                    <TextView
+                        android:id="@+id/tv_nation_name1"
+                        style="@style/SmallRobotoLightStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_team_name1"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_toRightOf="@+id/iv_nation_flag1"
+                        android:text="south africa"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_8sdp" />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_local_team"
+                android:layout_below="@+id/rl_view1"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--android:nestedScrollingEnabled="false"-->
+
+            </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+
+                android:id="@+id/rl_match_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_local_team"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:background="@color/colorPrimary"
-                android:text="TEAM FORM"
-                android:textColor="@color/colorLightWhite" />
+                android:orientation="vertical"
+                android:padding="@dimen/_8sdp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tv_tournament"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/tournament"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_weight=".3"
+                    android:textColor="@color/inactive_txt" />
+
+                <TextView
+                    android:id="@+id/tournament"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@drawable/search_bg"
+                    android:paddingBottom="@dimen/_2sdp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_weight=".7"
+                    android:text="Premier league, Group A - Round 4"
+                    android:textColor="@color/colorWhite" />
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_stadium"
+                    android:layout_width="0dp"
+                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_tournament"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/stadium"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/inactive_txt" />
+
+                <TextView
+                    android:id="@+id/stadium"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_tournament"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:background="@drawable/search_bg"
+                    android:paddingBottom="@dimen/_2sdp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:textSize="@dimen/_10sdp"
+                    android:text="VELTINS Arena Gelsenkichen"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_refrees"
+                    android:layout_width="0dp"
+                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_stadium"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/referees"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/inactive_txt" />
+
+                <TextView
+                    android:id="@+id/refrees"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/stadium"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:text="No Refery"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_attendance"
+                    android:layout_width="0dp"
+                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_refrees"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/attendance"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/inactive_txt" />
+
+                <TextView
+                    android:id="@+id/attendance"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_match_date"
+                    android:layout_width="0dp"
+                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_attendance"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="Match Date"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/inactive_txt" />
+
+                <TextView
+                    android:id="@+id/matchDate"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:text="12/8/2019, 11 AM"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+
+
+            </LinearLayout>
+            <View
+                android:id="@+id/back_view"
+                android:layout_below="@+id/rl_match_info"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_8sdp"
+                android:background="@color/Header_bg"/>
+            <RelativeLayout
+                android:layout_below="@+id/back_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/team_form"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TEAM FORM"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/inactive_txt"/>
+                <LinearLayout
+                    android:layout_below="@+id/team_form"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/_8sdp"
+                    >
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="W"
+                        android:background="@drawable/green_bg"
+                        android:textColor="@color/active_text"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="W"
+                        android:background="@drawable/green_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="L"
+                        android:gravity="center"
+                        android:background="@drawable/ic_red_card"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="W"
+                        android:background="@drawable/green_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="D"
+                        android:background="@drawable/grey_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+                    <ImageView
+                        android:id="@+id/local_next"
+                        android:layout_gravity="center"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_team_arrow" />
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_below="@+id/team_form"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/_8sdp"
+                    >
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="L"
+                        android:gravity="center"
+                        android:background="@drawable/ic_red_card"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="L"
+                        android:gravity="center"
+                        android:background="@drawable/ic_red_card"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_2sdp"/>
+
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="W"
+                        android:background="@drawable/green_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="D"
+                        android:background="@drawable/grey_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+
+                    <TextView
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="W"
+                        android:background="@drawable/green_bg"
+                        android:textColor="@color/active_text"
+                        android:layout_margin="@dimen/_1sdp"
+                        android:textSize="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_2sdp"/>
+                    <ImageView
+                        android:id="@+id/visitor_next"
+                        android:layout_gravity="center"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:src="@drawable/ic_team_arrow" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
         </RelativeLayout>
-
-
-    </RelativeLayout>
     </ScrollView>
 </layout>

@@ -1,0 +1,833 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/list_item_bg"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/no_data"
+                android:text="@string/no_data_found"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlue"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_margin="@dimen/_20sdp"/>
+
+            <LinearLayout
+                android:id="@+id/goal_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:background="@color/list_item_bg"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_8sdp">
+
+                    <TextView
+                        android:id="@+id/tv_local_team_name"
+                        style="@style/SmallRobotoRegularStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Aldosivi"
+                        android:textColor="@color/colorWhite" />
+
+                    <!--<Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />-->
+
+                    <TextView
+                        android:id="@+id/tv_local_formation"
+                        style="@style/SmallRobotoRegularStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:text=""
+                        android:textColor="@color/colorWhite" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_pitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:context="com.wolfscore.fragment.LineUpFragment">
+
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_550sdp"
+                        android:background="@color/colorGreen">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_80sdp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/pitch_center" />
+
+                        <ImageView
+                            android:layout_width="@dimen/_200sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|top"
+                            android:layout_marginTop="@dimen/_minus10sdp"
+                            android:src="@drawable/pitch_top" />
+
+                        <ImageView
+                            android:layout_width="@dimen/_200sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|bottom"
+                            android:layout_marginBottom="@dimen/_minus10sdp"
+                            android:src="@drawable/pitch_down"
+
+                            />
+
+
+                    </FrameLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_local_postion_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fl_local_keeper"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/fl_local_postion_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ll_local_postion_1"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/fl_local_postion_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fl_local_postion_2"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <!-- <FrameLayout
+                                 android:layout_width="0dp"
+                                 android:layout_height="@dimen/_50sdp"
+                                 android:layout_weight="1"
+                                 android:visibility="gone"
+
+
+                                 >
+
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:layout_gravity="bottom|center_horizontal"
+                                     android:text="@string/goals"
+                                     android:textColor="@color/colorWhite"
+                                     android:textSize="@dimen/_10sdp"
+                                     android:fontFamily="@font/roboto_regular"/>
+
+                                 <de.hdodenhof.circleimageview.CircleImageView
+                                     android:layout_width="@dimen/_35sdp"
+                                     android:layout_height="@dimen/_35sdp"
+                                     android:layout_gravity="top|center_horizontal"
+                                     android:src="@color/colorBalck"
+                                     android:text="@string/goals" />
+
+                                 <ImageView
+                                     android:layout_width="@dimen/_12sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:background="@drawable/ic_yellow_card" />
+
+
+                             </FrameLayout>
+
+                             <FrameLayout
+                                 android:layout_width="0dp"
+                                 android:layout_height="@dimen/_50sdp"
+                                 android:layout_weight="1">
+
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:layout_gravity="bottom|center_horizontal"
+                                     android:text="@string/goals"
+                                     android:textColor="@color/colorWhite"
+                                     android:textSize="@dimen/_10sdp"
+                                     android:fontFamily="@font/roboto_regular"/>
+
+                                 <de.hdodenhof.circleimageview.CircleImageView
+                                     android:layout_width="@dimen/_35sdp"
+                                     android:layout_height="@dimen/_35sdp"
+                                     android:layout_gravity="top|center_horizontal"
+                                     android:src="@color/colorBalck"
+                                     android:text="@string/goals" />
+
+                                 <ImageView
+                                     android:layout_width="@dimen/_12sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:background="@drawable/ic_yellow_card" />
+
+
+                             </FrameLayout>
+
+                             <FrameLayout
+                                 android:layout_width="0dp"
+                                 android:layout_height="@dimen/_50sdp"
+                                 android:layout_weight="1">
+
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:layout_gravity="bottom|center_horizontal"
+                                     android:text="@string/goals"
+                                     android:textColor="@color/colorWhite"
+                                     android:textSize="@dimen/_10sdp"
+                                     android:fontFamily="@font/roboto_regular"/>
+
+                                 <de.hdodenhof.circleimageview.CircleImageView
+                                     android:layout_width="@dimen/_35sdp"
+                                     android:layout_height="@dimen/_35sdp"
+                                     android:layout_gravity="top|center_horizontal"
+                                     android:src="@color/colorBalck"
+                                     android:text="@string/goals" />
+
+                                 <ImageView
+                                     android:layout_width="@dimen/_12sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:background="@drawable/ic_yellow_card" />
+
+
+                             </FrameLayout>
+
+                             <FrameLayout
+                                 android:layout_width="0dp"
+                                 android:layout_height="@dimen/_50sdp"
+                                 android:layout_weight="1">
+
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:layout_gravity="bottom|center_horizontal"
+                                     android:text="@string/goals"
+                                     android:textColor="@color/colorWhite"
+                                     android:textSize="@dimen/_10sdp"
+                                     android:fontFamily="@font/roboto_regular"/>
+
+                                 <de.hdodenhof.circleimageview.CircleImageView
+                                     android:layout_width="@dimen/_35sdp"
+                                     android:layout_height="@dimen/_35sdp"
+                                     android:layout_gravity="top|center_horizontal"
+                                     android:src="@color/colorBalck"
+                                     android:text="@string/goals" />
+
+                                 <ImageView
+                                     android:layout_width="@dimen/_12sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:background="@drawable/ic_yellow_card" />
+
+
+                             </FrameLayout>
+
+                             <FrameLayout
+                                 android:layout_width="0dp"
+                                 android:layout_height="@dimen/_50sdp"
+                                 android:layout_weight="1"
+                                 android:visibility="visible">
+
+                                 <TextView
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:layout_gravity="bottom|center_horizontal"
+                                     android:text="@string/goals"
+                                     android:textColor="@color/colorWhite"
+                                     android:textSize="@dimen/_10sdp"
+                                     android:fontFamily="@font/roboto_regular"/>
+
+                                 <de.hdodenhof.circleimageview.CircleImageView
+                                     android:layout_width="@dimen/_35sdp"
+                                     android:layout_height="@dimen/_35sdp"
+                                     android:layout_gravity="top|center_horizontal"
+                                     android:src="@color/colorBalck"
+                                     android:text="@string/goals" />
+
+                                 <ImageView
+                                     android:layout_width="@dimen/_12sdp"
+                                     android:layout_height="@dimen/_20sdp"
+                                     android:background="@drawable/ic_yellow_card" />
+
+
+                             </FrameLayout>-->
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/fl_local_postion_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fl_local_postion_3"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+
+                        <FrameLayout
+                            android:id="@+id/fl_local_keeper"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_5sdp">
+
+                            <TextView
+                                android:id="@+id/tv_local_keepr_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|center_horizontal"
+                                android:fontFamily="@font/roboto_regular"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/_9sdp" />
+
+                            <FrameLayout
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_36sdp"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/iv_local_Keeper"
+                                android:layout_width="@dimen/_35sdp"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_gravity="top|center_horizontal"
+                                android:src="@color/colorBalck"
+                                android:text="@string/goals"
+                                />
+
+                            <ImageView
+                                android:id="@+id/iv_keepr_ly_card"
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_17sdp"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:background="@drawable/ic_yellow_card"
+                                android:visibility="gone" />
+
+                                <ImageView
+                                android:id="@+id/iv_keepr_lr_card"
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_17sdp"
+                                android:layout_gravity="end|bottom"
+                                android:background="@drawable/ic_red_card"
+                                android:visibility="gone"
+                                   />
+
+                            </FrameLayout>
+
+
+                        </FrameLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/fl_visitor_postion_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/fl_visitor_keeper"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal"
+
+                            >
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/fl_visitor_postion_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/fl_visitor_postion_1"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/fl_visitor_postion_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/fl_visitor_postion_2"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/fl_visitor_postion_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/fl_visitor_postion_3"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/fl_visitor_keeper"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/_5sdp">
+
+                            <TextView
+                                android:id="@+id/tv_visitor_keper_name"
+                                android:layout_width="@dimen/_55sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|center_horizontal"
+                                android:fontFamily="@font/roboto_regular"
+                                android:singleLine="true"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/_9sdp" />
+
+
+
+                            <FrameLayout
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_36sdp"
+                                android:layout_gravity="center_horizontal"
+                                >
+
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/iv_visitor_keeper"
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_gravity="top|center_horizontal"
+                                    android:src="@color/colorBalck" />
+
+                                <ImageView
+                                    android:id="@+id/iv_keepr_vy_card"
+                                    android:layout_width="@dimen/_12sdp"
+                                    android:layout_height="@dimen/_17sdp"
+                                    android:layout_gravity="end"
+                                    android:layout_marginEnd="@dimen/_2sdp"
+                                    android:layout_marginRight="@dimen/_2sdp"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:background="@drawable/ic_yellow_card"
+                                    android:visibility="gone" />
+
+
+                                <ImageView
+                                    android:id="@+id/iv_keepr_vr_card"
+                                    android:layout_width="@dimen/_12sdp"
+                                    android:layout_height="@dimen/_17sdp"
+                                    android:layout_gravity="end|bottom"
+                                    android:background="@drawable/ic_red_card"
+                                    android:visibility="gone"
+                                    />
+
+                            </FrameLayout>
+
+
+
+                        </FrameLayout>
+
+
+                    </RelativeLayout>
+
+                </FrameLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:background="@color/list_item_bg"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingRight="@dimen/_8sdp">
+
+                    <TextView
+                        android:id="@+id/tv_visitor_name"
+                        style="@style/SmallRobotoRegularStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:text="San fansisco"
+                        android:textColor="@color/colorWhite" />
+
+                    <!--    <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />-->
+
+                    <TextView
+                        android:id="@+id/tv_visitor_formation"
+                        style="@style/SmallRobotoRegularStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorWhite" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bench_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/SmallRobotoMediumStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingBottom="@dimen/_4sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:text="@string/bench"
+                        android:textColor="@color/inactive_txt" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorDarkGray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/list_item_bg">
+
+                        <TextView
+                            style="@style/SmallRobotoLightStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:padding="@dimen/_8sdp"
+                            android:text="Aldosivi"
+                            android:textColor="@color/colorWhite" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorDarkGray" />
+
+                        <TextView
+                            style="@style/SmallRobotoLightStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:padding="@dimen/_8sdp"
+                            android:text="Sanfransico"
+                            android:textColor="@color/colorWhite" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_local_bench"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+
+                        android:background="@color/list_item_bg">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDarkGray" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_visitor_bench"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@color/list_item_bg">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDarkGray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/coach_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SmallRobotoMediumStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:text="@string/coach"
+                    android:textColor="@color/inactive_txt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDarkGray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/list_item_bg">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_local_coach"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:visibility="visible">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_lcoach"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@color/colorBalck" />
+
+                        <TextView
+                            android:id="@+id/tv_lcoach_name"
+                            style="@style/SmallRobotoRegularStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/iv_lcoach"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/roboto_regular"
+                            android:gravity="center"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_10sdp"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_player_position"
+                            style="@style/SmallRobotoLightStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_lcoach_name"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center"
+                            android:text="@string/coach"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_8sdp"
+                            />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDarkGray" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_visitor_coach"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:visibility="visible">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_coach_visitor"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@color/colorBalck" />
+
+                        <TextView
+                            android:id="@+id/tv_coach_vname"
+                            style="@style/SmallRobotoRegularStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/iv_coach_visitor"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/roboto_regular"
+                            android:gravity="center"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_10sdp"
+
+                            />
+
+                        <TextView
+                            style="@style/SmallRobotoLightStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_coach_vname"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center"
+                            android:text="@string/coach"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_8sdp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDarkGray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/SmallRobotoMediumStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingBottom="@dimen/_4sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:text="@string/injuared_and_suspended_player"
+                        android:textColor="@color/inactive_txt" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorDarkGray" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_local_injured"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+
+                        android:background="@color/list_item_bg">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDarkGray" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_visitor_injured"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@color/list_item_bg">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDarkGray" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

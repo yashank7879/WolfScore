@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/list_item_bg"
+    tools:context="com.wolfscore.fragment.MatchFactsFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/visitor_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/v_goal_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_view"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/v_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_toLeftOf="@+id/v_time"
+                android:layout_toStartOf="@+id/v_time"
+                android:drawablePadding="@dimen/_5sdp"
+                android:textSize="@dimen/_9sdp"
+                android:drawableRight="@drawable/ic_soccer_match"
+                android:text="Radamwl falcao, Goal"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/v_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:src="@drawable/ic_soccer_match"
+                android:text="30'"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/v_card_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/rl_main5"
+            android:layout_margin="@dimen/_2sdp"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/v_card_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_toLeftOf="@+id/v_card_icon"
+                android:layout_toStartOf="@+id/v_card_icon"
+                android:textSize="@dimen/_9sdp"
+                android:text="Rasamel Falcao"
+                android:textColor="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/v_card_icon"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:layout_toLeftOf="@+id/v_card_time"
+                android:src="@color/colorRed" />
+
+
+            <TextView
+                android:id="@+id/v_card_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:src="@drawable/ic_soccer_match"
+                android:text="80'"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/v_in_out_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+
+            >
+            <LinearLayout
+                android:id="@+id/in_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/v_in_out_time"
+                android:gravity="center"
+                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/v_in_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D.Terans"
+                android:layout_margin="@dimen/_1sdp"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/active_text"/>
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:background="@drawable/green_bg"
+                    android:src="@drawable/arrow_icon"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/out_layout"
+                android:layout_toLeftOf="@+id/v_in_out_time"
+                android:layout_below="@+id/in_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/v_out_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D.Terans"
+                    android:layout_margin="@dimen/_1sdp"
+                    android:textSize="@dimen/_9sdp"
+                    android:textColor="@color/active_text"/>
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:background="@drawable/ic_red_card"
+                    android:src="@drawable/arrow_icon"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_alignParentRight="true"
+                android:id="@+id/v_in_out_time"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:text="60'"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/active_text"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/local_layout"
+        android:layout_below="@+id/visitor_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/l_goal_layout"
+        android:layout_below="@+id/v_goal_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_3sdp"
+        >
+
+        <TextView
+            android:id="@+id/local_player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_toEndOf="@+id/l_time"
+            android:layout_toRightOf="@+id/l_time"
+            android:drawablePadding="@dimen/_5sdp"
+            android:textSize="@dimen/_9sdp"
+            android:drawableRight="@drawable/ic_soccer_match"
+            android:text="Radamwl falcao, Goal"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/l_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:src="@drawable/ic_soccer_match"
+            android:text="30'"
+            android:textSize="@dimen/_9sdp"
+            android:textColor="@color/colorWhite" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/l_card_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="@dimen/_3sdp"
+        android:gravity="center"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_below="@id/l_goal_layout">
+
+        <TextView
+            android:id="@+id/l_player_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D.Terans"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/l_card"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:textSize="@dimen/_9sdp"
+            android:textColor="@color/colorWhite" />
+
+        <ImageView
+            android:id="@+id/l_card"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_toRightOf="@+id/l_card_time"
+            android:src="@color/colorRed" />
+        <TextView
+            android:id="@+id/l_card_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:src="@drawable/ic_soccer_match"
+            android:text="30'"
+            android:textSize="@dimen/_9sdp"
+            android:textColor="@color/colorWhite" />
+
+
+    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/l_in_out_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            >
+            <LinearLayout
+                android:id="@+id/l_in_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/l_in_out_time"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:background="@drawable/green_bg"
+                    android:src="@drawable/arrow_icon"/>
+
+                <TextView
+                    android:id="@+id/l_player_in_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D.Terans"
+                    android:layout_margin="@dimen/_1sdp"
+                    android:textSize="@dimen/_9sdp"
+                    android:textColor="@color/active_text"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/l_out_layout"
+                android:layout_toRightOf="@+id/l_in_out_time"
+                android:layout_below="@+id/l_in_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:background="@drawable/ic_red_card"
+                    android:src="@drawable/arrow_icon"/>
+
+                <TextView
+                    android:id="@+id/l_player_out_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D.Terans"
+                    android:textSize="@dimen/_9sdp"
+                    android:layout_margin="@dimen/_1sdp"
+                    android:textColor="@color/active_text"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/l_in_out_time"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:text="60'"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/active_text"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

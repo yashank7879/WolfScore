@@ -36,14 +36,17 @@ import org.json.JSONObject;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import static com.wolfscore.utils.ApiCollection.ADD_FAVOURITES;
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
+import static com.wolfscore.utils.Constant.CurrentPage;
 
 public class SetupAppActivity extends AppCompatActivity implements View.OnClickListener, GetTeamListener, NextOnClick {
     ActivitySetupAppBinding binding;
@@ -55,9 +58,9 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
     List<NotificationModel> dataBeansList = new ArrayList<>();
     private String teamType = "team";
     NotificationModel model = new NotificationModel();
-    private Set<LocalTeamResponce.DataBean.TeamListBean> tempLocalTeamList;
-    private Set<LocalTeamResponce.DataBean.TeamListBean> tempPopularTeamList;
-    private Set<TopPlayerResponce.DataBean.PlayerListBean> tempPlayerList;
+    private Map<String,LocalTeamResponce.DataBean.TeamListBean> tempLocalTeamList;
+    private Map<String,LocalTeamResponce.DataBean.TeamListBean> tempPopularTeamList;
+    private Map<String,TopPlayerResponce.DataBean.PlayerListBean> tempPlayerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +76,9 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
     private void initializeView() {
 
         progressDialog = new ProgressDialog(this);
-        tempPlayerList = new HashSet<>();
-        tempLocalTeamList = new HashSet<>();
-        tempPopularTeamList = new HashSet<>();
+        tempPlayerList = new HashMap<>();
+        tempLocalTeamList = new HashMap<>();
+        tempPopularTeamList = new HashMap<>();
         binding.tvNext.setOnClickListener(this);
         binding.ivBack.setOnClickListener(this);
         binding.tvSkip.setOnClickListener(this);
@@ -92,13 +95,11 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onPageSelected(int i) {
-
                 if (i == 0) {
                     binding.tabLayout.setVisibility(View.GONE);
                 } else {
                     binding.tabLayout.setVisibility(View.VISIBLE);
                 }
-                // Toast.makeText(SetupAppActivity.this, "position:" + i, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -122,18 +123,19 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_next:
-                if (teamType.equals("Localteam")) {
+                //Log.e( "current page ", binding.viewpager.getCurrentItem()+"");
+                if (teamType.equals("Localteam") && binding.viewpager.getCurrentItem() == 0) {
                     teamType = "team";
                     getLocalSelectedTeam();
                     selectFavrouitApi(getLocalSelectedTeam());
-                } else if (teamType.equals("Popularteam")) {
+                } else if (teamType.equals("Popularteam")  && binding.viewpager.getCurrentItem() == 1) {
                     teamType = "team";
 
-                    selectFavrouitApi(getPopularSelectedTeam());
-                } else if (teamType.equals("player")) {
+                    selectFavrouitApi(getPopularSelectedTeam()  );
+                } else if (teamType.equals("player") && binding.viewpager.getCurrentItem() == 2) {
                     getSelectedPlayer();
                     selectFavrouitApi(getSelectedPlayer());
-                } else if (teamType.equals("Notification")){
+                } else if (teamType.equals("Notification") && binding.viewpager.getCurrentItem() == 3) {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("goal", dataBeansList.get(0).goal);
@@ -149,23 +151,47 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                         e.printStackTrace();
                     }
 
-                   /* StringBuffer str = new StringBuffer();
-                    str.append("{").append( "goal").append(":").append(dataBeansList.get(0).goal).append(",")
-                            .append("red_card").append(":").append(dataBeansList.get(0).red_card).append(",")
-                            .append("yellow_card").append(":").append(dataBeansList.get(0).yellow_card).append(",")
-                            .append("match_reminder").append(":").append(dataBeansList.get(0).match_reminder).append(",")
-                            .append("match_start").append(":").append(dataBeansList.get(0).match_start).append(",")
-                            .append("half_time").append(":").append(dataBeansList.get(0).half_time).append(",")
-                            .append("full_time_result").append(":").append(dataBeansList.get(0).full_time_result)
-                            .append("}");
-                    Log.e( "onClick: ", str.toString());
-                    notificationApi(str.toString());*/
+                } else {
+                    //if ( binding.viewpager.getCurrentItem() == )
+
+                    if (binding.viewpager.getCurrentItem() == 3){
+                        Intent intent = new Intent(SetupAppActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                       // overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                        finish();
+                    }
+                    binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() + 1);
+
+                    CurrentPage = binding.viewpager.getCurrentItem();
+
+
+
+                   /* binding.viewpager.setCurrentItem(nextCount);
+                    if (nextCount < 3) {
+                        previosCount = nextCount - 1;
+                        nextCount++;
+                    } else {
+                        previosCount = nextCount - 1;
+                    }*/
                 }
 
 
                 break;
             case R.id.iv_back:
-                if (previosCount == 0 && nextCount == 1) {
+
+                if (binding.viewpager.getCurrentItem() == 0) {
+                    onBackPressed();
+                }
+
+                binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() - 1);
+
+           /* if (binding.viewpager.getCurrentItem() == 0){
+                onBackPressed();
+            }*/
+
+            /*    if (previosCount == 0 && nextCount == 1) {
                     onBackPressed();
                 }
                 if (nextCount <= 3) {
@@ -175,17 +201,17 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                 }
                 binding.viewpager.setCurrentItem(previosCount);
 
-
+*/
                 break;
             default:
         }
     }
 
     private StringBuffer getPopularSelectedTeam() {
-        String joined = TextUtils.join(", ", tempPopularTeamList.toArray());
-        Log.e("getSelectedTeam: ", joined);
+      //  String joined = TextUtils.join(", ", tempPopularTeamList.toArray());
+      //  Log.e("getSelectedTeam: ", joined);
         StringBuffer stringBuffer = new StringBuffer();
-        for (LocalTeamResponce.DataBean.TeamListBean teamListBean : tempPopularTeamList) {
+        for (LocalTeamResponce.DataBean.TeamListBean teamListBean : tempPopularTeamList.values()) {
             if (teamListBean.getIs_favorite().equals("1")) {
                 stringBuffer.append(teamListBean.getTeam_id()).append(",");
             }
@@ -199,6 +225,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
     //""""""" Notification type """"""""""""//
     private void notificationApi(String notify) {
+        progressDialog.show();
         if (Constant.isNetworkAvailable(this, binding.mainLayout)) {
             AndroidNetworking.post(BASE_URL + "users/update_notification_setting")
                     .addHeaders("Api-Key", APIKEY)
@@ -217,8 +244,13 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                                     tempPlayerList.clear();
                                     PreferenceConnector.writeBoolean(SetupAppActivity.this, PreferenceConnector.IS_LOGIN, true);
 
+                                    finishAffinity();
                                     Intent intent = new Intent(SetupAppActivity.this, HomeActivity.class);
                                     startActivity(intent);
+                                 //   overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
                                     finish();
 
 
@@ -229,13 +261,14 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                progressDialog.dismiss();
                             }
 
                         }
 
                         @Override
                         public void onError(ANError anError) {
-
+                            progressDialog.dismiss();
                         }
                     });
         }
@@ -244,8 +277,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
     private StringBuffer getSelectedPlayer() {
         StringBuffer stringBuffer = new StringBuffer();
-        this.stringBuffer = new StringBuffer();
-        for (TopPlayerResponce.DataBean.PlayerListBean teamListBean : tempPlayerList) {
+        for (TopPlayerResponce.DataBean.PlayerListBean teamListBean : tempPlayerList.values()) {
             if (teamListBean.getIs_favorite().equals("1")) {
                 stringBuffer.append(teamListBean.getPlayer_id()).append(",");
             }
@@ -257,14 +289,12 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
         return stringBuffer;
     }
 
-    private StringBuffer stringBuffer = new StringBuffer();
-
     private StringBuffer getLocalSelectedTeam() {
 
-        String joined = TextUtils.join(", ", tempLocalTeamList.toArray());
-        Log.e("getSelectedTeam: ", joined);
+        // String joined = TextUtils.join(", ", tempLocalTeamList.toArray());
+        ///  Log.e("getSelectedTeam: ", joined);
         StringBuffer stringBuffer = new StringBuffer();
-        for (LocalTeamResponce.DataBean.TeamListBean teamListBean : tempLocalTeamList) {
+        for (LocalTeamResponce.DataBean.TeamListBean teamListBean : tempLocalTeamList.values()) {
             if (teamListBean.getIs_favorite().equals("1")) {
                 stringBuffer.append(teamListBean.getTeam_id()).append(",");
             }
@@ -278,6 +308,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
     //""""""" favroit local team , popular team  """""""""""//
     private void selectFavrouitApi(StringBuffer popularSelectedTeam) {
+        progressDialog.show();
         if (Constant.isNetworkAvailable(this, binding.mainLayout)) {
             AndroidNetworking.post(BASE_URL + ADD_FAVOURITES)
                     .addHeaders("Api-Key", APIKEY)
@@ -297,18 +328,10 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
                                     tempLocalTeamList.clear();
                                     tempPopularTeamList.clear();
-                                    binding.viewpager.setCurrentItem(nextCount);
-                                    if (nextCount < 3) {
-                                        previosCount = nextCount - 1;
-                                        nextCount++;
-                                    } else {
-                                        previosCount = nextCount - 1;
-                                    }
-                                  /*  if(nextCount == 3){
-                                        Intent intent = new Intent(SetupAppActivity.this,HomeActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }*/
+                                    tempPlayerList.clear();
+
+                                    binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() + 1);
+                                    CurrentPage = binding.viewpager.getCurrentItem();
 
                                     //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();
 
@@ -317,17 +340,19 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                progressDialog.dismiss();
                             }
 
                         }
 
                         @Override
                         public void onError(ANError anError) {
-
+                            progressDialog.dismiss();
                         }
                     });
         }
     }
+
 
 
     //""""""  show selected player name or team name  """""""""""//
@@ -351,8 +376,10 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
     public void nextLocalOnclickListener(LocalTeamResponce.DataBean.TeamListBean bean, String team, boolean value) {
         teamType = team;
         if (bean != null) {
+
             if (bean.getIs_favorite().equals("1")) {
-                tempLocalTeamList.add(bean);
+                tempLocalTeamList.put(bean.getTeam_id(),bean);
+
             } else {
                 tempLocalTeamList.remove(bean);
             }
@@ -366,8 +393,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
         teamType = team;
         if (bean != null) {
             if (bean.getIs_favorite().equals("1")) {
-
-                tempPopularTeamList.add(bean);
+                tempPopularTeamList.put(bean.getTeam_id(),bean);
             } else {
                 tempPopularTeamList.remove(bean);
             }
@@ -379,7 +405,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
         teamType = team;
         if (bean != null) {
             if (bean.getIs_favorite().equals("1")) {
-                tempPlayerList.add(bean);
+                tempPlayerList.put(bean.getPlayer_id(),bean);
             } else {
                 tempPlayerList.remove(bean);
             }

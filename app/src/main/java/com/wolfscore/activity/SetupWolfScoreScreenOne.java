@@ -108,9 +108,11 @@ public class SetupWolfScoreScreenOne extends AppCompatActivity implements View.O
 
                                     Intent intent = new Intent(SetupWolfScoreScreenOne.this, SetupAppActivity.class);
                                     startActivity(intent);
+                                    overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
 
-                                  //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();
+
+                                    //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();
 
 
                                 } else {

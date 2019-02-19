@@ -1,6 +1,8 @@
 package com.wolfscore.matches.modal;
 
-public class MatchCell {
+import java.io.Serializable;
+
+public class MatchCell implements Serializable {
     String routine_id;
     String user_id;
     String routine_name;

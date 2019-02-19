@@ -52,6 +52,8 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     private int offset = 0;
     private GetTeamListener listener;
     private NextOnClick nextListener;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
 
     public TopPlayerFragment() {
         // Required empty public constructor
@@ -61,7 +63,6 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -76,10 +77,14 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             Log.e( "setUserVisibleHint: ","123" );
+            nextListener.nextPlayerOnclickListener(null, "player", false);
             teamList.clear();
+            scrollListener.resetState();
             limit=20;
             offset=0;
             getTopPlayer();
+
+
         }
 
     }
@@ -102,12 +107,12 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
         binding.rvTopPlayer.setAdapter(adapter);
 
         //******  Pagination """""""""""""""//
-        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
                     progressDialog.show();
-                    offset = offset + 20; //load 5 items in recyclerview
+                    offset = offset + 50; //load 5 items in recyclerview
                     // progressDialog.show();
                     getTopPlayer();
 
@@ -115,7 +120,8 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
             }
         };
         binding.rvTopPlayer.addOnScrollListener(scrollListener);
-        getTopPlayer();
+
+     //   getTopPlayer();
 
 
     }
@@ -131,7 +137,7 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     private void getTopPlayer() {
         if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
             progressDialog.show();
-            AndroidNetworking.get(BASE_URL + "players/get_popular_players?limit=" + limit + "&offset=" + offset)
+            AndroidNetworking.get(BASE_URL + "players/get_popular_players?limit=" + 50 + "&offset=" + offset)
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .setPriority(Priority.MEDIUM)
@@ -185,5 +191,10 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
             adapter.notifyDataSetChanged();
             nextListener.nextPlayerOnclickListener(bean, "player", true);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

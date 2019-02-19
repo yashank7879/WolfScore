@@ -1,12 +1,22 @@
 package com.wolfscore.matches.modal;
 
-public class Matches {
+import java.io.Serializable;
+
+public class Matches implements Serializable{
     private MatchHeader matchHeader;
     private MatchCell matchCell;
     private LocalTeam localTeam;
     private VisitorTeam visitorTeam;
     private Time time;
     private Score score;
+
+    public Matches(LocalTeam localTeam, VisitorTeam visitorTeam, Time time, Score score) {
+
+        this.localTeam = localTeam;
+        this.visitorTeam = visitorTeam;
+        this.time = time;
+        this.score = score;
+    }
 
     public VisitorTeam getVisitorTeam() {
         return visitorTeam;

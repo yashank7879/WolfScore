@@ -6,13 +6,23 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by mindiii on 1/22/19.
  */
 
 public class Constant {
+    public static int CurrentPage=0;
+    public static Calendar calendar = Calendar.getInstance();
     //*****************check for network connection******************//
     public static boolean isNetworkAvailable(Context context, View coordinatorLayout) {
 
@@ -45,4 +55,43 @@ public class Constant {
         }
         return false;
     }
+
+    //**************hide keyboard********************//
+    public static void hideSoftKeyBoard(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public static String getFormatedDateTime(String dateStr, String strReadFormat, String strWriteFormat) {
+
+        String formattedDate = dateStr;
+        DateFormat readFormat = new SimpleDateFormat(strReadFormat, Locale.getDefault());
+        DateFormat writeFormat = new SimpleDateFormat(strWriteFormat, Locale.getDefault());
+
+        Date date = null;
+
+        try {
+            date = readFormat.parse(dateStr);
+        } catch (ParseException e) {
+        }
+
+        if (date != null) {
+            formattedDate = writeFormat.format(date);
+        }
+
+        return formattedDate;
+    }
+
+  public static String  getDayFromDate(Date date)
+    {
+        calendar.setTime(date);
+
+        String[] days = new String[] { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+
+        String day = days[calendar.get(Calendar.DAY_OF_WEEK)-1];
+        return day;
+    }
+
 }

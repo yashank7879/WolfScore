@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false">
+
+
+   <!-- <RelativeLayout
+        android:id="@+id/rl_imageview"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/_50sdp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:src="@color/colorBalck"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/iv_profile"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_8sdp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:fontFamily="@font/roboto_regular"
+            />
+        <ImageView
+            android:id="@+id/iv_keepr_ly_card"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/ic_yellow_card"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+
+    -->
+
+    <RelativeLayout
+        android:id="@+id/rl_imageview"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_weight="1"
+        >
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@color/colorBalck" />
+
+
+            <ImageView
+                android:id="@+id/iv_keepr_ly_card"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/ic_yellow_card"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/frame_layout"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_8sdp"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>
+

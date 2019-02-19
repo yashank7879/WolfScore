@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_45sdp"
+    android:background="@color/colorExtraDarkGray">
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_team"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_toEndOf="@id/fl_select"
+            android:layout_toRightOf="@id/fl_select"
+            android:src="@color/colorWhite" />
+
+
+        <TextView
+            android:id="@+id/tv_league_name"
+            style="@style/SmallRobotoRegularStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_country"
+            android:layout_toRightOf="@id/iv_team"
+            android:text="FCB Montpellier"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tv_country"
+            style="@style/SmallRobotoRegularStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_team"
+            android:layout_toRightOf="@id/iv_team"
+            android:text="USA"
+            android:textColor="@color/inactive_txt"
+            android:textSize="@dimen/_8sdp" />
+
+        <FrameLayout
+            android:id="@+id/fl_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/iv_plus"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/holo_circle_white" />
+
+        <ImageView
+            android:id="@+id/iv_select_team"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:background="@drawable/blue_circle_bg"
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ic_right_tick"
+            android:visibility="gone" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/_10sdp"
+        android:src="@drawable/ic_menu_options" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/rl_view"
+        android:background="@color/colorDarkGray" />
+
+</RelativeLayout>

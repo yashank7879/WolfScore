@@ -18,4 +18,15 @@ public static final String ADD_FAVOURITES = "users/ADD_FAVOURITES";
     public static final String SINGLE_FAVORITE_UNFAVORITE_API = "users/single_favorite_unfavorite";
     public static final String GET_LEAGUE_LIST_API = "leagues/get_league_list";
     public static final String GET_POPULAR_TEAMS_API = "teams/get_popular_teams";
+    public static final String GET_SEARCH_MATCHES = "matches/search_matches";
+    public static final String ADD_REMOVE_FILTERED_LEAGUE_API = "leagues/add_remove_filtered_league";
+
+    public static final String LEAGUE_FILTER_SEQUENCE_LIST_API = "leagues/get_league_filter_sequence_list";
+    public static final String SET_FILTER_LEAGUES_API = "leagues/set_filter_leagues";
+    public static final String HEAD_TO_HEAD="matches/get_head_to_head";
+    public static final String MATCH_DETAIL="matches/get_match_details";
+
+    public static final String GET_MATCH_DETAILS_API = "matches/get_team_lineup";
+
+
 }
