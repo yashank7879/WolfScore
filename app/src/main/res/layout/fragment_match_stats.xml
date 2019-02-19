@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="30"
-        android:progress="1"
+        android:progress="10"
         android:progressDrawable="@drawable/seekbar_style"
         android:thumb="@drawable/custom_thumb" />
 
