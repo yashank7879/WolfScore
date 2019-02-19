@@ -25,12 +25,9 @@ import com.wolfscore.aboutMatch.AboutMatchResponce;
 import com.wolfscore.aboutMatch.DataPlayer;
 import com.wolfscore.adapter.AboutMatchPagerAdpter;
 import com.wolfscore.databinding.ActivityAboutMatchBinding;
-import com.wolfscore.matches.modal.LocalTeam;
-import com.wolfscore.matches.modal.MatchHeader;
+
 import com.wolfscore.matches.modal.Matches;
-import com.wolfscore.matches.modal.Score;
-import com.wolfscore.matches.modal.Time;
-import com.wolfscore.matches.modal.VisitorTeam;
+
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;

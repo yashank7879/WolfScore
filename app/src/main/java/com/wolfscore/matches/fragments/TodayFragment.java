@@ -83,8 +83,6 @@ public class TodayFragment  extends Fragment {
 
         }
 
-      //  getMatchData(page);
-
 
         return rootView;
     }
@@ -226,7 +224,6 @@ public class TodayFragment  extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
 
                         }
 
