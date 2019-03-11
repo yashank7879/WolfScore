@@ -3,9 +3,17 @@ package com.wolfscore.matches.modal;
 import java.io.Serializable;
 
 public class MatchHeader implements Serializable {
-    int id;
-    String name;
-    int match_id;
+    private int id=0;
+    private String name="",countryName="";
+    private int match_id=0,season_id=0;
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
     public MatchHeader() {
 
@@ -25,6 +33,14 @@ public class MatchHeader implements Serializable {
 
     public void setMatch_id(int match_id) {
         this.match_id = match_id;
+    }
+
+    public int getSeason_id() {
+        return season_id;
+    }
+
+    public void setSeason_id(int season_id) {
+        this.season_id = season_id;
     }
 
     public MatchHeader(int id, String name) {

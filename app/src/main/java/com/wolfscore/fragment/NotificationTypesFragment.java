@@ -93,7 +93,8 @@ public class NotificationTypesFragment extends Fragment implements CompoundButto
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            progressDialog.dismiss();
+                            if (progressDialog!=null&&progressDialog.isShowing())
+                                progressDialog.dismiss();
                             try {
                                 String status = response.getString("status");
                                 String message = response.getString("message");

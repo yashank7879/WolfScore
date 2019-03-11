@@ -2,50 +2,119 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:baselineAligned="false"
-    android:gravity="center"
-    >
+    android:gravity="center">
 
     <RelativeLayout
         android:id="@+id/rl_imageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_margin="@dimen/_8sdp"
-        >
+        android:visibility="visible">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:src="@color/colorBalck"
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_centerHorizontal="true"
-            />
+            android:layout_gravity="center_horizontal">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_white_bg"
+                android:src="@drawable/ic_player_placeholder" />
+
+            <LinearLayout
+                android:id="@+id/ll_in_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    android:id="@+id/tv_in_out_time"
+                    style="@style/SmallRobotoRegularStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_6sdp"
+
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_in_time"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:background="@drawable/green_bg"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/arrow_icon"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_out_time"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:background="@drawable/red_bg"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/arrow_icon"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_yellow_card"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/ic_yellow_card"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/iv_red_card"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/ic_red_card"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
 
         <TextView
-            style="@style/SmallRobotoRegularStyle"
             android:id="@+id/tv_player_name"
+            style="@style/SmallRobotoRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/frame_layout"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/iv_profile"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_10sdp"
-            android:gravity="center"
-            android:fontFamily="@font/roboto_regular"
 
             />
+
         <TextView
-            style="@style/SmallRobotoLightStyle"
             android:id="@+id/tv_player_position"
+            style="@style/SmallRobotoLightStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/tv_player_name"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_8sdp"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
-            />
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_8sdp" />
     </RelativeLayout>
 </LinearLayout>

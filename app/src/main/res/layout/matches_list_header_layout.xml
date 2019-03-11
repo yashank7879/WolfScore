@@ -4,15 +4,19 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/Header_bg">
+    android:background="@color/colorBalck">
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_2sdp"
-        android:background="@color/home_screen_bg"/>
+        android:layout_height="@dimen/_8sdp"
+        android:background="@color/colorBalck"/>
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginLeft="@dimen/_4sdp"
+        android:layout_marginRight="@dimen/_4sdp"
+        android:background="@color/Header_bg"
         android:gravity="center">
     <ImageView
         android:id="@+id/header_img"

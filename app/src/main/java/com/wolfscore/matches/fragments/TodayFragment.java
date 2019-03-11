@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.wolfscore.matches.modal.Time;
 import com.wolfscore.matches.modal.VisitorTeam;
 import com.wolfscore.pagination.EndlessRecyclerViewScrollListener;
 import com.wolfscore.pagination.EndlessScrollListener;
+import com.wolfscore.responce.CountryDto;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
@@ -55,7 +57,7 @@ public class TodayFragment  extends Fragment {
 
     private ProgressDialog progressDialog;
     StickyHeaderAdapter adapter;
-   public StickyListHeadersListView stickyList;
+    public StickyListHeadersListView stickyList;
     int page=1;
     String league_id="";
 
@@ -65,12 +67,20 @@ public class TodayFragment  extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
         initialise(rootView);
         if (HomeActivity.homeActivity.event!=null&&HomeActivity.homeActivity.event.getLeague_id()
-                !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()&&
-                HomeActivity.homeActivity.current_item==1){
-            league_id= HomeActivity.homeActivity.event.getLeague_id();
-            HomeActivity.homeActivity.todayMatchesArrayList.clear();
-            page=1;
-            getMatchData(page);
+                !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()/*&&
+                HomeActivity.homeActivity.current_item==1*/){
+            if (!HomeActivity.homeActivity.league_id.isEmpty()&&HomeActivity.homeActivity.league_id.equalsIgnoreCase(HomeActivity.homeActivity.event.getLeague_id())){
+                HomeActivity.homeActivity.league_id= HomeActivity.homeActivity.event.getLeague_id();
+                adapter.notifyDataSetChanged();
+            }
+            else {
+                HomeActivity.homeActivity.league_id= HomeActivity.homeActivity.event.getLeague_id();
+                HomeActivity.homeActivity.todayMatchesArrayList.clear();
+                page=1;
+                getMatchData(page);
+            }
+
+
         }
         else {
             if (HomeActivity.homeActivity.todayMatchesArrayList.size()>0){
@@ -104,7 +114,7 @@ public class TodayFragment  extends Fragment {
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       startActivity(new Intent(getActivity(), AboutMatchActivity.class).putExtra("obj",HomeActivity.homeActivity.todayMatchesArrayList.get(position)));
+                startActivity(new Intent(getActivity(), AboutMatchActivity.class).putExtra("obj",HomeActivity.homeActivity.todayMatchesArrayList.get(position)));
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
@@ -132,6 +142,7 @@ public class TodayFragment  extends Fragment {
     }
 
     private void getMatchData(int page) {
+        Log.d("auttoken", "getMatchData: auttoken...."+PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN,""));
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("please wait...");
         progressDialog.show();
@@ -144,19 +155,20 @@ public class TodayFragment  extends Fragment {
                     .addQueryParameter("page", page+"")
                     .addQueryParameter("date", "")
                     .addQueryParameter("team_id", "")
-                    .addQueryParameter("league_id", league_id)
+                    .addQueryParameter("league_id", HomeActivity.homeActivity.league_id)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                progressDialog.dismiss();
+                                if (progressDialog!=null&&progressDialog.isShowing())
+                                    progressDialog.dismiss();
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
                                //     matchesArrayList.clear();
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                 //   Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
                                     JSONObject data_obj= response.getJSONObject("data");
                                     JSONArray data_array= data_obj.getJSONArray("data");
                                     if (data_array.length()>0) {
@@ -173,6 +185,34 @@ public class TodayFragment  extends Fragment {
                                             matchHeader.setId(league_data_obj.getInt("id"));
                                             matchHeader.setName(league_data_obj.getString("name"));
                                             matchHeader.setMatch_id(object.getInt("id"));
+                                            matchHeader.setSeason_id(object.getInt("season_id"));
+
+                                            int countryId = league_data_obj.getInt("country_id");
+
+
+                                         //   matchHeader.setSeason_id(object.getInt("country_id"));
+                                            JSONObject  country_obj=null,country_data=null;
+
+                                           ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(getActivity());
+                                            for (int j = 0; j < countryDtos.size(); j++) {
+                                                if (String.valueOf(countryId).equalsIgnoreCase(countryDtos.get(j).getCountry_id())){
+                                                    matchHeader.setCountryName(countryDtos.get(j).getCountry_name());
+                                                    break;
+                                                }
+
+                                            }
+
+/*
+                                            if (league_data_obj.has("country")) {
+                                                country_obj = league_data_obj.getJSONObject("country");
+                                                if (country_obj.has("data")){
+                                                    country_data=country_obj.getJSONObject("data");
+                                                    if (country_data.has("name")){
+                                                        matchHeader.setCountryName(!country_data.isNull("name") ? country_data.getString("name") : "");
+                                                    }
+                                                }
+                                            }
+*/
 
                                             JSONObject localTeam_obj=object.getJSONObject("localTeam");
                                             JSONObject localteam_data=localTeam_obj.getJSONObject("data");
@@ -229,7 +269,8 @@ public class TodayFragment  extends Fragment {
 
                         @Override
                         public void onError(ANError anError) {
-                            progressDialog.dismiss();
+                            if (progressDialog!=null&&progressDialog.isShowing())
+                                progressDialog.dismiss();
                         }
                     });
         }

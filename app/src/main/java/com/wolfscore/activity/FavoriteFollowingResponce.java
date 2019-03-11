@@ -49,6 +49,15 @@ public class FavoriteFollowingResponce {
 
         private PlayerListBeanX player_list;
         private TeamListBeanX team_list;
+        private FavoriteListBeanX league_list;
+
+        public FavoriteListBeanX getLeague_list() {
+            return league_list;
+        }
+
+        public void setLeague_list(FavoriteListBeanX league_list) {
+            this.league_list = league_list;
+        }
 
         public PlayerListBeanX getPlayer_list() {
             return player_list;
@@ -349,6 +358,105 @@ public class FavoriteFollowingResponce {
                     this.created_on = created_on;
                 }
             }
+        }
+
+        public static class FavoriteListBeanX{
+            private String total_records;
+            private List<FavListBean> league_list;
+
+            public List<FavListBean> getLeague_list() {
+                return league_list;
+            }
+
+            public void setLeague_list(List<FavListBean> league_list) {
+                this.league_list = league_list;
+            }
+
+            public String getTotal_records() {
+                return total_records;
+            }
+
+            public void setTotal_records(String total_records) {
+                this.total_records = total_records;
+            }
+
+            public static class FavListBean{
+         String league_id="",country_id="",league_name="",league_flag="",is_cup="",current_season_id="",
+            current_round_id="",current_stage_id="",live_standings="" ;
+
+                public String getLeague_id() {
+                    return league_id;
+                }
+
+                public void setLeague_id(String league_id) {
+                    this.league_id = league_id;
+                }
+
+                public String getCountry_id() {
+                    return country_id;
+                }
+
+                public void setCountry_id(String country_id) {
+                    this.country_id = country_id;
+                }
+
+                public String getLeague_name() {
+                    return league_name;
+                }
+
+                public void setLeague_name(String league_name) {
+                    this.league_name = league_name;
+                }
+
+                public String getLeague_flag() {
+                    return league_flag;
+                }
+
+                public void setLeague_flag(String league_flag) {
+                    this.league_flag = league_flag;
+                }
+
+                public String getIs_cup() {
+                    return is_cup;
+                }
+
+                public void setIs_cup(String is_cup) {
+                    this.is_cup = is_cup;
+                }
+
+                public String getCurrent_season_id() {
+                    return current_season_id;
+                }
+
+                public void setCurrent_season_id(String current_season_id) {
+                    this.current_season_id = current_season_id;
+                }
+
+                public String getCurrent_round_id() {
+                    return current_round_id;
+                }
+
+                public void setCurrent_round_id(String current_round_id) {
+                    this.current_round_id = current_round_id;
+                }
+
+                public String getCurrent_stage_id() {
+                    return current_stage_id;
+                }
+
+                public void setCurrent_stage_id(String current_stage_id) {
+                    this.current_stage_id = current_stage_id;
+                }
+
+                public String getLive_standings() {
+                    return live_standings;
+                }
+
+                public void setLive_standings(String live_standings) {
+                    this.live_standings = live_standings;
+                }
+            }
+
         }
     }
 }

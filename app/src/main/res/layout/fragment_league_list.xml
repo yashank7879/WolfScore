@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        tools:context="com.wolfscore.activity.LeagueFilteringActivity">
+        <RelativeLayout
+            android:id="@+id/rl_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_8sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_toEndOf="@id/tv_done"
+                android:layout_toLeftOf="@id/tv_sorting"
+                android:layout_toRightOf="@id/tv_done"
+                android:layout_toStartOf="@id/tv_sorting"
+                android:background="@drawable/search_bg">
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    style="@style/SmallRobotoRegularStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/iv_search"
+                    android:layout_toRightOf="@id/iv_search"
+                    android:background="@null"
+                    android:hint="@string/filter_tournaments"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite" />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/popular_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorBalck1"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="POPULAR"
+                        android:textColor="@color/inactive_txt"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/popular_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/ll_selct_deselect"
+                    android:layout_below="@id/rl_filter"
+                    android:background="@color/Header_bg"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/_8sdp" />
+
+                <LinearLayout
+                    android:id="@+id/league_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorBalck1"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="REST OF THE WORLD"
+                        android:textColor="@color/inactive_txt"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/ll_selct_deselect"
+                    android:layout_below="@id/rl_filter"
+                    android:background="@color/Header_bg"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="@dimen/_8sdp" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+</layout>

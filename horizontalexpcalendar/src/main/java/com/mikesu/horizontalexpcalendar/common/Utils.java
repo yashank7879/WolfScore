@@ -123,6 +123,7 @@ public class Utils {
     if (density >= 4.0) {
       return 2;
     }
+
     if (density >= 3.0) {
       return 2;
     }

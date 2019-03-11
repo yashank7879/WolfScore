@@ -50,6 +50,16 @@ public class GetLeagueResponce {
         private String total_records;
         private List<LeagueListBean> league_list;
 
+        public List<LeagueListBean> getPopular_league() {
+            return popular_league;
+        }
+
+        public void setPopular_league(List<LeagueListBean> popular_league) {
+            this.popular_league = popular_league;
+        }
+
+        private List<LeagueListBean> popular_league;
+
         public String getTotal_records() {
             return total_records;
         }
@@ -99,7 +109,17 @@ public class GetLeagueResponce {
             private String current_round_id;
             private String current_stage_id;
             private String live_standings;
+
+            public String getIs_favorite() {
+                return is_favorite;
+            }
+
+            public void setIs_favorite(String is_favorite) {
+                this.is_favorite = is_favorite;
+            }
+
             private String is_selected;
+            private String is_favorite;
             private String country_name;
 
             boolean isChecked=false;

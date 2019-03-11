@@ -19,6 +19,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
 import com.wolfscore.R;
 import com.wolfscore.activity.FavoriteFollowingResponce;
+import com.wolfscore.adapter.FollowingFavoriteAdapter;
 import com.wolfscore.adapter.FollowingPlayerAdapter;
 import com.wolfscore.adapter.FollowingTeamAdapter;
 import com.wolfscore.databinding.FragmentFavoriteFollowingBinding;
@@ -43,8 +44,10 @@ public class FavoriteFollowingFragment extends Fragment {
     private ProgressDialog progressDialog;
     private List<FavoriteFollowingResponce.DataBean.PlayerListBeanX.PlayerListBean> playerList;
     private List<FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean> teamList;
+    private List<FavoriteFollowingResponce.DataBean.FavoriteListBeanX.FavListBean> favList;
     private FollowingPlayerAdapter playerAdapter;
     private FollowingTeamAdapter teamAdapter;
+    private FollowingFavoriteAdapter favoriteAdapter;
 
     public FavoriteFollowingFragment() {
         // Required empty public constructor
@@ -70,6 +73,7 @@ public class FavoriteFollowingFragment extends Fragment {
         progressDialog = new ProgressDialog(mContext);
         playerList = new ArrayList<>();
         teamList = new ArrayList<>();
+        favList = new ArrayList<>();
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         binding.rvPlayer.setLayoutManager(horizontalLayoutManager);
@@ -82,6 +86,14 @@ public class FavoriteFollowingFragment extends Fragment {
         binding.rvTeams.setLayoutManager(horizontalLayout);
         teamAdapter = new FollowingTeamAdapter(teamList, mContext);
         binding.rvTeams.setAdapter(teamAdapter);
+
+
+        LinearLayoutManager favHorizontalLayout = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+        binding.rvFav.setLayoutManager(favHorizontalLayout);
+        favoriteAdapter = new FollowingFavoriteAdapter(favList, mContext);
+        binding.rvFav.setAdapter(favoriteAdapter);
+
+
         getFollowingFavorite();
     }
 
@@ -100,6 +112,12 @@ public class FavoriteFollowingFragment extends Fragment {
         FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean teamListBean = new FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean();
         teamListBean.setName("Browse");
         teamList.add(teamListBean);
+
+        FavoriteFollowingResponce.DataBean.FavoriteListBeanX.FavListBean fav = new FavoriteFollowingResponce.DataBean.FavoriteListBeanX.FavListBean();
+        fav.setLeague_name("Browse");
+        favList.add(fav);
+
+
     }
 
     private void getFollowingFavorite() {
@@ -113,20 +131,25 @@ public class FavoriteFollowingFragment extends Fragment {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            progressDialog.dismiss();
+                            if (progressDialog!=null&&progressDialog.isShowing())
+                                progressDialog.dismiss();
                             try {
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
                                     teamList.clear();
                                     playerList.clear();
+                                    favList.clear();
                                     addTeamList();
                                     FavoriteFollowingResponce responce1 = new Gson().fromJson(response.toString(), FavoriteFollowingResponce.class);
                                     teamList.addAll(responce1.getData().getTeam_list().getTeam_list());
                                     playerList.addAll(responce1.getData().getPlayer_list().getPlayer_list());
+                                    favList.addAll(responce1.getData().getLeague_list().getLeague_list());
+
                                     setFavrouitCount(responce1);
                                     teamAdapter.notifyDataSetChanged();
                                     playerAdapter.notifyDataSetChanged();
+                                    favoriteAdapter.notifyDataSetChanged();
                                 } else {
                                     Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
 
@@ -150,6 +173,7 @@ public class FavoriteFollowingFragment extends Fragment {
     private void setFavrouitCount(FavoriteFollowingResponce responce1) {
         binding.tvPlayerCount.setText("Player"+" ("+responce1.getData().getPlayer_list().getTotal_records()+")");
         binding.tvTeamCount.setText("Team"+" ("+responce1.getData().getTeam_list().getTotal_records()+")");
+        binding.tvFavCount.setText("Favorite"+" ("+responce1.getData().getLeague_list().getTotal_records()+")");
     }
 
     @Override

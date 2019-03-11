@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
                 android:gravity="end"
-                android:padding="@dimen/_6sdp"
+                android:padding="@dimen/_8sdp"
                 android:text="@string/next"
                 android:textColor="@color/colorBlue" />
 

@@ -158,6 +158,7 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
                 break;
             case R.id.tv_done:
                 Constant.hideSoftKeyBoard(this, binding.etSearch);
+                EventBus.getDefault().post(new FilteredEvent(StringBuffer().toString()));
                 onBackPressed();
 
               // EventBus.getDefault().post(new FilteredEvent(StringBuffer().toString()));
@@ -243,7 +244,6 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-       EventBus.getDefault().post(new FilteredEvent(StringBuffer().toString()));
 
     }
 

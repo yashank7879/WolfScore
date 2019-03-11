@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_bg"
+    android:background="@color/colorBalck"
     android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_4sdp"
+        android:layout_marginLeft="@dimen/_4sdp"
+        android:layout_marginRight="@dimen/_4sdp"
         android:gravity="center"
+        android:background="@color/Header_bg"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -27,9 +29,10 @@
 
         <ImageView
             android:id="@+id/local_icon"
-            android:layout_width="@dimen/_20sdp"
+            android:layout_width="0dp"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:layout_marginRight="@dimen/_6sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_margin="@dimen/_2sdp"
             android:layout_weight=".1"
             android:src="@drawable/ic_football" />
 
@@ -49,7 +52,7 @@
         <LinearLayout
             android:id="@+id/score_layout"
             android:visibility="visible"
-            android:layout_width="@dimen/_11sdp"
+            android:layout_width="@dimen/_12sdp"
             android:layout_height="wrap_content"
             android:layout_weight=".1"
             android:gravity="center"
@@ -70,20 +73,20 @@
                 android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/green_bg"
                 android:gravity="center"
                 android:text="live"
                 android:textColor="@color/active_text"
-                android:textSize="@dimen/_8sdp"
+                android:textSize="@dimen/_7sdp"
                 />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/visitor_icon"
-            android:layout_width="@dimen/_20sdp"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_margin="@dimen/_2sdp"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:layout_marginRight="@dimen/_6sdp"
             android:layout_weight=".1"
             android:src="@drawable/ic_football" />
 

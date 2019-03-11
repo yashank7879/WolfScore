@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/list_item_bg"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/timer_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/timer_icon"
+        android:src="@drawable/ic_watch_icon"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_margin="@dimen/_8sdp"
+        />
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:text="120"
+        android:gravity="center"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/active_text"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@drawable/gray_border_bg"/>
+    <View
+        android:id="@+id/view"
+        android:layout_width="@dimen/_2sdp"
+        android:layout_height="match_parent"
+        android:background="@color/colorGray"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/timer_icon"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/timer_layout"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_4sdp">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:text="GOAL"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/colorBlue"/>
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_11sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:text="Lorem ipsum dolor sit amet,consectetur adipiscing elit.Donec vehicula sem a malesuada rhoncus.Vivamus non nisi quis libero scelerisque pretium.Ut eu tristique justo."
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/active_text"/>
+
+    </LinearLayout>
+
+</LinearLayout>

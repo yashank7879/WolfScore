@@ -92,6 +92,7 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
         adapter = new SearchTeamAdapter(mContext, noRepeatList, this);
         binding.rvSearchTeams.setAdapter(adapter);
         binding.tvCancelSearch.setOnClickListener(this);
+        binding.rlSearch.setOnClickListener(this);
 
 
         //******  Pagination """""""""""""""//
@@ -288,6 +289,8 @@ public class SearchTeamFragment extends Fragment  implements SearchTeamAdapter.F
         switch (v.getId()){
             case R.id.tv_cancel_search:
                 getActivity().onBackPressed();
+                break;
+                case R.id.rl_search:
                 break;
         }
     }

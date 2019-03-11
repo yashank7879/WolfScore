@@ -12,7 +12,7 @@
     <string name="select_favorites">Select Favorites</string>
     <string name="skip">SKIP</string>
     <string name="search">Search</string>
-    <string name="popular_teams">Popular teams</string>
+    <string name="popular_teams">Popular Teams</string>
     <string name="select_your_favorite_clubs_and_national_teams_to_follow">Select your favorite clubs and national teams to follow</string>
     <string name="local_teams">Local Teams</string>
     <string name="added_as_favorite"> added as favorite</string>
@@ -46,7 +46,7 @@
     <string name="media">MEDIA</string>
     <string name="head_to_head">HEAD TO HEAD</string>
     <string name="line_up">LINE UP</string>
-    <string name="live_tracker">LIVE TRACKER</string>
+    <string name="live_tracker">LIVE TICKER</string>
     <string name="table">TABLE</string>
     <string name="statistics">STATISTICS</string>
     <string name="man_of_the_match">MAN OF THE MATCH</string>
@@ -77,6 +77,16 @@
     <string name="coach">Coach</string>
     <string name="injuared_and_suspended_player">Injuared and suspended player</string>
     <string name="no_data_found">No data found</string>
+    <string name="top_stats">Top Stats</string>
+    <string name="ball_passesion">Ball Possesion</string>
+
+   /////////league
+    <string name="trophies">TROPHIES</string>
+    <string name="matches">MATCHES</string>
+    <string name="news">NEWS</string>
+    <string name="overview">OVERVIEW</string>
+    <string name="squad">SQUAD</string>
+    <string name="total_shots">Total shots</string>
 
 
 </resources>

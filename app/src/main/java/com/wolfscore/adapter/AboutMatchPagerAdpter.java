@@ -1,20 +1,19 @@
 package com.wolfscore.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
 
 import com.wolfscore.R;
-import com.wolfscore.activity.AboutMatchActivity;
 import com.wolfscore.fragment.HeadToHeadMatchFragment;
 import com.wolfscore.fragment.LineUpFragment;
 import com.wolfscore.fragment.MatchFactsFragment;
-import com.wolfscore.fragment.TableFragment;
+import com.wolfscore.matches.fragments.LiveTickerFragment;
+import com.wolfscore.matches.fragments.MeadiaFragment;
+import com.wolfscore.matches.fragments.StatsFragment;
+import com.wolfscore.matches.fragments.TableFragment;
 
 /**
  * Created by mindiii on 2/2/19.
@@ -44,12 +43,23 @@ public class AboutMatchPagerAdpter extends FragmentPagerAdapter {
         else if (position == 2) {
             return new HeadToHeadMatchFragment();
         }
+        else if (position == 3) {
+            return new LiveTickerFragment();
+        }
+        else if (position == 5) {
+            return new TableFragment();
+        }
         else if (position==4)
         {
             return new LineUpFragment();
         }
+        else if (position==6)
+        {
+            return new StatsFragment();
+        }
+
         else {
-            return  new TableFragment();
+            return  new MeadiaFragment();
         }
     }
 
@@ -70,8 +80,11 @@ public class AboutMatchPagerAdpter extends FragmentPagerAdapter {
 
         } else if (position == 5){
             return mContext.getString(R.string.table );
-        }else {
+        }else if(position==6) {
             return  mContext.getString(R.string.statistics);
+        }
+        else {
+            return mContext.getString(R.string.live_tracker );
         }
     }
 }
