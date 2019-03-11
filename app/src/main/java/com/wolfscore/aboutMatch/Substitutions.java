@@ -11,5 +11,5 @@ import java.util.List;
 
 public class Substitutions {
     @JsonProperty("data")
-    private List<DataSubstiItem> dataSubsti;
+    public List<DataSubstiItem> dataSubsti;
 }

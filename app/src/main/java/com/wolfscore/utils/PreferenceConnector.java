@@ -4,6 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wolfscore.responce.CountryDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PreferenceConnector {
     public static final String PREF_NAME = "WOLFSCORE";
     public static final int MODE = Context.MODE_PRIVATE;
@@ -21,6 +28,8 @@ public class PreferenceConnector {
     public static final String PROFILE_IMG = "ProfileImg";
     public static final String Name = "name";
     public static final String IS_LOGIN = "Login";
+    public static final String PREFERANCE_COUNTRY_LIST="preferance country list";
+
 
 
 
@@ -63,6 +72,33 @@ public class PreferenceConnector {
     public static void clear(Context context) {
 
         getEditor(context).clear().commit();
+    }
+
+    public static void saveCountryList(Context context, List<CountryDto> categoryDTOS) {
+        try {
+            Gson gson = new Gson();
+            String category = gson.toJson(categoryDTOS);
+
+            getEditor(context).putString(PREFERANCE_COUNTRY_LIST, category).commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static ArrayList<CountryDto> getCountryList(Context context) {
+      //  SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFRENCE_NAME, Context.MODE_PRIVATE);
+
+        ArrayList<CountryDto> categoryDTOS = new ArrayList<>();
+        Gson gson = new Gson();
+       // String vjson = prefs.getString(PREFERANCE_COUNTRY_LIST, "");
+        String vjson= getPreferences(context).getString(PREFERANCE_COUNTRY_LIST, "");
+        categoryDTOS = gson.fromJson(vjson, new TypeToken<List<CountryDto>>() {
+        }.getType());
+
+        return categoryDTOS;
     }
 
 

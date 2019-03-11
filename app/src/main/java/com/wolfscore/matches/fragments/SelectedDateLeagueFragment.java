@@ -1,5 +1,6 @@
 package com.wolfscore.matches.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.wolfscore.matches.modal.Score;
 import com.wolfscore.matches.modal.Time;
 import com.wolfscore.matches.modal.VisitorTeam;
 import com.wolfscore.pagination.EndlessScrollListener;
+import com.wolfscore.responce.CountryDto;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
@@ -73,8 +75,16 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
     DateFormat currentDateFormat = new SimpleDateFormat("dd");
     Calendar cal_today = Calendar.getInstance();
     String today_date="";
+    private Context context;
 
     private HorizontalExpCalendar horizontalExpCalendar;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context=context;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_selected_date_league, container, false);
@@ -117,22 +127,23 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
         binding.ivBack.setOnClickListener(this);
         binding.calanderIcon.setOnClickListener(this);
         binding.clLayout.setOnClickListener(this);
+        binding.topLayout.setOnClickListener(this);
 
         //  stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
 
-        adapter = new StickyHeaderAdapter(getActivity(), matchesArrayList);
+        adapter = new StickyHeaderAdapter(context, matchesArrayList);
         binding.list.setAdapter(adapter);
         binding.list.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
             public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-              //  Toast.makeText(getActivity(), "Header", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "Header", Toast.LENGTH_SHORT).show();
             }
         });
 
         binding.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(), AboutMatchActivity.class)
+                startActivity(new Intent(context, AboutMatchActivity.class)
                .putExtra("obj",matchesArrayList.get(position)));
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
@@ -161,14 +172,14 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
     }
 
     private void getMatchData(int page) {
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("please wait...");
         progressDialog.show();
-        if (Constant.isNetworkAvailable(getActivity(), stickyList)) {
+        if (Constant.isNetworkAvailable(context, stickyList)) {
             //  http://dev.wolfscore.info/api_v1/matches/get_fixtures?type=today&page=1&date=&team_id=&league_id=""
             AndroidNetworking.get(BASE_URL + GET_SEARCH_MATCHES)
                     .addHeaders("Api-Key", APIKEY)
-                    .addHeaders("Auth-Token", PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""))
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(context, PreferenceConnector.AUTH_TOKEN, ""))
                     .addQueryParameter("type", "date")
                     .addQueryParameter("page", page + "")
                     .addQueryParameter("date", date)
@@ -180,12 +191,13 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                progressDialog.dismiss();
+                                if (progressDialog!=null&&progressDialog.isShowing())
+                                    progressDialog.dismiss();
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
                                     //     matchesArrayList.clvalue = {JSONObject@5233} "{"subscription":{"started_at":{"date":"2018-12-19 08:01:22.000000","timezone_type":3,"timezone":"UTC"},"trial_ends_at":{"date":"2019-01-02 08:01:14.000000","timezone_type":3,"timezone":"UTC"},"ends_at":null},"plan":{"name":"Pro Plan Standard","price":"175.00","request_limit":"2000,60"},"sports":[{"id":1,"name":"Soccer","current":true}],"pagination":{"total":227,"count":100,"per_page":100,"current_page":1,"total_pages":3,"links":{"next":"https:\/\/soccer.sportmonks.com\/api\/v2.0\/fixtures\/date\/2019-02-15?page=2"}}}"ear();
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                  //  Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
                                     JSONObject data_obj = response.getJSONObject("data");
                                     JSONArray data_array = data_obj.getJSONArray("data");
                                     if (data_array.length() > 0) {
@@ -202,6 +214,35 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
                                             matchHeader.setId(league_data_obj.getInt("id"));
                                             matchHeader.setName(league_data_obj.getString("name"));
                                             matchHeader.setMatch_id(object.getInt("id"));
+                                            matchHeader.setSeason_id(object.getInt("season_id"));
+
+                                            JSONObject  country_obj=null,country_data=null;
+                                            int countryId = league_data_obj.getInt("country_id");
+
+
+                                            //   matchHeader.setSeason_id(object.getInt("country_id"));
+
+                                            ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(getActivity());
+                                            for (int j = 0; j < countryDtos.size(); j++) {
+                                                if (String.valueOf(countryId).equalsIgnoreCase(countryDtos.get(j).getCountry_id())){
+                                                    matchHeader.setCountryName(countryDtos.get(j).getCountry_name());
+                                                    break;
+                                                }
+
+                                            }
+
+/*
+                                            if (league_data_obj.has("country")) {
+                                                country_obj = league_data_obj.getJSONObject("country");
+                                                if (country_obj.has("data")){
+                                                    country_data=country_obj.getJSONObject("data");
+                                                    if (country_data.has("name")){
+                                                        matchHeader.setCountryName(!country_data.isNull("name") ? country_data.getString("name") : "");
+                                                    }
+                                                }
+                                            }
+*/
+
 
                                             JSONObject localTeam_obj = object.getJSONObject("localTeam");
                                             JSONObject localteam_data = localTeam_obj.getJSONObject("data");
@@ -250,7 +291,7 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
                                     }
 
                                 } else {
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -260,7 +301,8 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
 
                         @Override
                         public void onError(ANError anError) {
-                            progressDialog.dismiss();
+                            if (progressDialog!=null&&progressDialog.isShowing())
+                                progressDialog.dismiss();
                         }
                     });
         }
@@ -277,7 +319,8 @@ public class SelectedDateLeagueFragment extends Fragment implements View.OnClick
             case R.id.calanderIcon:
                 openCalender();
             case R.id.clLayout:
-
+                break;
+            case R.id.top_layout:
                 break;
             default:
         }

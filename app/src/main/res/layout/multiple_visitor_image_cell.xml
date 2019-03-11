@@ -1,60 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="0dp"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_55sdp"
     android:layout_weight="1"
-    android:layout_height="@dimen/_50sdp"
     android:baselineAligned="false">
 
     <RelativeLayout
         android:id="@+id/rl_imageview"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_weight="1"
-        >
+        android:layout_height="@dimen/_55sdp"
+        android:layout_weight="1">
 
         <FrameLayout
             android:id="@+id/frame_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_36sdp"
             android:layout_centerHorizontal="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
-                android:src="@color/colorBalck" />
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/circle_white_bg"
+                android:src="@drawable/ic_player_placeholder" />
 
+            <LinearLayout
+                android:id="@+id/ll_in_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_in_out_time"
+                    style="@style/SmallRobotoRegularStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_6sdp"
+
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_in_time"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:background="@drawable/green_bg"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/arrow_icon"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_out_time"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:background="@drawable/red_bg"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/arrow_icon"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_keepr_vy_card"
                 android:layout_width="@dimen/_12sdp"
                 android:layout_height="@dimen/_17sdp"
-                android:layout_gravity="bottom|end"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/ic_yellow_card"
                 android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/iv_keepr_vr_card"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/ic_red_card"
+                android:visibility="gone" />
         </FrameLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/frame_layout"
-        android:layout_centerHorizontal="true"
-        >
 
-        <TextView
-            android:id="@+id/tv_player_name"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_8sdp"
+            android:layout_below="@+id/frame_layout"
+            android:layout_centerHorizontal="true">
 
-            />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_player_name"
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_8sdp"
+
+                />
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -110,8 +157,7 @@
     </LinearLayout>-->
 
 
-<!--before shubhbam-->
-<!--
+    <!--before shubhbam--><!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="wrap_content"

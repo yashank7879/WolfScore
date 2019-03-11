@@ -17,6 +17,7 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:largeHeap="true"
         tools:replace="android:allowBackup,icon,theme,label,name">
         <activity
             android:name=".activity.SplashScreenActivity"
@@ -34,7 +35,8 @@
         <activity
             android:name=".activity.SetupAppActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity android:name=".activity.HomeActivity"
             android:theme="@style/Transparent"
@@ -65,6 +67,15 @@
         <activity android:name=".activity.SortingTournamentActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.VideoPlayActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.AboutLeagueActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+      <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5e0bf629c03ab3ea32289c2a1253a24eae8138c6" />
 
 
     </application>

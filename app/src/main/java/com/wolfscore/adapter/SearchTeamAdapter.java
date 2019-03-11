@@ -1,6 +1,8 @@
 package com.wolfscore.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -9,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wolfscore.R;
+import com.wolfscore.activity.AboutLeagueActivity;
 import com.wolfscore.activity.SearchActivity;
 import com.wolfscore.responce.LocalTeamResponce;
 
@@ -28,11 +32,18 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
     private Context mContext;
     private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
     private FavrouitTeamSelect listener;
+    private String league="";
 
     public SearchTeamAdapter(Context mContext, List<LocalTeamResponce.DataBean.TeamListBean> teamList, FavrouitTeamSelect listener) {
         this.mContext = mContext;
         this.teamList = teamList;
         this.listener = listener;
+    }
+    public SearchTeamAdapter(Context mContext, List<LocalTeamResponce.DataBean.TeamListBean> teamList, FavrouitTeamSelect listener,String league) {
+        this.mContext = mContext;
+        this.teamList = teamList;
+        this.listener = listener;
+        this.league=league;
     }
 
     @NonNull
@@ -43,7 +54,7 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         if (teamList.size() != 0) {
             final LocalTeamResponce.DataBean.TeamListBean team = teamList.get(position);
@@ -58,14 +69,26 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
                 holder.ivStar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
 
             }
+/*
+            holder.league_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!league.isEmpty()&&league.equalsIgnoreCase("league")) {
+                        Activity activity = (Activity) mContext;
+                       // teamList.get(position).get
+                        mContext.startActivity(new Intent(mContext, AboutLeagueActivity.class));
+                        activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                    }
+                }
+            });
+*/
 
             holder.ivStar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //"""""""" check / Uncheck  """""""""//
                     if (team.getIs_favorite().equals("0")) {
                         holder.ivStar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
-
                         listener.favrouitSelectUnselect(teamList.get(holder.getAdapterPosition()), "1", holder.ivStar);
                     } else {
                         holder.ivStar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_white_star3x));
@@ -86,12 +109,14 @@ public class SearchTeamAdapter extends RecyclerView.Adapter<SearchTeamAdapter.My
         private TextView tvTeamName;
         private ImageView ivStar;
         private ImageView ivTeam;
+        private LinearLayout league_layout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             ivTeam = (CircleImageView) itemView.findViewById(R.id.iv_team);
             tvTeamName = (TextView) itemView.findViewById(R.id.tv_team_name);
             ivStar = (ImageView) itemView.findViewById(R.id.iv_star);
+            league_layout=itemView.findViewById(R.id.league_layout);
         }
     }
 

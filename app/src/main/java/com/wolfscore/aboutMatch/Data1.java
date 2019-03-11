@@ -8,41 +8,43 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Data1 {
-    private Venue venue;
-    private Cards cards;
-    private Scores scores;
-    private Referee referee;
-    private Integer visitorteamId;
-    private WeatherReport weatherReport;
-    private Standings standings;
-    private Colors colors;
-    private Corners corners;
-    private Substitutions substitutions;
-    private Stats stats;
-    private Odds odds;
-    private FlatOdds flatOdds;
+    public Venue venue;
+    public Cards cards;
+    public Scores scores;
+    public Referee referee;
+    public Integer visitorteamId;
+    public WeatherReport weatherReport;
+    public Standings standings;
+    public Colors colors;
+    public Corners corners;
+    public Substitutions substitutions;
+    public Stats stats;
+    public Odds odds;
+    public FlatOdds flatOdds;
 
-    private Events events;
-    private League league;
+    public Events events;
+    public League league;
     public Time time;
     public int attendance;
 
 
     public Boolean commentaries;
-    private LocalTeam localTeam;
-    private Lineup lineup;
-    private Integer visitorteam_id;
-    private String leg;
-    private Integer roundId;
-    private Integer refereeId;
-    private Integer localteam_id;
-    private Season season;
-    private Integer id;
-    private String pitch;
-    private Integer venueId;
-    private Formations formations;
+    public LocalTeam localTeam;
+    public Lineup lineup;
+    public Integer visitorteam_id;
+    public String leg;
+    public Integer roundId;
+    public Integer refereeId;
+    public Integer localteam_id;
+    public Season season;
+    public Integer id;
+    public String pitch;
+    public Integer venueId;
+    public Formations formations;
     @JsonProperty("visitorTeam")
     public VisitorTeam visitorTeam;
+    @JsonProperty("sidelined")
+    public Sidelined sidelined;
 
     @JsonProperty("localCoach")
     public Player localCoach;
@@ -61,7 +63,7 @@ public class Data1 {
     public void setLeague(League league) {
         this.league = league;
     }
-    //  private VisitorTeam visitorTeam;
+    //  public VisitorTeam visitorTeam;
 
 
     public Boolean getCommentaries() {
@@ -282,47 +284,47 @@ public class Data1 {
 
 
     //  @JsonProperty("goals")
-  //  private Goals goals;
+  //  public Goals goals;
 /*    @JsonProperty("assistants")
-    private Assistants assistants;
+    public Assistants assistants;
     @JsonProperty("comments")
-    private Comments comments;
+    public Comments comments;
     @JsonProperty("bench")
-    private Bench bench;
+    public Bench bench;
     @JsonProperty("visitorTeam")
-    private VisitorTeam visitorTeam;
+    public VisitorTeam visitorTeam;
     @JsonProperty("stage_id")
-    private Integer stageId;
+    public Integer stageId;
     @JsonProperty("tvstations")
-    private Tvstations tvstations;
+    public Tvstations tvstations;
     @JsonProperty("league")
-    private League league;
+    public League league;
     @JsonProperty("season_id")
-    private Integer seasonId;
+    public Integer seasonId;
     @JsonProperty("coaches")
-    private Coaches coaches;
+    public Coaches coaches;
     @JsonProperty("aggregate_id")
-    private String aggregateId;
+    public String aggregateId;
     @JsonProperty("winning_odds_calculated")
-    private Boolean winningOddsCalculated;
+    public Boolean winningOddsCalculated;
     @JsonProperty("deleted")
-    private Boolean deleted;
+    public Boolean deleted;
     @JsonProperty("highlights")
-    private Highlights highlights;*/
+    public Highlights highlights;*/
   /*  @JsonProperty("round")
-    private Round round;
+    public Round round;
     @JsonProperty("stage")
-    private Stage stage;
+    public Stage stage;
     @JsonProperty("group_id")
-    private String groupId;
+    public String groupId;
     @JsonProperty("time")
-    private Time time;
+    public Time time;
     @JsonProperty("sidelined")
-    private Sidelined sidelined;
+    public Sidelined sidelined;
     @JsonProperty("league_id")
-    private Integer leagueId;
+    public Integer leagueId;
     @JsonProperty("attendance")
-    private String attendance;*/
+    public String attendance;*/
 
 
 

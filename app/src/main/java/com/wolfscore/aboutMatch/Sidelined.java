@@ -11,5 +11,5 @@ import java.util.List;
 
 public class Sidelined {
     @JsonProperty("data")
-    private List data;
+    public List<com.wolfscore.aboutMatch.DataLineUpItem> slidelineData;
 }

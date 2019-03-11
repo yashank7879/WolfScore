@@ -27,6 +27,19 @@ public static final String ADD_FAVOURITES = "users/ADD_FAVOURITES";
     public static final String MATCH_DETAIL="matches/get_match_details";
 
     public static final String GET_MATCH_DETAILS_API = "matches/get_team_lineup";
+    public static final String GET_MATCH_STATS="matches/get_team_statistics";
+    public static final String GET_MATCH_TABLE="matches/get_standings_detail";
+    public static final String GET_MATCH_COMMENTARY="matches/get_match_commentary";
+    public static final String GET_MATCH_HIGHLIGHT="matches/get_match_highlight";
+
+    ///////////////League
+    public static final String GET_LEAGUE_TABLE_STATISTICS="leagues/get_standing_and_statistics_by_league_id";
+    public static final String GET_COUNTRY_LEAGUE_LIST="leagues/get_country_league_list";
+    public static final String GET_LEAGUE_MATCHES="leagues/get_league_matches";
+    public static final String GET_LIVE_SCORE_MATCHES="matches/live_score";
+    public static final String GET_COUNTRY_LIST="users/get_country_list";
+
+
 
 
 }

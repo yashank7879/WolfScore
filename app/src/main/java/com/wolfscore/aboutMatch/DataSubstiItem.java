@@ -9,25 +9,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DataSubstiItem {
     @JsonProperty("fixture_id")
-    private Integer fixtureId;
+    public Integer fixtureId;
     @JsonProperty("player_in_id")
-    private Integer playerInId;
+    public Integer playerInId;
     @JsonProperty("player_out_id")
-    private Integer playerOutId;
+    public Integer playerOutId;
     @JsonProperty("player_out_name")
-    private String playerOutName;
+    public String playerOutName;
     @JsonProperty("injuried")
-    private String injuried;
+    public String injuried;
     @JsonProperty("id")
-    private Long id;
+    public Long id;
     @JsonProperty("team_id")
-    private String teamId;
+    public String teamId;
     @JsonProperty("extra_minute")
-    private String extraMinute;
+    public String extraMinute;
     @JsonProperty("type")
-    private String type;
+    public String type;
     @JsonProperty("player_in_name")
-    private String playerInName;
+    public String playerInName;
     @JsonProperty("minute")
-    private Integer minute;
+    public Integer minute;
 }

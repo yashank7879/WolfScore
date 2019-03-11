@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wolfscore.R;
 import com.wolfscore.matches.modal.Matches;
+import com.wolfscore.utils.Constant;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -34,8 +35,6 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
     ArrayList<Matches> matchesArrayList;
     Context context;
     private Typeface robotoMedium;
-
-
     public StickyHeaderAdapter(Context context,   ArrayList<Matches> matchesArrayList) {
         inflater = LayoutInflater.from(context);
         this.matchesArrayList=matchesArrayList;
@@ -100,7 +99,8 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         }
         if (matchesArrayList.get(position).getTime()!=null)
         {
-            String time=   getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
+          // String time=  getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
+            String time= Constant.getServerFormattedDate(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a",context);
 
             if (matchesArrayList.get(position).getTime().getStatus().equals("NS")){
                 holder.score_layout.setVisibility(View.GONE);
@@ -114,7 +114,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
                 holder.time.setVisibility(View.GONE);
                 holder.score.setText(time);
                 holder.status.setText("TBA");
-                holder.status.setBackgroundResource(R.drawable.green_bg);
+                holder.status.setBackgroundResource(R.color.list_item_bg);
             }
             else if(matchesArrayList.get(position).getTime().getStatus().equals("FT"))
             {
@@ -131,7 +131,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
                 holder.time.setVisibility(View.GONE);
                 holder.score.setText(time);
                 holder.status.setText("POSTP");
-                holder.status.setBackgroundResource(R.drawable.green_bg);
+                holder.status.setBackgroundResource(R.color.list_item_bg);
             }
             else if(matchesArrayList.get(position).getTime().getStatus().equals("DELAYED"))
             {
@@ -139,7 +139,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
                 holder.time.setVisibility(View.GONE);
                 holder.score.setText(time);
                 holder.status.setText("DELAYED");
-                holder.status.setBackgroundResource(R.drawable.green_bg);
+                holder.status.setBackgroundResource(R.color.list_item_bg);
             }
             else if(matchesArrayList.get(position).getTime().getStatus().equals("LIVE"))
             {
@@ -153,7 +153,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
                 holder.time.setVisibility(View.GONE);
                 holder.score.setText(time);
                 holder.status.setText(matchesArrayList.get(position).getTime().getStatus());
-                holder.status.setBackgroundResource(R.drawable.green_bg);
+                holder.status.setBackgroundResource(R.color.list_item_bg);
             }
 
         }
@@ -176,7 +176,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         }
 
         String headerText=   matchesArrayList.get(position).getHeaderName();
-        holder.text.setText(headerText);
+        holder.text.setText(""+matchesArrayList.get(position).getMatchHeader().getCountryName()+" - "+headerText);
         holder.text.setTypeface(robotoMedium);
         Picasso.with(context).load("https:\\/\\/cdn.sportmonks.com\\/images\\/soccer\\/teams\\/7\\/2279.png")
                 .placeholder(R.drawable.app_icon).into( holder.header_img);

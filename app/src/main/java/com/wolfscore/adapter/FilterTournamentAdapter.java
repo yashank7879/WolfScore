@@ -29,9 +29,9 @@ public class FilterTournamentAdapter extends RecyclerView.Adapter<FilterTourname
     private List<GetLeagueResponce.DataBean.LeagueListBean> leagueList;
     private List<GetLeagueResponce.DataBean.LeagueListBean> tournamentListFiltered;
     private Context mContext;
-    private LeagueFilteringActivity listener;
+    private FilterTournamentListenr listener;
 
-    public FilterTournamentAdapter(Context mContext, List<GetLeagueResponce.DataBean.LeagueListBean> leagueList, LeagueFilteringActivity listener) {
+    public FilterTournamentAdapter(Context mContext, List<GetLeagueResponce.DataBean.LeagueListBean> leagueList, FilterTournamentListenr listener) {
         this.leagueList = leagueList;
         this.tournamentListFiltered = leagueList;
         this.mContext = mContext;

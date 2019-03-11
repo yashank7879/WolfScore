@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:gravity="center">
+            >
 
             <ImageView
                 android:id="@+id/navigation_icon"
@@ -41,6 +41,8 @@
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_menu"
                 android:visibility="visible" />
+
+
 
             <RelativeLayout
                 android:id="@+id/rl_search"
@@ -78,17 +80,14 @@
             </RelativeLayout>
 
 
-            <EditText
-                android:id="@+id/search_edt"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_margin="@dimen/_4sdp"
-                android:layout_toLeftOf="@+id/right_layout"
-                android:background="@drawable/search_edt_bg"
-                android:drawableLeft="@drawable/search_icon"
-                android:hint="search"
-                android:paddingLeft="@dimen/_8sdp"
-                android:textColorHint="@color/colorWhite"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_6sdp"
+                android:text="Live Score"
+                android:textColor="@color/active_text"
+                android:layout_centerHorizontal="true"
                 android:textSize="@dimen/_14sdp"
                 android:visibility="gone" />
 
@@ -154,7 +153,7 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-
+            android:layout_marginTop="@dimen/_8sdp"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -202,7 +201,7 @@
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/soccer_match"
-                    android:tint="@color/colorBlue" />
+                  />
 
                 <TextView
                     android:id="@+id/match"
@@ -231,7 +230,7 @@
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/live_score"
-                    android:tint="@color/inactive_txt" />
+                  />
 
                 <TextView
                     android:id="@+id/live_score"
@@ -260,7 +259,7 @@
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/league"
-                    android:tint="@color/inactive_txt" />
+                  />
 
                 <TextView
                     android:id="@+id/league"
@@ -289,7 +288,7 @@
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/newspaper"
-                    android:tint="@color/inactive_txt" />
+                    />
 
                 <TextView
                     android:id="@+id/news"
@@ -319,7 +318,7 @@
                     android:layout_height="@dimen/_22sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/highlight"
-                    android:tint="@color/inactive_txt" />
+                    />
 
                 <TextView
                     android:id="@+id/highlight"

@@ -89,7 +89,7 @@ public class HeadToHeadAdapter extends RecyclerView.Adapter<HeadToHeadAdapter.My
                 e.printStackTrace();
             }
 
-
+/*
             if (matchesArrayList.get(position).getTime().getStatus().equals("NS")){
                 holder.score_layout.setVisibility(View.GONE);
                 holder.time.setVisibility(View.VISIBLE);
@@ -103,7 +103,7 @@ public class HeadToHeadAdapter extends RecyclerView.Adapter<HeadToHeadAdapter.My
                 holder.time.setVisibility(View.GONE);
                 holder.score.setText(time);
                 holder.status.setText("TBA");
-                holder.status.setBackgroundResource(R.drawable.green_bg);
+                holder.status.setBackgroundResource(R.color.list_item_bg);
             }
             else if(matchesArrayList.get(position).getTime().getStatus().equals("FT"))
             {
@@ -143,7 +143,7 @@ public class HeadToHeadAdapter extends RecyclerView.Adapter<HeadToHeadAdapter.My
                 holder.status.setText(matchesArrayList.get(position).getTime().getStatus());
                 holder.status.setBackgroundResource(R.drawable.green_bg);
 
-            }
+            }*/
 
         }
 

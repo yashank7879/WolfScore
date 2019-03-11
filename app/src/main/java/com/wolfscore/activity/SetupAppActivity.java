@@ -86,6 +86,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
         binding.viewpager.setAdapter(adapter);
         binding.tabLayout.setupWithViewPager(binding.viewpager);
         binding.viewpager.setPagingEnabled(false);
+     //  binding.viewpager.setOffscreenPageLimit(4);
 
         binding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -132,10 +133,18 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                     teamType = "team";
 
                     selectFavrouitApi(getPopularSelectedTeam()  );
-                } else if (teamType.equals("player") && binding.viewpager.getCurrentItem() == 2) {
+                }
+                else if (teamType.equals("player") && binding.viewpager.getCurrentItem() == 2) {
+                    binding.tvNext.setText("FINISH");
                     getSelectedPlayer();
                     selectFavrouitApi(getSelectedPlayer());
-                } else if (teamType.equals("Notification") && binding.viewpager.getCurrentItem() == 3) {
+                }
+               /* else if ( binding.viewpager.getCurrentItem() == 3) {
+                    binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() + 1);
+                    CurrentPage = binding.viewpager.getCurrentItem();
+                }*/
+                else if (teamType.equals("Notification") && binding.viewpager.getCurrentItem() == 3) {
+                    binding.tvNext.setText("FINISH");
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("goal", dataBeansList.get(0).goal);
@@ -181,11 +190,13 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.iv_back:
 
+
                 if (binding.viewpager.getCurrentItem() == 0) {
                     onBackPressed();
                 }
 
                 binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() - 1);
+                binding.tvNext.setText("NEXT");
 
            /* if (binding.viewpager.getCurrentItem() == 0){
                 onBackPressed();

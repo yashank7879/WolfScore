@@ -41,6 +41,7 @@ import java.util.List;
 
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
+import static com.wolfscore.utils.Constant.isRunApi;
 
 public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     FragmentTopPlayerBinding binding;
@@ -63,6 +64,7 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isRunApi = false;
     }
 
     @Override

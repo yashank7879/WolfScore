@@ -1,5 +1,6 @@
 package com.wolfscore.fragment;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -58,8 +59,9 @@ import static com.wolfscore.utils.ApiCollection.HEAD_TO_HEAD;
 public class HeadToHeadMatchFragment  extends Fragment {
     FragmentHeadToHeadBinding binding;
     HeadToHeadAdapter adapter;
-    private ProgressDialog progressDialog;
+  //  private ProgressDialog progressDialog;
     int page=1;
+    private Context mContext;
     ArrayList<Matches> matchesArrayList=new ArrayList<>();
 
     public HeadToHeadMatchFragment() {
@@ -67,14 +69,20 @@ public class HeadToHeadMatchFragment  extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext=context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_head_to_head, container, false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        progressDialog = new ProgressDialog(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+     //   progressDialog = new ProgressDialog(mContext);
         binding.rvlocalTeam.setLayoutManager(layoutManager);
         //   adapter = new LocalTeamAdapter(mContext, teamList, this);
-        adapter = new HeadToHeadAdapter(getActivity(),matchesArrayList);
+        adapter = new HeadToHeadAdapter(mContext,matchesArrayList);
         binding.rvlocalTeam.setAdapter(adapter);
         if (matchesArrayList!=null&&matchesArrayList.size()>0)
         {
@@ -87,7 +95,7 @@ public class HeadToHeadMatchFragment  extends Fragment {
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (Constant.isNetworkAvailable(getActivity(), binding.scrollingMainLayout)) {
+                if (Constant.isNetworkAvailable(mContext, binding.scrollingMainLayout)) {
 
                         getLocalTeam(page);
                    }
@@ -103,11 +111,11 @@ public class HeadToHeadMatchFragment  extends Fragment {
     }
 
     private void getLocalTeam(int page) {
-        if (Constant.isNetworkAvailable(getActivity(), binding.scrollingMainLayout) ) {
-            progressDialog.show();
+        if (Constant.isNetworkAvailable(mContext, binding.scrollingMainLayout) ) {
+         //   progressDialog.show();
             AndroidNetworking.get(BASE_URL+HEAD_TO_HEAD )
                     .addHeaders("Api-Key", APIKEY)
-                    .addHeaders("Auth-Token", PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""))
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .addQueryParameter("team_one_id", ""+AboutMatchActivity.aboutMatchActivity.matches.getLocalTeam().getId())
                     .addQueryParameter("team_two_id",""+AboutMatchActivity.aboutMatchActivity.matches.getVisitorTeam().getId())
                     .addQueryParameter("page",""+page)
@@ -117,8 +125,9 @@ public class HeadToHeadMatchFragment  extends Fragment {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-
-                                progressDialog.dismiss();
+                              /*  if (progressDialog!=null)
+                                    if (progressDialog.isShowing())
+                                progressDialog.dismiss();*/
                                 String status = response.getString("status");
                                 String message = response.getString("message");
 /*
@@ -129,13 +138,13 @@ public class HeadToHeadMatchFragment  extends Fragment {
                                     objectMapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
                                     AboutMatchResponce emp = objectMapper.readValue(String.valueOf(response), AboutMatchResponce.class);
-                                    Toast.makeText(getActivity(), "" + emp, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "" + emp, Toast.LENGTH_SHORT).show();
                                }
 */
 
                                 if (status.equals("success")) {
                                     //     matchesArrayList.clvalue = {JSONObject@5233} "{"subscription":{"started_at":{"date":"2018-12-19 08:01:22.000000","timezone_type":3,"timezone":"UTC"},"trial_ends_at":{"date":"2019-01-02 08:01:14.000000","timezone_type":3,"timezone":"UTC"},"ends_at":null},"plan":{"name":"Pro Plan Standard","price":"175.00","request_limit":"2000,60"},"sports":[{"id":1,"name":"Soccer","current":true}],"pagination":{"total":227,"count":100,"per_page":100,"current_page":1,"total_pages":3,"links":{"next":"https:\/\/soccer.sportmonks.com\/api\/v2.0\/fixtures\/date\/2019-02-15?page=2"}}}"ear();
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
                                     JSONObject data_obj = response.getJSONObject("data");
                                     JSONArray data_array = data_obj.getJSONArray("data");
                                     if (data_array.length() > 0) {
@@ -189,7 +198,7 @@ public class HeadToHeadMatchFragment  extends Fragment {
                                 }
 
                                 else {
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -198,7 +207,10 @@ public class HeadToHeadMatchFragment  extends Fragment {
 
                         @Override
                         public void onError(ANError anError) {
-                            progressDialog.dismiss();
+/*
+                            if (progressDialog!=null&&progressDialog.isShowing())
+                                progressDialog.dismiss();
+*/
                         }
                     });
         }

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.wolfscore.fragment.LeagueListFragment;
 import com.wolfscore.listener.GetTeamListener;
 import com.wolfscore.fragment.LocalTeamFragment;
 import com.wolfscore.fragment.NotificationTypesFragment;
@@ -32,9 +33,14 @@ private GetTeamListener listener;
             return new LocalTeamFragment();
         }else if (i == 1){
             return new PopularTeamFragment();
-        }else if (i == 2){
+        }
+        else if (i == 2){
             return new TopPlayerFragment();
-        }else{
+        }
+       /* else if (i == 3){
+            return new LeagueListFragment();
+        }*/
+        else{
             return new NotificationTypesFragment();
         }
     }

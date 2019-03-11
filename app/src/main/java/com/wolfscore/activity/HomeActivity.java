@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,9 @@ import com.mikesu.horizontalexpcalendar.common.Marks;
 import com.wolfscore.CalenderListener;
 import com.wolfscore.R;
 import com.wolfscore.fragment.LiveFragment;
+import com.wolfscore.fragment.NewsFragment;
 import com.wolfscore.fragment.SearchTeamFragment;
+import com.wolfscore.league.fragments.LeagueFragment;
 import com.wolfscore.matches.fragments.BlankFragment;
 import com.wolfscore.matches.fragments.CalenderFragment;
 import com.wolfscore.matches.fragments.MatchListFragment;
@@ -51,11 +54,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout match_layout, live_score_layout, league_layout, news_layout, highlight_layout;
     ImageView match_img, live_score_img, league_img, news_img, highlight_img;
-    TextView match, live_score, league, news, highlight,current_date;
+    TextView match, live_score, league, news, highlight,current_date,title;
   public   RelativeLayout rl_search,calander_layout;
     FrameLayout search_fragment;
     private Typeface robotoregular;
@@ -71,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     MatchListFragment matchListFragment = null;
     Context context;
     public int current_item=0;
+    public String league_id="",t_league_id="",y_league_id="";
     public FilteredEvent event=new FilteredEvent();
 
     protected FragmentManager fragmentManager;
@@ -79,6 +84,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
    public ArrayList<Matches> tomorrowMatchesArrayList =new ArrayList<>();
    public ArrayList<Matches> yesterdayMatchesArrayList=new ArrayList<>();
    public ArrayList<Matches> todayMatchesArrayList=new ArrayList<>();
+   private RelativeLayout right_layout;
     private HorizontalExpCalendar.HorizontalExpCalListener horizontalExpCalListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +127,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         search_fragment=findViewById(R.id.search_fragment);
         current_date=findViewById(R.id.current_date);
         calander_layout=findViewById(R.id.calander_layout);
+        right_layout=findViewById(R.id.right_layout);
+        title=findViewById(R.id.title);
 
         calander_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +146,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         rl_search.setOnClickListener(this);
         filter.setOnClickListener(this);
         calender.setOnClickListener(this);
+
+        match_img.setColorFilter(getResources().getColor(R.color.colorBlue));
+        live_score_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        news_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        league_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        highlight_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+
+
         robotoregular = ResourcesCompat.getFont(this, R.font.roboto_regular);
         cal_yesterday.add(Calendar.DATE, -1);
         yesterday_date= dateFormat.format(cal_yesterday.getTime());
@@ -249,23 +265,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.match_layout:
-                search_fragment.setVisibility(View.GONE);
-                calander_layout.setVisibility(View.GONE);
-                match_img.setColorFilter(getResources().getColor(R.color.colorBlue));
-                live_score_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
-                news_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
-                league_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
-                highlight_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
-                match.setTextColor(getResources().getColor(R.color.colorBlue));
-                league.setTextColor(getResources().getColor(R.color.inactive_txt));
-                live_score.setTextColor(getResources().getColor(R.color.inactive_txt));
-                news.setTextColor(getResources().getColor(R.color.inactive_txt));
-                highlight.setTextColor(getResources().getColor(R.color.inactive_txt));
+                matchTab();
+
                 replaceFragment(new MatchListFragment());
                 break;
             case R.id.live_score_layout:
-                search_fragment.setVisibility(View.GONE);
-                calander_layout.setVisibility(View.GONE);
+              //  search_fragment.setVisibility(View.GONE);
+              //  calander_layout.setVisibility(View.GONE);
                 match_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
                 live_score_img.setColorFilter(getResources().getColor(R.color.colorBlue));
                 news_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
@@ -276,15 +282,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 live_score.setTextColor(getResources().getColor(R.color.colorBlue));
                 news.setTextColor(getResources().getColor(R.color.inactive_txt));
                 highlight.setTextColor(getResources().getColor(R.color.inactive_txt));
-                replaceFragment(new LiveFragment());
-                break;
-            case R.id.league_layout:
+
                 search_fragment.setVisibility(View.GONE);
                 calander_layout.setVisibility(View.GONE);
+                //Bundle bundle2 = new Bundle();
+                //String myMessage2 = "live";
+              //  bundle2.putString("date", myMessage2 );
+               // replacesearchFragment1(new LiveFragment(),bundle2,"live fragmnet");
+                rl_search.setVisibility(View.GONE);
+                right_layout.setVisibility(View.GONE);
+                title.setVisibility(View.VISIBLE);
+                replaceFragment(new LiveFragment());
+
+                break;
+            case R.id.league_layout:
+             //   search_fragment.setVisibility(View.GONE);
+               // calander_layout.setVisibility(View.GONE);
                 match_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
                 live_score_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
                 news_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
                 league_img.setColorFilter(getResources().getColor(R.color.colorBlue));
+            //    league_img.setColorFilter(ContextCompat.getColor(context, R.color.colorBlue), android.graphics.PorterDuff.Mode.SRC_IN);
                 highlight_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
                 match.setTextColor(getResources().getColor(R.color.inactive_txt));
                 league.setTextColor(getResources().getColor(R.color.colorBlue));
@@ -292,7 +310,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 news.setTextColor(getResources().getColor(R.color.inactive_txt));
                 highlight.setTextColor(getResources().getColor(R.color.inactive_txt));
 
-                //  replaceFragment(new MatchListFragment());
+                 // replaceFragment(new LeagueFragment());
+                search_fragment.setVisibility(View.VISIBLE);
+                calander_layout.setVisibility(View.GONE);
+
+                rl_search.setVisibility(View.VISIBLE);
+                right_layout.setVisibility(View.VISIBLE);
+                title.setVisibility(View.GONE);
+
+                Bundle bundle1 = new Bundle();
+                String myMessage1 = "league";
+                bundle1.putString("date", myMessage1 );
+                replacesearchFragment1(new LeagueFragment(),bundle1,"League fragment");
+
                 break;
             case R.id.news_layout:
                 search_fragment.setVisibility(View.GONE);
@@ -309,7 +339,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 news.setTextColor(getResources().getColor(R.color.colorBlue));
                 highlight.setTextColor(getResources().getColor(R.color.inactive_txt));
 
-                //  replaceFragment(new MatchListFragment());
+                search_fragment.setVisibility(View.VISIBLE);
+                calander_layout.setVisibility(View.GONE);
+                rl_search.setVisibility(View.VISIBLE);
+                right_layout.setVisibility(View.VISIBLE);
+                title.setVisibility(View.GONE);
+
+
+                Bundle bundle3 = new Bundle();
+                String myMessage3 = "news";
+                bundle3.putString("date", myMessage3 );
+                replacesearchFragment1(new NewsFragment(),bundle3,"news");
                 break;
             case R.id.highlight_layout:
                 search_fragment.setVisibility(View.GONE);
@@ -326,16 +366,34 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 news.setTextColor(getResources().getColor(R.color.inactive_txt));
                 highlight.setTextColor(getResources().getColor(R.color.colorBlue));
 
+                rl_search.setVisibility(View.VISIBLE);
+                right_layout.setVisibility(View.VISIBLE);
+                title.setVisibility(View.GONE);
+
+
                 //   replaceFragment(new MatchListFragment());
                 break;
 
             case R.id.rl_search:
+                android.support.v4.app.FragmentManager manager1 = getSupportFragmentManager();
+                FragmentTransaction ft2 = manager1.beginTransaction();
+                Fragment frg= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+                Fragment frg1= getSupportFragmentManager().findFragmentByTag("League fragment");
+                if (frg!=null) {
+                    ft2.remove(frg);
+                    ft2.commit();
+                }
+                if (frg1!=null)
+                {
+                    ft2.remove(frg1);
+                    ft2.commit();
+                }
                 search_fragment.setVisibility(View.VISIBLE);
                 calander_layout.setVisibility(View.GONE);
                 Bundle bundle = new Bundle();
                 String myMessage = "search";
                 bundle.putString("date", myMessage );
-                replacesearchFragment(new SearchTeamFragment(),bundle);
+                replacesearchFragment(new SearchTeamFragment(),bundle,"Search fragment");
             break;
            /* case R.id.filter:
                 calander_layout.setVisibility(View.GONE);
@@ -343,6 +401,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;*/
 
             case R.id.calender:
+
+                android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft1 = manager.beginTransaction();
+                Fragment fr= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+                Fragment fr1= getSupportFragmentManager().findFragmentByTag("League fragment");
+                if (fr!=null) {
+                    ft1.remove(fr);
+                    ft1.commit();
+                }
+                if (fr1!=null)
+                {
+                    ft1.remove(fr1);
+                    ft1.commit();
+                }
+
                 calander_layout.setVisibility(View.VISIBLE);
                 horizontalExpCalendar.scrollToDate(new DateTime(), true, true, true);
 
@@ -373,8 +446,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDateSelected(DateTime dateTime) {
                         Log.i("Calender", "onDateSelected: " + dateTime.toString());
-                        search_fragment.setVisibility(View.VISIBLE);
-                        calander_layout.setVisibility(View.GONE);
+                        /*search_fragment.setVisibility(View.VISIBLE);
+                        calander_layout.setVisibility(View.GONE);*/
                         horizontalExpCalendar.setGone();
                         String dateStr = dateTime.toString();
                         SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
@@ -388,21 +461,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                         Bundle bundle = new Bundle();
                         if (newDateStr.equalsIgnoreCase(today_date)){
+                            search_fragment.setVisibility(View.GONE);
+                            calander_layout.setVisibility(View.GONE);
                             bundle.putString("day", "1" );
                             replaceFragment(new MatchListFragment(),bundle);
                         }
                         else if (newDateStr.equalsIgnoreCase(tomorrow_date)){
+                            search_fragment.setVisibility(View.GONE);
+                            calander_layout.setVisibility(View.GONE);
                             bundle.putString("day", "2" );
                             replaceFragment(new MatchListFragment(),bundle);
                         }
                         else if (newDateStr.equalsIgnoreCase(yesterday_date)){
+                            search_fragment.setVisibility(View.GONE);
+                            calander_layout.setVisibility(View.GONE);
                             bundle.putString("day", "0" );
                             replaceFragment(new MatchListFragment(),bundle);
                         }
                         else {
                             bundle.putString("date", newDateStr );
                             bundle.putSerializable("datetime",dateTime);
-                            replacesearchFragment(new SelectedDateLeagueFragment(),bundle);
+                            replacesearchFragment(new SelectedDateLeagueFragment(),bundle,"Date Fragment");
                         }
                     }
 
@@ -418,7 +497,39 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    protected void replacesearchFragment(Fragment fragment,Bundle bundle) {
+    protected void replacesearchFragment(Fragment fragment,Bundle bundle,String fragmentName) {
+        try {
+            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+
+          /*  FragmentTransaction ft1 = manager.beginTransaction();
+            ft1.setCustomAnimations(R.anim.right_in,  R.anim.left_out);
+            Fragment fr= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+            ft1.remove(fr);
+            ft1.commit();*/
+            manager.popBackStack();
+            String backStateName = fragment.getClass().getName();
+            fragment.setArguments(bundle);
+            boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
+            if (!fragmentPopped) { //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.setCustomAnimations(R.anim.right_in,  R.anim.left_out);
+                ft.replace(R.id.search_fragment, fragment,fragmentName);
+               if (backStateName.equals("com.wolfscore.matches.fragments.MatchListFragment")) {
+                    ft.addToBackStack(backStateName);
+                } else {
+                    ft.addToBackStack(null);
+                }
+                ft.commit();
+                search_fragment.setVisibility(View.VISIBLE);
+                calander_layout.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    protected void replacesearchFragment1(Fragment fragment,Bundle bundle,String fragmentName) {
         try {
             String backStateName = fragment.getClass().getName();
             fragment.setArguments(bundle);
@@ -427,21 +538,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             if (!fragmentPopped) { //fragment not in back stack, create it.
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.setCustomAnimations(R.anim.right_in,  R.anim.left_out);
-                ft.add(R.id.search_fragment, fragment);
-               if (backStateName.equals("com.wolfscore.matches.fragments.MatchListFragment")) {
-                    ft.addToBackStack(backStateName);
-                } else {
-                    ft.addToBackStack(null);
-                }
-                ft.setCustomAnimations(R.anim.right_in,  R.anim.left_out);
+                ft.replace(R.id.search_fragment, fragment,fragmentName);
                 ft.commit();
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         }
     }
 
-public void setSelectedDate()
+
+    public void setSelectedDate()
 {
 
     Marks.markToday();
@@ -460,8 +567,46 @@ public void setSelectedDate()
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+
+     /*//   List fragmentList = getSupportFragmentManager().getFragments();
+       Fragment frag= getSupportFragmentManager().findFragmentByTag("League fragment");
+       Fragment frag1= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+
+     //   boolean handled = false;
+
+        if (frag!=null) {
+            if (frag.getTag().equalsIgnoreCase("League fragment")) {
+                matchTab();
+            }
+        }
+        if (frag1!=null) {
+            if (frag1.getTag().equalsIgnoreCase("live fragmnet")) {
+                matchTab();
+            }
+        }*/
+            super.onBackPressed();
+     //   super.onBackPressed();
         overridePendingTransition(R.anim.left_in, R.anim.right_out);
+    }
+    private void matchTab()
+    {
+        search_fragment.setVisibility(View.GONE);
+        calander_layout.setVisibility(View.GONE);
+        match_img.setColorFilter(getResources().getColor(R.color.colorBlue));
+        live_score_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        news_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        league_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        highlight_img.setColorFilter(getResources().getColor(R.color.inactive_txt));
+        match.setTextColor(getResources().getColor(R.color.colorBlue));
+        league.setTextColor(getResources().getColor(R.color.inactive_txt));
+        live_score.setTextColor(getResources().getColor(R.color.inactive_txt));
+        news.setTextColor(getResources().getColor(R.color.inactive_txt));
+        highlight.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+        rl_search.setVisibility(View.VISIBLE);
+        right_layout.setVisibility(View.VISIBLE);
+        title.setVisibility(View.GONE);
     }
 }
 
