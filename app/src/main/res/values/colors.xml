@@ -9,11 +9,13 @@
     <color name="colorBlue">#049ce0</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorLightWhite">#cccccc</color>
+    <color name="bg_search">#121318</color>
 
     ///////////
     <color name="home_screen_bg">#1f2024</color>
     <color name="active_text">#ffffff</color>
     <color name="inactive_txt">#8396a5</color>
+    <color name="inactive_txt1">#212528</color>
     <color name="Header_bg">#1e2024</color>
     <color name="list_header_bg">#232d33</color>
     <color name="list_item_bg">#23282c</color>

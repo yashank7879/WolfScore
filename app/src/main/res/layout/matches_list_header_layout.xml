@@ -4,11 +4,11 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/colorBalck">
+    android:background="@color/bg_search">
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_8sdp"
-        android:background="@color/colorBalck"/>
+        android:layout_height="@dimen/_4sdp"
+        android:background="@color/bg_search"/>
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
