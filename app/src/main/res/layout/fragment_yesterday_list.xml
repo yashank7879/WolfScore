@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBalck"
+    android:background="@color/bg_search"
     android:orientation="vertical">
 
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/list"
-        android:background="@color/Header_bg"
+        android:background="@color/bg_search"
         android:layout_width="match_parent"
-        android:divider=""
+        android:dividerHeight="0dp"
         android:layout_height="match_parent"/>
 
 </LinearLayout>
