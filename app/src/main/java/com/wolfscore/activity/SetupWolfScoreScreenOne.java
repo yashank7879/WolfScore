@@ -119,7 +119,6 @@ public class SetupWolfScoreScreenOne extends AppCompatActivity implements View.O
                                     overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
 
-                                    //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();
 
 
                                 } else {
@@ -145,14 +144,14 @@ public class SetupWolfScoreScreenOne extends AppCompatActivity implements View.O
                 binding.tvNewToWs.setTypeface(robotoLight);
                 binding.rlNewToWs.setBackground(null);
                 binding.tvLogMe.setTypeface(robotoMedium);
-                binding.rlLogMe.setBackground(ContextCompat.getDrawable(this, R.color.active_text));
+                binding.rlLogMe.setBackground(ContextCompat.getDrawable(this, R.color.colorBlue));
                 break;
             case R.id.rl_new_to_ws:
                 guestSignUpApi(androidDeviceId);
                 binding.tvLogMe.setTypeface(robotoLight);
                 binding.rlLogMe.setBackground(null);
                 binding.tvNewToWs.setTypeface(robotoMedium);
-                binding.rlNewToWs.setBackground(ContextCompat.getDrawable(this, R.color.active_text));
+                binding.rlNewToWs.setBackground(ContextCompat.getDrawable(this, R.color.colorBlue));
                 break;
 
         }
