@@ -129,7 +129,7 @@
                     android:id="@+id/tv_fav_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Teams (0)"
+                    android:text="League (0)"
                     style="@style/SmallRobotoRegularStyle"
                     android:textColor="@color/colorWhite" />
 

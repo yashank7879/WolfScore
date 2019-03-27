@@ -1,10 +1,16 @@
 package com.wolfscore.league.fragments.adapter;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +19,10 @@ import android.widget.ExpandableListView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.Glide;
@@ -21,16 +30,20 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.StreamEncoder;
 import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParser;
 import com.squareup.picasso.Picasso;
 import com.wolfscore.R;
 import com.wolfscore.league.fragments.leagueModel.Country;
 import com.wolfscore.matches.modal.TableDTO;
 import com.wolfscore.responce.GetLeagueResponce;
+import com.wolfscore.utils.SvgBitmapDecoder;
 import com.wolfscore.utils.SvgDecoder;
 import com.wolfscore.utils.SvgDrawableTranscoder;
 import com.wolfscore.utils.SvgSoftwareLayerSetter;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,14 +65,16 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
     private List<String> mKeys = new ArrayList<>();
     private GenericRequestBuilder mRequestBuilder;
     private FavrouitTeamSelect listener;
+    private LinearLayout linearLayout;
 
-    public AllLeagueAdapter(Context context, ArrayList<Country> countriesLeagueList,FavrouitTeamSelect listener) {
+    public AllLeagueAdapter(Context context, ArrayList<Country> countriesLeagueList, LinearLayout linearLayout, FavrouitTeamSelect listener) {
         this._context = context;
         this.countriesLeague = countriesLeagueList;
         this.countriesLeagueList=countriesLeagueList;
         this.listener=listener;
+        this.linearLayout=linearLayout;
       //  mKeys.addAll(this.tableHashMap.keySet());
-        initGlideForSVG();
+       //initGlideForSVG();
     }
 
     @Override
@@ -90,6 +105,7 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
         final ImageView arrow, iv_star;
 
         tv_team_name=convertView.findViewById(R.id.tv_team_name);
+        RelativeLayout fav_layout=(RelativeLayout)convertView.findViewById(R.id.fav_layout);
         iv_star=convertView.findViewById(R.id.iv_star);
         arrow=convertView.findViewById(R.id.arrow);
         iv_star.setVisibility(View.VISIBLE);
@@ -103,7 +119,7 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
 
         }
 
-        iv_star.setOnClickListener(new View.OnClickListener() {
+        fav_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (String.valueOf(league.getIs_favorite()).equals("0")) {
@@ -158,7 +174,23 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
         /*Picasso.with(_context)
                 .load(country.getCountry_flag())
                 .into(iv_team);*/
-        loadImage(iv_team,country.getCountry_flag());
+
+/*
+        SvgLoader.pluck()
+                .with((Activity) _context)
+                .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
+                .load(country.getCountry_flag(), iv_team);
+*/
+
+/*
+        Glide.with(_context)
+                .load(country.getCountry_flag())
+                .asBitmap().fitCenter()
+                .imageDecoder(new SvgBitmapDecoder(_context))
+                .into(iv_team);
+*/
+
+      // loadImage(iv_team,country.getCountry_flag());
 
         TextView tv_team_name;
         tv_team_name=convertView.findViewById(R.id.tv_team_name);
@@ -202,10 +234,12 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
 
     private void loadImage(ImageView mImageView,String url) {
         if (url.contains("svg")){
-            mRequestBuilder.diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .load(Uri.parse(url))
-                    .error(R.drawable.ic_team_placeholder)
-                    .into(mImageView);
+           mRequestBuilder
+                   .load(Uri.parse(url))
+                   .error(R.drawable.ic_team_placeholder)
+                   .diskCacheStrategy(DiskCacheStrategy.NONE)
+                   .skipMemoryCache(true)
+                   .into(mImageView);
         } else if (url.contains("png")) {
             Glide.with(_context).load(url) .error(R.drawable.ic_team_placeholder).into(mImageView);
         }
@@ -220,38 +254,59 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
                 if (constraint != null) {
                     if (constraint.length() > 0) {
                         ArrayList<Country> mFilter = new ArrayList<>();
-                        for (Country country: countriesLeague) {
+                        for (Country country : countriesLeague) {
                             ArrayList<Country.League> leagues = country.getLeagueArrayList();
                             ArrayList<Country.League> filterLeague = new ArrayList<>();
-                            boolean flag = false;
-                            for (Country.League league: leagues) {
-                                if (league.getLeague_name().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                                    filterLeague.add(league);
-                                    flag = true;
+
+
+                            if (country.getCountry_name().toLowerCase().contains(constraint.toString().toLowerCase())){
+                                Country newCountry = new Country();
+                                newCountry.setCountry_id(country.getCountry_id());
+                                newCountry.setCountry_name(country.getCountry_name());
+                                newCountry.setCountry_flag(country.getCountry_flag());
+                                newCountry.setLeagueArrayList(country.getLeagueArrayList());
+                                mFilter.add(newCountry);
+                            }
+                            else {
+                                boolean flag = false;
+                                for (Country.League league : leagues) {
+                                    if (league.getLeague_name().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                                        filterLeague.add(league);
+                                        flag = true;
+                                    }
+                                }
+                                if (flag) {
+                                    Country newCountry = new Country();
+                                    newCountry.setLeagueArrayList(filterLeague);
+                                    newCountry.setCountry_flag(country.getCountry_flag());
+                                    newCountry.setCountry_name(country.getCountry_name());
+                                    newCountry.setCountry_id(country.getCountry_id());
+                                    mFilter.add(newCountry);
                                 }
                             }
 
-                            country.setLeagueArrayList(leagues);
-                            if (flag) {
-                                country.setLeagueArrayList(filterLeague);
-                                mFilter.add(country);
-                            }
                         }
 
                         filterResults.values = mFilter;
-                    //   notifyDataSetChanged();
-                    } else {
+                    }
+
+                    else {
                         filterResults.values = countriesLeague;
-                      //  notifyDataSetChanged();
+
                     }
                 }
                 return filterResults;
-               // return null;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 countriesLeagueList = (ArrayList<Country>) results.values;
+                if (countriesLeagueList.size()==0)
+                {
+                    linearLayout.setVisibility(View.GONE);
+                }
+                else
+                    linearLayout.setVisibility(View.VISIBLE);
                 notifyDataSetChanged();
 
             }
@@ -261,4 +316,45 @@ public class AllLeagueAdapter  extends BaseExpandableListAdapter implements Filt
     public interface FavrouitTeamSelect {
         void favrouitSelectUnselect(Country.League league, String value, ImageView ivStar);
     }
+
+
+/*
+    private class HttpImageRequestTask extends AsyncTask<Void, Void, Drawable> {
+        @Override
+        protected Drawable doInBackground(Void... params) {
+            try {
+
+
+                final URL url = new URL("http://upload.wikimedia.org/wikipedia/commons/e/e8/Svg_example3.svg");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream inputStream = urlConnection.getInputStream();
+                SVG svg = SVGParser.getSVGFromInputStream(inputStream);
+                Drawable drawable = svg.createPictureDrawable();
+                return drawable;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Drawable drawable) {
+            // Update the view
+            updateImageView(drawable);
+        }
+    }
+*/
+
+/*
+    @SuppressLint("NewApi")
+    private void updateImageView(Drawable drawable){
+        if(drawable != null){
+
+            // Try using your library and adding this layer type before switching your SVG parsing
+            mImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            mImageView.setImageDrawable(drawable);
+        }
+    }
+*/
 }

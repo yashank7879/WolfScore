@@ -45,6 +45,13 @@
             android:layout_marginStart="@dimen/_5sdp" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/fav_layout"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
     <ImageView
         android:id="@+id/iv_star"
         android:layout_width="@dimen/_20sdp"
@@ -67,6 +74,7 @@
         android:tint="@color/active_text"
         android:layout_margin="@dimen/_4sdp"
         android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
     <View

@@ -135,15 +135,16 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                     selectFavrouitApi(getPopularSelectedTeam()  );
                 }
                 else if (teamType.equals("player") && binding.viewpager.getCurrentItem() == 2) {
-                    binding.tvNext.setText("FINISH");
+
                     getSelectedPlayer();
                     selectFavrouitApi(getSelectedPlayer());
                 }
-               /* else if ( binding.viewpager.getCurrentItem() == 3) {
+                else if ( binding.viewpager.getCurrentItem() == 3) {
+                    binding.tvNext.setText("FINISH");
                     binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() + 1);
                     CurrentPage = binding.viewpager.getCurrentItem();
-                }*/
-                else if (teamType.equals("Notification") && binding.viewpager.getCurrentItem() == 3) {
+                }
+                else if (teamType.equals("Notification") && binding.viewpager.getCurrentItem() == 4) {
                     binding.tvNext.setText("FINISH");
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -163,7 +164,7 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
                 } else {
                     //if ( binding.viewpager.getCurrentItem() == )
 
-                    if (binding.viewpager.getCurrentItem() == 3){
+                    if (binding.viewpager.getCurrentItem() == 4){
                         Intent intent = new Intent(SetupAppActivity.this, HomeActivity.class);
                         startActivity(intent);
                        // overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -197,6 +198,17 @@ public class SetupAppActivity extends AppCompatActivity implements View.OnClickL
 
                 binding.viewpager.setCurrentItem(binding.viewpager.getCurrentItem() - 1);
                 binding.tvNext.setText("NEXT");
+                break;
+
+            case R.id.tv_skip:
+
+                Intent intent = new Intent(SetupAppActivity.this, HomeActivity.class);
+                startActivity(intent);
+                // overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+                finish();
+
 
            /* if (binding.viewpager.getCurrentItem() == 0){
                 onBackPressed();

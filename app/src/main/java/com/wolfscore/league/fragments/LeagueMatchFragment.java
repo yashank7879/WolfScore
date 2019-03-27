@@ -36,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class LeagueMatchFragment extends Fragment {
 
     private void initialise(View rootView)
     {
+
         // matchesArrayList.clear();
         stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
 

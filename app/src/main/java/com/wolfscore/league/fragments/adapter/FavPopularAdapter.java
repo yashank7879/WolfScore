@@ -1,6 +1,8 @@
 package com.wolfscore.league.fragments.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.bumptech.glide.load.resource.file.FileToStreamDecoder;
 import com.caverock.androidsvg.SVG;
 import com.squareup.picasso.Picasso;
 import com.wolfscore.R;
+import com.wolfscore.activity.AboutLeagueActivity;
 import com.wolfscore.adapter.TopPlayerAdapter;
 import com.wolfscore.league.fragments.leagueModel.Country;
 import com.wolfscore.listener.PlayerOnClick;
@@ -43,16 +47,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavPopularAdapter extends RecyclerView.Adapter<FavPopularAdapter.MyViewHolder> {
     private Context mContext;
-    private PlayerOnClick listener;
+   // private PlayerOnClick listener;
     List<Country.League> fav_leagueArrayList;
     List<Country.League> filtered_leagueArrayList;
     private GenericRequestBuilder mRequestBuilder;
+    private AllLeagueAdapter.FavrouitTeamSelect listener;
+    private  LinearLayout linearLayout;
 
-    public FavPopularAdapter(Context mContext,List<Country.League> fav_leagueArrayList) {
+    public FavPopularAdapter(Context mContext, List<Country.League> fav_leagueArrayList, LinearLayout linearLayout, AllLeagueAdapter.FavrouitTeamSelect listener) {
         this.mContext = mContext;
         this.fav_leagueArrayList = fav_leagueArrayList;
         this.filtered_leagueArrayList=fav_leagueArrayList;
         this.listener = listener;
+        this.linearLayout=linearLayout;
         initGlideForSVG();
     }
 
@@ -77,6 +84,29 @@ public class FavPopularAdapter extends RecyclerView.Adapter<FavPopularAdapter.My
 
             }
             loadImage( holder.iv_team,fav_leagueArrayList.get(i).getLeague_flag());
+           holder.main_layout.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   Activity activity = (Activity) mContext;
+                   mContext.startActivity(new Intent(mContext, AboutLeagueActivity.class)
+                           .putExtra("League",  fav_leagueArrayList.get(i)));
+                   activity.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+               }
+           });
+            holder.fav_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (String.valueOf(fav_leagueArrayList.get(i).getIs_favorite()).equals("0")) {
+                        holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
+                        listener.favrouitSelectUnselect(fav_leagueArrayList.get(i), "1", holder.iv_star);
+                    } else {
+                        holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_white_star3x));
+
+                        listener.favrouitSelectUnselect(fav_leagueArrayList.get(i), "0",holder.iv_star);
+                    }
+                }
+            });
 
         }
     }
@@ -92,6 +122,7 @@ public class FavPopularAdapter extends RecyclerView.Adapter<FavPopularAdapter.My
         CircleImageView iv_team;
         ImageView iv_star;
         View dividerView;
+        RelativeLayout main_layout,fav_layout;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
@@ -99,6 +130,8 @@ public class FavPopularAdapter extends RecyclerView.Adapter<FavPopularAdapter.My
             iv_team = (CircleImageView) view.findViewById(R.id.iv_team);
             iv_star=(ImageView)view.findViewById(R.id.iv_star);
             dividerView=(View)view.findViewById(R.id.view);
+            main_layout=(RelativeLayout)view.findViewById(R.id.main_layout);
+            fav_layout=(RelativeLayout)view.findViewById(R.id.fav_layout);
               }
     }
 
@@ -156,7 +189,12 @@ public class FavPopularAdapter extends RecyclerView.Adapter<FavPopularAdapter.My
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 fav_leagueArrayList = (ArrayList<Country.League>) filterResults.values;
-
+                if (fav_leagueArrayList.size()==0)
+                {
+                    linearLayout.setVisibility(View.GONE);
+                }else {
+                    linearLayout.setVisibility(View.VISIBLE);
+                }
                 // refresh the list with filtered data
                 notifyDataSetChanged();
             }

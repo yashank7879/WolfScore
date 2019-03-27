@@ -1,6 +1,5 @@
 package com.wolfscore.activity;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -19,8 +20,6 @@ import com.google.gson.Gson;
 import com.wolfscore.R;
 import com.wolfscore.adapter.TopPlayerAdapter;
 import com.wolfscore.databinding.FragmentTopPlayerBinding;
-import com.wolfscore.listener.GetTeamListener;
-import com.wolfscore.listener.NextOnClick;
 import com.wolfscore.listener.PlayerOnClick;
 import com.wolfscore.pagination.EndlessRecyclerViewScrollListener;
 import com.wolfscore.responce.TopPlayerResponce;
@@ -38,6 +37,7 @@ import java.util.List;
 import static com.wolfscore.utils.ApiCollection.ADD_FAVOURITES;
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
+import static com.wolfscore.utils.ApiCollection.SINGLE_FAVORITE_UNFAVORITE_API;
 
 public class AddFavrouitPlayerActivity extends AppCompatActivity implements PlayerOnClick, View.OnClickListener {
     FragmentTopPlayerBinding binding;
@@ -142,10 +142,12 @@ public class AddFavrouitPlayerActivity extends AppCompatActivity implements Play
     @Override
     public void playerItemOnCLick(TopPlayerResponce.DataBean.PlayerListBean bean, String value) {
         if (value.equals("1")) {
-            bean.setIs_favorite("1");
-            adapter.notifyDataSetChanged();
 
-            tempList.add(bean);
+            favrouitApi(bean,"1");
+         //   bean.setIs_favorite("1");
+         //   adapter.notifyDataSetChanged();
+
+           // tempList.add(bean);
             binding.tvFavroitTeam.setVisibility(View.VISIBLE);
             binding.tvFavroitTeam.setText(MessageFormat.format("{0} {1}", bean.getFirst_name(), getString(R.string.added_as_favorite)));
             handler = new Handler();
@@ -157,9 +159,10 @@ public class AddFavrouitPlayerActivity extends AppCompatActivity implements Play
             }, 3000);
 
         } else {
-            bean.setIs_favorite("0");
-            adapter.notifyDataSetChanged();
-            tempList.remove(bean);
+            favrouitApi(bean,"0");
+         //   bean.setIs_favorite("0");
+         //   adapter.notifyDataSetChanged();
+          //  tempList.remove(bean);
         }
     }
 
@@ -167,8 +170,9 @@ public class AddFavrouitPlayerActivity extends AppCompatActivity implements Play
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_done:
-                getSelectedPlayer();
-                selectFavrouitApi();
+                onBackPressed();
+               // getSelectedPlayer();
+                //selectFavrouitApi();
                 break;
             case R.id.iv_back:
                 onBackPressed();
@@ -236,6 +240,61 @@ public class AddFavrouitPlayerActivity extends AppCompatActivity implements Play
                     });
         }
     }
+
+    private void favrouitApi(TopPlayerResponce.DataBean.PlayerListBean bean, String value) {
+        if ( Constant.isNetworkAvailable(this, binding.mainLayout)) {//http://dev.wolfscore.info/api_v1/users/single_favorite_unfavorite
+           getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            AndroidNetworking.post(BASE_URL + SINGLE_FAVORITE_UNFAVORITE_API)
+                    .addBodyParameter("request_type", value)
+                    .addBodyParameter("request_id", ""+bean.getPlayer_id())//team id,player id,league id
+                    .addBodyParameter("type", "player")// team || player ||league
+                    .addHeaders("Api-Key", APIKEY)
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(this, PreferenceConnector.AUTH_TOKEN, ""))
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            String status = null;
+                            try {
+                                status = response.getString("status");
+                                String message = response.getString("message");
+                                if (status.equals("success")) {
+
+                                    if (value.equals("0")){
+                                        bean.setIs_favorite("0");
+                                        adapter.notifyDataSetChanged();
+                                    }else {
+                                        bean.setIs_favorite("1");
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else {
+
+                                    if (value.equals("0")){
+                                        bean.setIs_favorite("1");
+                                    }else {
+                                        bean.setIs_favorite("0");
+                                    }  adapter.notifyDataSetChanged();
+                                    Toast.makeText(AddFavrouitPlayerActivity.this, "" + message, Toast.LENGTH_SHORT).show();
+                                }
+                                //adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                progressDialog.dismiss();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

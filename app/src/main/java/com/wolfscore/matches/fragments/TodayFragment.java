@@ -1,5 +1,6 @@
 package com.wolfscore.matches.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -20,6 +23,7 @@ import com.wolfscore.R;
 import com.wolfscore.activity.AboutMatchActivity;
 import com.wolfscore.activity.ActivityMatchDetail;
 import com.wolfscore.activity.HomeActivity;
+import com.wolfscore.activity.NewFilteredActivity;
 import com.wolfscore.matches.adapter.StickyHeaderAdapter;
 import com.wolfscore.matches.modal.LocalTeam;
 import com.wolfscore.matches.modal.MatchHeader;
@@ -53,68 +57,146 @@ import static com.wolfscore.utils.ApiCollection.GET_FIXTURES;
  */
 
 public class TodayFragment  extends Fragment {
-  //  public ArrayList<Matches> matchesArrayList = new ArrayList<>();
-
     private ProgressDialog progressDialog;
     StickyHeaderAdapter adapter;
     public StickyListHeadersListView stickyList;
     int page=1;
-    String league_id="";
+    String league_id="",onGoing="",byTime="";
+    TextView my_matches,all_matches,ongoing,by_time,show_all,no_data_txt;
+    int total_pages=1;
+    private boolean isMyMatch=false,isOngoing=true,isBytime=true;
+    public ArrayList<Matches> MatchesArrayList=new ArrayList<>();
+    private LinearLayout no_data;
+    Context context;
+    View rootView;
+    private boolean isVisible=false;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context=context;
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
+         rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
         initialise(rootView);
         if (HomeActivity.homeActivity.event!=null&&HomeActivity.homeActivity.event.getLeague_id()
-                !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()/*&&
-                HomeActivity.homeActivity.current_item==1*/){
-            if (!HomeActivity.homeActivity.league_id.isEmpty()&&HomeActivity.homeActivity.league_id.equalsIgnoreCase(HomeActivity.homeActivity.event.getLeague_id())){
+                !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()
+               ){
+            MatchesArrayList.clear();
+            HomeActivity.homeActivity.league_id= HomeActivity.homeActivity.event.getLeague_id();
+            HomeActivity.homeActivity.todayMatchesArrayList.clear();
+            HomeActivity.homeActivity.my_todayMatchesArrayList.clear();
+            page=1;
+            getMatchData(page);
+           /* if (!HomeActivity.homeActivity.league_id.isEmpty()&&HomeActivity.homeActivity.league_id.equalsIgnoreCase(HomeActivity.homeActivity.event.getLeague_id())){
                 HomeActivity.homeActivity.league_id= HomeActivity.homeActivity.event.getLeague_id();
+
+                MatchesArrayList.clear();
+              if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")){
+                  MatchesArrayList.addAll(HomeActivity.homeActivity.my_todayMatchesArrayList);
+
+              }else {
+                  MatchesArrayList.addAll(HomeActivity.homeActivity.todayMatchesArrayList);
+              }
+
                 adapter.notifyDataSetChanged();
             }
             else {
+                MatchesArrayList.clear();
                 HomeActivity.homeActivity.league_id= HomeActivity.homeActivity.event.getLeague_id();
                 HomeActivity.homeActivity.todayMatchesArrayList.clear();
+                HomeActivity.homeActivity.my_todayMatchesArrayList.clear();
                 page=1;
                 getMatchData(page);
-            }
-
-
+            }*/
         }
         else {
-            if (HomeActivity.homeActivity.todayMatchesArrayList.size()>0){
-                adapter.notifyDataSetChanged();
-            }
-            else {
-                page=1;
-                getMatchData(page);
-            }
-
-        }
-
+         //  if (!isVisible) {
+               page = 1;
+               getMatchData(page);
+           //    isVisible=true;
+         //  }
+         }
 
         return rootView;
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (rootView != null){
+                if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.active_text));
+                    isMyMatch=false;
+                }
+                else {
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+                    isMyMatch=true;
+                }
+                if (HomeActivity.homeActivity.byTime.equalsIgnoreCase("time")) {
+                    by_time.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.active_text));
+                }else {
+                    by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+                }
+               /* if (isVisible) {
+                    page = 1;
+                    MatchesArrayList.clear();
+                    getMatchData(page);
+                }*/
+
+            }
+
+        }
+
+    }
+
     private void initialise(View rootView)
     {
-       // matchesArrayList.clear();
-         stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
+        stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
+        my_matches = (TextView) rootView.findViewById(R.id.my_matches);
+        all_matches = (TextView) rootView.findViewById(R.id.all_matches);
+        ongoing = (TextView) rootView.findViewById(R.id.ongoing);
+        by_time = (TextView) rootView.findViewById(R.id.by_time);
+        no_data = (LinearLayout) rootView.findViewById(R.id.no_data);
+        show_all = (TextView) rootView.findViewById(R.id.show_all);
+        no_data_txt = (TextView) rootView.findViewById(R.id.no_data_txt);
 
-        adapter = new StickyHeaderAdapter(getActivity(),HomeActivity.homeActivity.todayMatchesArrayList);
+        if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")){
+            my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+          //  all_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+            my_matches.setTextColor(getResources().getColor(R.color.active_text));
+          //  all_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+        }
+        else {
+            my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+         //   all_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+            my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+         //   all_matches.setTextColor(getResources().getColor(R.color.active_text));
+
+        }
+
+        adapter = new StickyHeaderAdapter(context,MatchesArrayList);
         stickyList.setAdapter(adapter);
         stickyList.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
             public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-               // Toast.makeText(getActivity(),"Header", Toast.LENGTH_SHORT).show();
             }
         });
 
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(), AboutMatchActivity.class).putExtra("obj",HomeActivity.homeActivity.todayMatchesArrayList.get(position)));
+                startActivity(new Intent(context, AboutMatchActivity.class).putExtra("obj",MatchesArrayList.get(position)));
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
@@ -123,17 +205,125 @@ public class TodayFragment  extends Fragment {
         stickyList.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
+
+               if (page<=total_pages)
                 getMatchData(page);
-                // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
+        show_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                HomeActivity.homeActivity.list_type="all";
+                HomeActivity.homeActivity.todayMatchesArrayList.clear();
+                page=1;
+                MatchesArrayList.clear();
+                isMyMatch=true;
+                my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+                onGoing="";
+                isOngoing=true;
+                ongoing.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                ongoing.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+                HomeActivity.homeActivity.byTime="";
+                isBytime=true;
+                by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+                if (show_all.getText().toString().equalsIgnoreCase("Show All Matches"))
+                {
+                getMatchData(page);
+                }
+                else {
+                    HomeActivity.homeActivity.current_item=1;
+                    //  startActivity(new Intent(getActivity(), LeagueFilteringActivity.class));
+                    startActivity(new Intent(getActivity(), NewFilteredActivity.class));
+                }
+
+            }
+        });
+        my_matches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               my_matches.setEnabled(false);
+                all_matches.setEnabled(true);
+
+
+                if (isMyMatch){
+                HomeActivity.homeActivity.list_type="my";
+                isMyMatch=false;
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.active_text));
+                }
+                else{
+                    HomeActivity.homeActivity.list_type="all";
+                    isMyMatch=true;
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+                }
+                page=1;
+                MatchesArrayList.clear();
+
+                    getMatchData(page);
+            }
+        });
+
+        ongoing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ongoing.setEnabled(false);
+
+                if (isOngoing){
+                    onGoing="ongoing";
+                    isOngoing=false;
+                    ongoing.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    ongoing.setTextColor(getResources().getColor(R.color.active_text));
+
+                }
+                else{
+                    onGoing="";
+                    isOngoing=true;
+                    ongoing.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    ongoing.setTextColor(getResources().getColor(R.color.inactive_txt));
+                }
+
+                page=1;
+                MatchesArrayList.clear();
+
+                getMatchData(page);
+
+            }
+        });
+        by_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                by_time.setEnabled(false);
+                if (isBytime){
+                    HomeActivity.homeActivity.byTime="time";
+                    isBytime=false;
+                    by_time.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.active_text));
+                }
+                else{
+                    HomeActivity.homeActivity.byTime="";
+                    isBytime=true;
+                    by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+                }
+                page=1;
+                MatchesArrayList.clear();
+                getMatchData(page);
+
+            }
+        });
+
     }
 
-    private void bindData() {
-        Collections.sort(HomeActivity.homeActivity.todayMatchesArrayList, new Comparator<Matches>() {
+    private void bindData( ArrayList<Matches> MatchesArrayList) {
+        Collections.sort(MatchesArrayList, new Comparator<Matches>() {
             public int compare(Matches matches, Matches nextMatches) {
                 return matches.getHeaderId() - nextMatches.getHeaderId();
             }
@@ -142,20 +332,23 @@ public class TodayFragment  extends Fragment {
     }
 
     private void getMatchData(int page) {
-        Log.d("auttoken", "getMatchData: auttoken...."+PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN,""));
-        progressDialog = new ProgressDialog(getActivity());
+        Log.d("auttoken", "getMatchData: auttoken...."+PreferenceConnector.readString(context, PreferenceConnector.AUTH_TOKEN,""));
+        progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("please wait...");
         progressDialog.show();
-        if (Constant.isNetworkAvailable(getActivity(), stickyList)) {
+        if (Constant.isNetworkAvailable(context, stickyList)) {
             //  http://dev.wolfscore.info/api_v1/matches/get_fixtures?type=today&page=1&date=&team_id=&league_id=""
             AndroidNetworking.get(BASE_URL + GET_FIXTURES)
                     .addHeaders("Api-Key", APIKEY)
-                    .addHeaders("Auth-Token", PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""))
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(context, PreferenceConnector.AUTH_TOKEN, ""))
                     .addQueryParameter("type", "today")
                     .addQueryParameter("page", page+"")
                     .addQueryParameter("date", "")
                     .addQueryParameter("team_id", "")
+                    .addQueryParameter("list_type", HomeActivity.homeActivity.list_type)
                     .addQueryParameter("league_id", HomeActivity.homeActivity.league_id)
+                    .addQueryParameter("ongoing", onGoing)
+                    .addQueryParameter("sort_by",HomeActivity.homeActivity.byTime)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -193,7 +386,7 @@ public class TodayFragment  extends Fragment {
                                          //   matchHeader.setSeason_id(object.getInt("country_id"));
                                             JSONObject  country_obj=null,country_data=null;
 
-                                           ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(getActivity());
+                                           ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(context);
                                             for (int j = 0; j < countryDtos.size(); j++) {
                                                 if (String.valueOf(countryId).equalsIgnoreCase(countryDtos.get(j).getCountry_id())){
                                                     matchHeader.setCountryName(countryDtos.get(j).getCountry_name());
@@ -202,17 +395,6 @@ public class TodayFragment  extends Fragment {
 
                                             }
 
-/*
-                                            if (league_data_obj.has("country")) {
-                                                country_obj = league_data_obj.getJSONObject("country");
-                                                if (country_obj.has("data")){
-                                                    country_data=country_obj.getJSONObject("data");
-                                                    if (country_data.has("name")){
-                                                        matchHeader.setCountryName(!country_data.isNull("name") ? country_data.getString("name") : "");
-                                                    }
-                                                }
-                                            }
-*/
 
                                             JSONObject localTeam_obj=object.getJSONObject("localTeam");
                                             JSONObject localteam_data=localTeam_obj.getJSONObject("data");
@@ -242,29 +424,118 @@ public class TodayFragment  extends Fragment {
 
                                             Matches matches=new Matches(matchHeader,localTeam,visitorTeam,time,score);
                                             // Matches matches = new Matches(localTeam, matchHeader);
-                                            HomeActivity.homeActivity.todayMatchesArrayList.add(matches);
+
+                                            if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my"))
+                                            {
+                                             HomeActivity.homeActivity.my_todayMatchesArrayList.add(matches);
+                                                MatchesArrayList.add(matches);
+                                               // MatchesArrayList.addAll(HomeActivity.homeActivity.my_todayMatchesArrayList);
+                                            }
+                                            else {
+                                                HomeActivity.homeActivity.todayMatchesArrayList.add(matches);
+                                                MatchesArrayList.add(matches);
+                                                //  MatchesArrayList.addAll(HomeActivity.homeActivity.todayMatchesArrayList);
+                                            }
+
 
                                         }
                                         //  addRecyclerHeaders();
-                                        bindData();
+                                        bindData(MatchesArrayList);
+                                        if (HomeActivity.homeActivity.todayMatchesArrayList.size()>0)
+                                        bindData(HomeActivity.homeActivity.todayMatchesArrayList);
+                                        if (HomeActivity.homeActivity.my_todayMatchesArrayList.size()>0)
+                                        bindData(HomeActivity.homeActivity.my_todayMatchesArrayList);
+                                        no_data.setVisibility(View.GONE);
                                         adapter.notifyDataSetChanged();
-                                      JSONObject meta_obj=  data_obj.getJSONObject("meta");
+                                        my_matches.setEnabled(true);
+                                        ongoing.setEnabled(true);
+                                        by_time.setEnabled(true);
+
+                                        JSONObject meta_obj=  data_obj.getJSONObject("meta");
                                      JSONObject pagination_obj=   meta_obj.getJSONObject("pagination");
-                                     int current_page=   pagination_obj.getInt("current_page");
-                                     int total_pages=pagination_obj.getInt("total_pages");
-                                    /* if (current_page<total_pages){
-                                         page=current_page+1;
-                                        // getMatchData();
-                                     }*/
+
+                                      total_pages=pagination_obj.getInt("total_pages");
+                                        int current_page=   pagination_obj.getInt("current_page");
+
                                     }
 
-                                } else {
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                    else {
+                                        //todo for empty array
+                                        MatchesArrayList.clear();
+                                        adapter.notifyDataSetChanged();
+                                        my_matches.setEnabled(true);
+                                        ongoing.setEnabled(true);
+                                        by_time.setEnabled(true);
+
+                                        no_data.setVisibility(View.VISIBLE);
+                                        if (onGoing.equalsIgnoreCase("ongoing")&&
+                                           HomeActivity.homeActivity.list_type.equalsIgnoreCase("my"))
+                                        {
+                                            no_data_txt.setText("No my matches that are ongoing");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                        }
+                                        else if (onGoing.equalsIgnoreCase("ongoing")) {
+                                            no_data_txt.setText("No ongoing matches");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                        }
+
+                                        else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("all")){
+                                            no_data_txt.setText("No matches scheduled");
+                                            show_all.setText("FILTER TOURNAMENTS");
+                                        }
+                                        else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                                            no_data_txt.setText("No Favorite playing");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+
+                                        }
+                                        else {
+                                            no_data_txt.setText("No matches scheduled");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                        }
+                                            //   Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }
+
+                                else {
+
+                                    MatchesArrayList.clear();
+                                    adapter.notifyDataSetChanged();
+                                    my_matches.setEnabled(true);
+                                    ongoing.setEnabled(true);
+                                    by_time.setEnabled(true);
+                                    no_data.setVisibility(View.VISIBLE);
+                                    if (onGoing.equalsIgnoreCase("ongoing")&&
+                                            HomeActivity.homeActivity.list_type.equalsIgnoreCase("my"))
+                                    {
+                                        no_data_txt.setText("No my matches that are ongoing");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+
+                                    }
+
+                                    else if (onGoing.equalsIgnoreCase("ongoing")) {
+                                        no_data_txt.setText("No ongoing matches");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                    }
+                                    else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("all")){
+                                        no_data_txt.setText("No matches scheduled");
+                                        show_all.setText("FILTER TOURNAMENTS");
+                                    }
+
+                                    else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                                        no_data_txt.setText("No Favorite playing");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                    }
+                                    else {
+                                        no_data_txt.setText("No matches scheduled");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                    }
+                                        //    Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
 
                         @Override

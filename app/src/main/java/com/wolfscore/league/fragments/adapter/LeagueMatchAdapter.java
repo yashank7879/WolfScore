@@ -61,6 +61,7 @@ public class LeagueMatchAdapter extends BaseAdapter implements StickyListHeaders
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
+
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.matches_list_item_cell_view, parent, false);
@@ -100,7 +101,7 @@ public class LeagueMatchAdapter extends BaseAdapter implements StickyListHeaders
         if (matchesArrayList.get(position).getTime()!=null)
         {
             // String time=  getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
-            String time= Constant.getServerFormattedDate(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a",context);
+            String time= Constant.getServerFormattedDate(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "HH:mm",context);
 
             if (matchesArrayList.get(position).getTime().getStatus().equals("NS")){
                 holder.score_layout.setVisibility(View.GONE);
@@ -177,7 +178,9 @@ public class LeagueMatchAdapter extends BaseAdapter implements StickyListHeaders
         }
 
         String headerText= matchesArrayList.get(position).getHeaderName();
-        holder.text.setText(matchesArrayList.get(position).getMatchHeader().getName());
+
+        String day=Constant.getDay(matchesArrayList.get(position).getMatchHeader().getName());
+        holder.text.setText(""+day+" , "+matchesArrayList.get(position).getMatchHeader().getName());
         holder.text.setTypeface(robotoMedium);
         Picasso.with(context).load("https:\\/\\/cdn.sportmonks.com\\/images\\/soccer\\/teams\\/7\\/2279.png")
                 .placeholder(R.drawable.app_icon).into( holder.header_img);

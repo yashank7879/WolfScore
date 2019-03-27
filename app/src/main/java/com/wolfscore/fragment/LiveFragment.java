@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -55,6 +56,7 @@ public class LiveFragment extends Fragment {
     StickyHeaderAdapter adapter;
     public StickyListHeadersListView stickyList;
     public ArrayList<Matches> LiveMatchesArrayList=new ArrayList<>();
+    LinearLayout my_match_layout;
 
 
 
@@ -70,6 +72,8 @@ public class LiveFragment extends Fragment {
     {
         // matchesArrayList.clear();
         stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
+        my_match_layout=(LinearLayout)rootView.findViewById(R.id.my_match_layout);
+        my_match_layout.setVisibility(View.GONE);
 
         adapter = new StickyHeaderAdapter(getActivity(),LiveMatchesArrayList);
         stickyList.setAdapter(adapter);

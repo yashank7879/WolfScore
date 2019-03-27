@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.wolfscore.R;
 import com.wolfscore.activity.HomeActivity;
 import com.wolfscore.activity.LeagueFilteringActivity;
+import com.wolfscore.activity.NewFilteredActivity;
 import com.wolfscore.matches.adapter.matchListPagerAdapter;
 import com.wolfscore.matches.modal.FilteredEvent;
 import com.wolfscore.matches.modal.Matches;
@@ -35,9 +36,7 @@ public class MatchListFragment extends Fragment {
         initialise(rootView);
         return rootView;
     }
-    private void initialise(View rootView)
-    {
-
+    private void initialise(View rootView) {
         //register EventBus (this activity is a subscriber)
         Bundle bundle = this.getArguments();
         day = bundle.getString("day");
@@ -66,7 +65,8 @@ public class MatchListFragment extends Fragment {
             public void onClick(View v) {
                // is_filtered=true;
                 HomeActivity.homeActivity.current_item=viewpager.getCurrentItem();
-                startActivity(new Intent(getActivity(), LeagueFilteringActivity.class));
+              //  startActivity(new Intent(getActivity(), LeagueFilteringActivity.class));
+                startActivity(new Intent(getActivity(), NewFilteredActivity.class));
             }
         });
 

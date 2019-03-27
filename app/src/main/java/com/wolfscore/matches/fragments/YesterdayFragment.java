@@ -1,5 +1,6 @@
 package com.wolfscore.matches.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -18,6 +21,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.wolfscore.R;
 import com.wolfscore.activity.AboutMatchActivity;
 import com.wolfscore.activity.HomeActivity;
+import com.wolfscore.activity.NewFilteredActivity;
 import com.wolfscore.matches.adapter.StickyHeaderAdapter;
 import com.wolfscore.matches.modal.LocalTeam;
 import com.wolfscore.matches.modal.MatchHeader;
@@ -54,14 +58,26 @@ import static com.wolfscore.utils.ApiCollection.GET_FIXTURES;
 
 public class YesterdayFragment  extends Fragment {
  // public   ArrayList<Matches> matchesArrayList = new ArrayList<>();
-  public   StickyListHeadersListView stickyList;
+    public   StickyListHeadersListView stickyList;
     private ProgressDialog progressDialog;
     StickyHeaderAdapter adapter;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Calendar cal = Calendar.getInstance();
     String yesterday_date="";
     int page=1;
-    String league_id="";
+    String league_id="",list_type="",byTime="",onGoing="";
+    TextView my_matches,all_matches,ongoing,by_time,show_all,no_data_txt;
+    int total_pages=1;
+    public ArrayList<Matches> MatchesArrayList=new ArrayList<>();
+    boolean isMyMatch=false,isBytime=true;
+    private LinearLayout no_data;
+    private Context context;
+    private  View rootView;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context=context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,36 +87,77 @@ public class YesterdayFragment  extends Fragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (rootView != null){
+                if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.active_text));
+                    isMyMatch=false;
+                }
+                else {
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+                    isMyMatch=true;
+                }
+                if (HomeActivity.homeActivity.byTime.equalsIgnoreCase("time")) {
+                    by_time.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.active_text));
+                }else {
+                    by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
+         rootView = inflater.inflate(R.layout.fragment_yesterday_list, null);
         stickyList = (StickyListHeadersListView)rootView.findViewById(R.id.list);
         initialise(rootView);
         if (HomeActivity.homeActivity.event!=null&&HomeActivity.homeActivity.event.getLeague_id()
                 !=null&&!HomeActivity.homeActivity.event.getLeague_id().isEmpty()/*&&
                 HomeActivity.homeActivity.current_item==0*/){
 
-            if (!HomeActivity.homeActivity.y_league_id.isEmpty()&&HomeActivity.homeActivity.y_league_id.equalsIgnoreCase(HomeActivity.homeActivity.event.getLeague_id())){
+            HomeActivity.homeActivity.y_league_id= HomeActivity.homeActivity.event.getLeague_id();
+            HomeActivity.homeActivity.yesterdayMatchesArrayList.clear();
+            HomeActivity.homeActivity.my_yesterdayMatchesArrayList.clear();
+            page=1;
+            getMatchData(page);
+
+           /* if (!HomeActivity.homeActivity.y_league_id.isEmpty()&&HomeActivity.homeActivity.y_league_id.equalsIgnoreCase(HomeActivity.homeActivity.event.getLeague_id())){
                 HomeActivity.homeActivity.y_league_id= HomeActivity.homeActivity.event.getLeague_id();
+
+                MatchesArrayList.clear();
+                if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")){
+                    MatchesArrayList.addAll(HomeActivity.homeActivity.my_yesterdayMatchesArrayList);
+
+                }else {
+                    MatchesArrayList.addAll(HomeActivity.homeActivity.yesterdayMatchesArrayList);
+                }
+
+
                 adapter.notifyDataSetChanged();
             }
             else {
                 HomeActivity.homeActivity.y_league_id= HomeActivity.homeActivity.event.getLeague_id();
                 HomeActivity.homeActivity.yesterdayMatchesArrayList.clear();
+                HomeActivity.homeActivity.my_yesterdayMatchesArrayList.clear();
                 page=1;
                 getMatchData(page);
             }
-
-
+*/
         }
         else {
-            if (HomeActivity.homeActivity.yesterdayMatchesArrayList.size()>0){
-                adapter.notifyDataSetChanged();
-            }
-            else {
-                page=1;
-                getMatchData(page);
-            }
-
+            page=1;
+            getMatchData(page);
         }
 
         return rootView;
@@ -108,20 +165,49 @@ public class YesterdayFragment  extends Fragment {
 
     private void initialise(View rootView)
     {
-         adapter = new StickyHeaderAdapter(getActivity(),HomeActivity.homeActivity.yesterdayMatchesArrayList);
+        my_matches = (TextView) rootView.findViewById(R.id.my_matches);
+        all_matches = (TextView) rootView.findViewById(R.id.all_matches);
+        ongoing = (TextView) rootView.findViewById(R.id.ongoing);
+        by_time = (TextView) rootView.findViewById(R.id.by_time);
+        no_data = (LinearLayout) rootView.findViewById(R.id.no_data);
+        show_all = (TextView) rootView.findViewById(R.id.show_all);
+        no_data_txt = (TextView) rootView.findViewById(R.id.no_data_txt);
+        ongoing.setVisibility(View.GONE);
+
+
+        if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")){
+            my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+            my_matches.setTextColor(getResources().getColor(R.color.active_text));
+            isMyMatch=false;
+        }
+        else {
+            my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+            my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+            isMyMatch=true;
+
+        }
+        if (HomeActivity.homeActivity.byTime.equalsIgnoreCase("time")) {
+            by_time.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+            by_time.setTextColor(getResources().getColor(R.color.active_text));
+        }else {
+            by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+            by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+        }
+
+        adapter = new StickyHeaderAdapter(context,MatchesArrayList);
         stickyList.setAdapter(adapter);
         stickyList.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
             public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-             //   Toast.makeText(getActivity(),"Header", Toast.LENGTH_SHORT).show();
             }
         });
 
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(), AboutMatchActivity.class)
-                        .putExtra("obj",HomeActivity.homeActivity.yesterdayMatchesArrayList.get(position)));
+                startActivity(new Intent(context, AboutMatchActivity.class)
+                        .putExtra("obj",MatchesArrayList.get(position)));
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
             }
         });
@@ -129,18 +215,115 @@ public class YesterdayFragment  extends Fragment {
         stickyList.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
+                if (page<=total_pages)
                 getMatchData(page);
-                // or loadNextDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
+        show_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity.homeActivity.list_type="all";
+                HomeActivity.homeActivity.yesterdayMatchesArrayList.clear();
+                page=1;
+                MatchesArrayList.clear();
+                isMyMatch=true;
+                my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
 
+                HomeActivity.homeActivity.byTime="";
+                isBytime=true;
+                by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+
+
+                if (show_all.getText().toString().equalsIgnoreCase("Show All Matches"))
+                {
+                    getMatchData(page);
+                }
+                else {
+                    HomeActivity.homeActivity.current_item=0;
+                    //  startActivity(new Intent(getActivity(), LeagueFilteringActivity.class));
+                    startActivity(new Intent(getActivity(), NewFilteredActivity.class));
+                }
+
+            }
+        });
+
+        my_matches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                my_matches.setEnabled(false);
+
+                if (isMyMatch){
+                    HomeActivity.homeActivity.list_type="my";
+                    isMyMatch=false;
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.active_text));
+                }
+                else{
+                    HomeActivity.homeActivity.list_type="all";
+                    isMyMatch=true;
+                    my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+                }
+
+                page=1;
+                MatchesArrayList.clear();
+
+                    getMatchData(page);
+            }
+        });
+        all_matches.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                my_matches.setEnabled(true);
+                all_matches.setEnabled(false);
+                HomeActivity.homeActivity.list_type="all";
+                page=1;
+                MatchesArrayList.clear();
+                my_matches.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                all_matches.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                my_matches.setTextColor(getResources().getColor(R.color.inactive_txt));
+                all_matches.setTextColor(getResources().getColor(R.color.active_text));
+
+              /*  if (HomeActivity.homeActivity.yesterdayMatchesArrayList.size()>0)
+                {
+                    MatchesArrayList.addAll(HomeActivity.homeActivity.yesterdayMatchesArrayList);
+                    adapter.notifyDataSetChanged();
+                }else*/
+                    getMatchData(page);
+
+            }
+        });
+
+        by_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                by_time.setEnabled(false);
+                if (isBytime){
+                    HomeActivity.homeActivity.byTime="time";
+                    isBytime=false;
+                    by_time.setBackgroundColor(getResources().getColor(R.color.list_item_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.active_text));
+                }
+                else{
+                    HomeActivity.homeActivity.byTime="";
+                    isBytime=true;
+                    by_time.setBackgroundColor(getResources().getColor(R.color.Header_bg));
+                    by_time.setTextColor(getResources().getColor(R.color.inactive_txt));
+                }
+                page=1;
+                MatchesArrayList.clear();
+
+                getMatchData(page);
+
+            }
+        });
     }
 
-    private void bindData() {
-        Collections.sort(HomeActivity.homeActivity.yesterdayMatchesArrayList, new Comparator<Matches>() {
+    private void bindData(ArrayList<Matches> MatchesArrayList) {
+        Collections.sort(MatchesArrayList, new Comparator<Matches>() {
             public int compare(Matches Galaxy, Matches nextGalaxy) {
                 return Galaxy.getHeaderId() - nextGalaxy.getHeaderId();
             }
@@ -148,19 +331,21 @@ public class YesterdayFragment  extends Fragment {
     }
 
     private void getMatchData(int page) {
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("please wait...");
         progressDialog.show();
-        if (Constant.isNetworkAvailable(getActivity(), stickyList)) {
-            //  http://dev.wolfscore.info/api_v1/matches/get_fixtures?type=today&page=1&date=&team_id=&league_id=""
+        if (Constant.isNetworkAvailable(context, stickyList)) {
             AndroidNetworking.get(BASE_URL + GET_FIXTURES)
                     .addHeaders("Api-Key", APIKEY)
-                    .addHeaders("Auth-Token", PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""))
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(context, PreferenceConnector.AUTH_TOKEN, ""))
                     .addQueryParameter("type", "date")
                     .addQueryParameter("page", page+"")
                     .addQueryParameter("date", yesterday_date)
                     .addQueryParameter("team_id", "")
+                    .addQueryParameter("list_type", HomeActivity.homeActivity.list_type)
                     .addQueryParameter("league_id", HomeActivity.homeActivity.y_league_id)
+                    .addQueryParameter("ongoing", onGoing)
+                    .addQueryParameter("sort_by", HomeActivity.homeActivity.byTime)
                     .setPriority(Priority.MEDIUM)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
@@ -172,8 +357,6 @@ public class YesterdayFragment  extends Fragment {
                                 String status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
-                                   // matchesArrayList.clear();
-                                  //  Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
                                     JSONObject data_obj= response.getJSONObject("data");
                                     JSONArray data_array= data_obj.getJSONArray("data");
                                     if (data_array.length()>0) {
@@ -184,7 +367,6 @@ public class YesterdayFragment  extends Fragment {
                                             league_data_obj.getInt("id");
                                             league_data_obj.getString("name");
 
-                                          //  MatchHeader matchHeader = new MatchHeader( league_data_obj.getInt("id"), league_data_obj.getString("name"));
 
                                             MatchHeader matchHeader = new MatchHeader();
                                             matchHeader.setId(league_data_obj.getInt("id"));
@@ -194,10 +376,9 @@ public class YesterdayFragment  extends Fragment {
                                             int countryId = league_data_obj.getInt("country_id");
 
 
-                                            //   matchHeader.setSeason_id(object.getInt("country_id"));
                                             JSONObject  country_obj=null,country_data=null;
 
-                                            ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(getActivity());
+                                            ArrayList<CountryDto> countryDtos= PreferenceConnector.getCountryList(context);
                                             for (int j = 0; j < countryDtos.size(); j++) {
                                                 if (String.valueOf(countryId).equalsIgnoreCase(countryDtos.get(j).getCountry_id())){
                                                     matchHeader.setCountryName(countryDtos.get(j).getCountry_name());
@@ -205,21 +386,6 @@ public class YesterdayFragment  extends Fragment {
                                                 }
 
                                             }
-
-
-/*
-                                            if (league_data_obj.has("country")) {
-                                                country_obj = league_data_obj.getJSONObject("country");
-                                                if (country_obj.has("data")){
-                                                    country_data=country_obj.getJSONObject("data");
-                                                    if (country_data.has("name")){
-                                                        matchHeader.setCountryName(!country_data.isNull("name") ? country_data.getString("name") : "");
-                                                    }
-                                                }
-                                            }
-*/
-
-
 
                                             JSONObject localTeam_obj=object.getJSONObject("localTeam");
                                             JSONObject localteam_data=localTeam_obj.getJSONObject("data");
@@ -248,26 +414,78 @@ public class YesterdayFragment  extends Fragment {
                                             time.setTime(starting_at_data.getString("time"));
 
                                             Matches matches=new Matches(matchHeader,localTeam,visitorTeam,time,score);                                            // Matches matches = new Matches(localTeam, matchHeader);
-                                            HomeActivity.homeActivity.yesterdayMatchesArrayList.add(matches);
 
-                                          }
-                                      //  addRecyclerHeaders();
-                                        bindData();
+                                            if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my"))
+                                            {
+                                                HomeActivity.homeActivity.my_yesterdayMatchesArrayList.add(matches);
+                                                MatchesArrayList.add(matches);
+                                            }
+                                            else {
+                                                HomeActivity.homeActivity.yesterdayMatchesArrayList.add(matches);
+                                                MatchesArrayList.add(matches);
+                                            }
+
+                                        }
+                                        bindData(MatchesArrayList);
+                                        if (HomeActivity.homeActivity.yesterdayMatchesArrayList.size()>0)
+                                            bindData(HomeActivity.homeActivity.yesterdayMatchesArrayList);
+                                        if (HomeActivity.homeActivity.my_yesterdayMatchesArrayList.size()>0)
+                                            bindData(HomeActivity.homeActivity.my_yesterdayMatchesArrayList);
                                         adapter.notifyDataSetChanged();
+                                        my_matches.setEnabled(true);
+                                        by_time.setEnabled(true);
+                                        no_data.setVisibility(View.GONE);
                                         JSONObject meta_obj=  data_obj.getJSONObject("meta");
                                         JSONObject pagination_obj=   meta_obj.getJSONObject("pagination");
                                         int current_page=   pagination_obj.getInt("current_page");
                                         int total_pages=pagination_obj.getInt("total_pages");
-/*
-                                        if (current_page<total_pages){
-                                            page=current_page+1;
-                                          //  getMatchData();
+
+                                    }
+                                    else {
+                                        MatchesArrayList.clear();
+                                        adapter.notifyDataSetChanged();
+                                        my_matches.setEnabled(true);
+                                        by_time.setEnabled(true);
+                                        no_data.setVisibility(View.VISIBLE);
+                                        if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                                            no_data_txt.setText("No Favorite playing");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+
                                         }
-*/
+                                        else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("all")&&
+                                                HomeActivity.homeActivity.byTime.equals("")){
+                                            no_data_txt.setText("No matches scheduled");
+                                            show_all.setText("FILTER TOURNAMENTS");
+                                        }
+                                        else {
+                                            no_data_txt.setText("No matches scheduled");
+                                            show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                        }
+                                        //todo for empty array
+
                                     }
 
                                 } else {
-                                    Toast.makeText(getActivity(), "" + message, Toast.LENGTH_SHORT).show();
+                                    MatchesArrayList.clear();
+                                    adapter.notifyDataSetChanged();
+                                    my_matches.setEnabled(true);
+                                    by_time.setEnabled(true);
+                                    no_data.setVisibility(View.VISIBLE);
+                                    if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("my")) {
+                                        no_data_txt.setText("No Favorite playing");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+
+                                    }
+                                    else if (HomeActivity.homeActivity.list_type.equalsIgnoreCase("all")&&
+                                            HomeActivity.homeActivity.byTime.equals("")){
+                                        no_data_txt.setText("No matches scheduled");
+                                        show_all.setText("FILTER TOURNAMENTS");
+                                    }
+                                    else {
+                                        no_data_txt.setText("No matches scheduled");
+                                        show_all.setText(getActivity().getResources().getString(R.string.show_all));
+                                    }
+                                //    Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -279,8 +497,8 @@ public class YesterdayFragment  extends Fragment {
                         public void onError(ANError anError) {
                             if (progressDialog!=null&&progressDialog.isShowing())
                                 progressDialog.dismiss();
-                        }
-                    });
+                     }
+             });
         }
 
     }

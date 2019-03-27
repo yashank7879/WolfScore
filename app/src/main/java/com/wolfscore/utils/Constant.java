@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -23,9 +24,10 @@ import java.util.TimeZone;
  */
 
 public class Constant {
-    public static int CurrentPage=0;
+    public static int CurrentPage = 0;
     public static boolean isRunApi;
     public static Calendar calendar = Calendar.getInstance();
+
     //*****************check for network connection******************//
     public static boolean isNetworkAvailable(Context context, View coordinatorLayout) {
 
@@ -87,13 +89,12 @@ public class Constant {
         return formattedDate;
     }
 
-  public static String  getDayFromDate(Date date)
-    {
+    public static String getDayFromDate(Date date) {
         calendar.setTime(date);
 
-        String[] days = new String[] { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+        String[] days = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 
-        String day = days[calendar.get(Calendar.DAY_OF_WEEK)-1];
+        String day = days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
         return day;
     }
 
@@ -103,8 +104,8 @@ public class Constant {
         //{"date":"2017-03-04 05:18:41","time_zone":"UTC"}
 
         //  String SERVER_TIMEZONE = SharedPref.getSharedPrefData(context, SharedPref.PREFRENCE_SERVER_TIME);
-     //   String SERVER_TIMEZONE="America/Los_Angeles";
-        String SERVER_TIMEZONE="UTC";
+        //   String SERVER_TIMEZONE="America/Los_Angeles";
+        String SERVER_TIMEZONE = "UTC";
         SimpleDateFormat dateFormatServer = new SimpleDateFormat(
                 dateFormatFrom);
         SimpleDateFormat dateFormatLocal = new SimpleDateFormat(
@@ -128,4 +129,42 @@ public class Constant {
         return convertedDateString;
     }
 
+    public static String getDay(String input_date) {
+        Calendar calendar = new GregorianCalendar();
+        Date date = new Date();
+        String finalDay = "";
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = date_format.parse(input_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.setTime(date);
+        int reslut = calendar.get(Calendar.DAY_OF_WEEK);
+        switch (reslut) {
+            case Calendar.MONDAY:
+                finalDay = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                finalDay = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                finalDay = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                finalDay = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                finalDay = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                finalDay = "Saturday";
+                break;
+            case Calendar.SUNDAY:
+                finalDay = "Sunday";
+                break;
+        }
+        return finalDay;
+
+    }
 }

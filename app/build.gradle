@@ -26,6 +26,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,6 +37,10 @@ android {
     }
     dataBinding {
         dataBinding.enabled = true;
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -62,7 +67,10 @@ dependencies {
     implementation 'se.emilsjolander:stickylistheaders:2.4.0+'
     implementation project(':horizontalexpcalendar')
     implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
+    implementation 'com.zoonref:simple-view-behavior:1.0'
+  //  implementation 'com.github.ar-android:AndroidSvgLoader:1.0.1'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;
     }

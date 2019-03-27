@@ -76,7 +76,7 @@
     <string name="attacker">Attacker</string>
     <string name="coach">Coach</string>
     <string name="injuared_and_suspended_player">Injuared and suspended player</string>
-    <string name="no_data_found">No data found</string>
+    <string name="no_data_found">No Data found</string>
     <string name="top_stats">Top Stats</string>
     <string name="ball_passesion">Ball Possesion</string>
 
@@ -87,6 +87,21 @@
     <string name="overview">OVERVIEW</string>
     <string name="squad">SQUAD</string>
     <string name="total_shots">Total shots</string>
+    <string name="popular_league">Popular League</string>
+    <string name="select_your_league">Select your favorite league to follow</string>
+    <string name="my_matches">My Matches</string>
+    <string name="all_matches">All Matches</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="by_time">By Time</string>
+    <string name="show_all">Show All Matches</string>
+    <string name="top_faetures">TOP FEATURES</string>
+    <string name="my_profile">My Profile</string>
+    <string name="matche">Matches</string>
+    <string name="settings">Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="premium_features">PREMIUM FEATURES</string>
+    <string name="remove_banner_add">Remove banner-ads</string>
+    <string name="restore_previous_purchase">Restore Previous Purchases</string>
 
 
 </resources>

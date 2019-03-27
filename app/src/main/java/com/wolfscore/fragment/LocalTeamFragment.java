@@ -61,6 +61,7 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
     private String countryCodeValue = "";
     private GetTeamListener listener;
     private NextOnClick nextListener;
+    private  String country="";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,9 +122,16 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
         //"""""""""" Get current country """""""""""//
         TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         assert tm != null;
+
         countryCodeValue = tm.getNetworkCountryIso().toUpperCase();
 
         countryCodeValue = !countryCodeValue.isEmpty() ? countryCodeValue : "US";
+      if (countryLookupMap.containsKey(countryCodeValue))
+        country= countryLookupMap.get(countryCodeValue);
+
+        Log.d("country name.......", "onViewCreated....: "+country);
+       String country1 = getContext().getResources().getConfiguration().locale.getISO3Country();
+        Log.d("country name.......", "onViewCreated....: "+country+".............country1.."+country1);
 
 
         //******  Pagination """""""""""""""//
@@ -444,7 +452,7 @@ public class LocalTeamFragment extends Fragment implements LocalTeamAdapter.Team
     private void getLocalTeam() {
         if (Constant.isNetworkAvailable(mContext, binding.mainLayout) ) {
 
-            AndroidNetworking.get(BASE_URL + "teams/get_local_teams?country=" + countryCodeValue + "&search_term=" + this.search + "&limit=" + 50 + "&offset=" + offset)
+            AndroidNetworking.get(BASE_URL + "teams/get_local_teams?country=" + country + "&search_term=" + this.search + "&limit=" + 50 + "&offset=" + offset)
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
                     .setPriority(Priority.MEDIUM)

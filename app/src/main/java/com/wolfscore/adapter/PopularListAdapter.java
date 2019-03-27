@@ -42,7 +42,7 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
     @NonNull
     @Override
     public MyviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_league_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.league_list_item_view, parent, false);
         return new MyviewHolder(view);
     }
 
@@ -57,21 +57,29 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
             holder.view.setBackgroundColor(mContext.getResources().getColor(R.color.colorBalck));
             holder.view.setVisibility(View.VISIBLE);
             if (listBean.getIs_favorite().equals("1")){
-                holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
+                holder.ivSelectTeam.setVisibility(View.VISIBLE);
+                holder.ivPlus.setVisibility(View.GONE);
+                // holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_active_star));
             }else {
-                holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_white_star3x));
+                holder.ivPlus.setVisibility(View.VISIBLE);
+                holder.ivSelectTeam.setVisibility(View.GONE);
+                //  holder.iv_star.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_white_star3x));
             }
 
-
-            holder.iv_star.setOnClickListener(new View.OnClickListener() {
+            holder.main_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (String.valueOf(listBean.getIs_favorite()).equals("0")) {
-                        holder.iv_star.setImageResource(R.drawable.ic_active_star);
-                        listener.favUnfav(listBean, "1",  holder.iv_star);
+                        //   holder.iv_star.setImageResource(R.drawable.ic_active_star);
+                        holder.ivPlus.setVisibility(View.GONE);
+                        holder.ivSelectTeam.setVisibility(View.VISIBLE);
+
+                        listener.favUnfav(listBean, "1");
                     } else if (String.valueOf(listBean.getIs_favorite()).equals("1")){
-                        holder.iv_star.setImageResource(R.drawable.ic_white_star3x);
-                        listener.favUnfav(listBean, "0",  holder.iv_star);
+                        //  holder.iv_star.setImageResource(R.drawable.ic_white_star3x);
+                        holder.ivPlus.setVisibility(View.VISIBLE);
+                        holder.ivSelectTeam.setVisibility(View.GONE);
+                        listener.favUnfav(listBean, "0");
                     }
                 }
             });
@@ -88,7 +96,7 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
         private RelativeLayout main_layout;
         private CircleImageView ivTeam;
         private TextView tv_team_name;
-        private ImageView iv_star;
+        private ImageView ivPlus,ivSelectTeam;
         private View view;
 
         MyviewHolder(View itemView) {
@@ -96,7 +104,8 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
             main_layout = (RelativeLayout) itemView.findViewById(R.id.main_layout);
             ivTeam = (CircleImageView) itemView.findViewById(R.id.iv_team);
             tv_team_name = (TextView) itemView.findViewById(R.id.tv_team_name);
-            iv_star = (ImageView) itemView.findViewById(R.id.iv_star);
+            ivPlus = (ImageView) itemView.findViewById(R.id.iv_plus);
+            ivSelectTeam = (ImageView) itemView.findViewById(R.id.iv_select_team);
             view = (View) itemView.findViewById(R.id.view);
         }
     }
@@ -136,6 +145,7 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
     }
 */
 
+/*
     public Filter getFilter() {
         return new Filter() {
             @Override
@@ -171,6 +181,7 @@ public class PopularListAdapter extends RecyclerView.Adapter<PopularListAdapter.
             }
         };
     }
+*/
 
 
 /*

@@ -27,6 +27,7 @@ import com.wolfscore.aboutMatch.DataSubstiItem;
 import com.wolfscore.adapter.AboutMatchPagerAdpter;
 import com.wolfscore.databinding.ActivityAboutMatchBinding;
 
+import com.wolfscore.databinding.ActivityAboutMatchTempBinding;
 import com.wolfscore.matches.modal.Matches;
 
 import com.wolfscore.utils.Constant;
@@ -48,6 +49,7 @@ import static com.wolfscore.utils.ApiCollection.MATCH_DETAIL;
 
 public class AboutMatchActivity extends AppCompatActivity implements View.OnClickListener {
     ActivityAboutMatchBinding binding;
+   // ActivityAboutMatchTempBinding binding;
     public static AboutMatchActivity aboutMatchActivity;
     private ProgressDialog progressDialog;
     public Matches matches;

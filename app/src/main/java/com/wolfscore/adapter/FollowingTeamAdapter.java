@@ -16,6 +16,7 @@ import com.wolfscore.R;
 import com.wolfscore.activity.AddFavrouitPlayerActivity;
 import com.wolfscore.activity.AddFavrouitTeamActivity;
 import com.wolfscore.activity.FavoriteFollowingResponce;
+import com.wolfscore.listener.FavUnfavListener;
 
 import java.util.List;
 
@@ -26,10 +27,12 @@ import java.util.List;
 public class FollowingTeamAdapter extends RecyclerView.Adapter<FollowingTeamAdapter.MyViewHolder> {
     private Context mContext;
     private List<FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean> playerList;
+    private FavUnfavListener listener;
 
-    public FollowingTeamAdapter(List<FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean> playerList, Context mContext) {
+    public FollowingTeamAdapter(List<FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean> playerList, Context mContext, FavUnfavListener listener) {
         this.playerList = playerList;
         this.mContext = mContext;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,23 +44,30 @@ public class FollowingTeamAdapter extends RecyclerView.Adapter<FollowingTeamAdap
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-
-        if (playerList.size() != 0){
+        if (playerList.size() != 0) {
             FavoriteFollowingResponce.DataBean.TeamListBeanX.TeamListBean bean = playerList.get(position);
-            if (position == 0){
-                holder.ivPlayer.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_browse_plus));
-            }else {
+            if (position == 0) {
+                holder.ivPlayer.setBackground(null);
+                holder.tvPlayerName.setText("");
+                holder.ivStar.setVisibility(View.INVISIBLE);
+                holder.ivPlayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_browse_plus));
+            } else {
+                holder.ivPlayer.setBackground(ContextCompat.getDrawable(mContext,R.drawable.circle_white_bg));
                 Picasso.with(holder.ivPlayer.getContext()).load(bean.getLogo_path()).fit().into(holder.ivPlayer);
-            }
-            holder.tvPlayerName.setText(bean.getName());
+                holder.ivStar.setVisibility(View.VISIBLE);
+                holder.tvPlayerName.setText(bean.getName());
 
-            holder.ivPlayer.setOnClickListener(new View.OnClickListener() {
+            }
+            holder.ivPlayer.setOnClickListener(v -> {
+                if (holder.getAdapterPosition() == 0) {
+                    Intent intent = new Intent(mContext, AddFavrouitTeamActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
+            holder.ivStar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.getAdapterPosition() == 0){
-                        Intent intent = new Intent(mContext, AddFavrouitTeamActivity.class);
-                        mContext.startActivity(intent);
-                    }
+                    listener.teamFavUnfav(bean.getTeam_id(),holder.getAdapterPosition());
                 }
             });
         }
@@ -70,11 +80,13 @@ public class FollowingTeamAdapter extends RecyclerView.Adapter<FollowingTeamAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPlayer;
+        private ImageView ivStar;
         private TextView tvPlayerName;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             ivPlayer = (ImageView) itemView.findViewById(R.id.iv_player);
+            ivStar = (ImageView) itemView.findViewById(R.id.iv_star);
             tvPlayerName = (TextView) itemView.findViewById(R.id.tv_player_name);
         }
     }

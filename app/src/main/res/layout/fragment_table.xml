@@ -14,7 +14,7 @@
             android:id="@+id/no_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Data not Found"
+            android:text="@string/no_data_found"
             android:layout_centerInParent="true"
             android:textSize="@dimen/_20sdp"
             android:textColor="@color/colorBlue"

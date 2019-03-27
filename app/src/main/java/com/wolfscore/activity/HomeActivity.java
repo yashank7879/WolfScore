@@ -11,9 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -31,9 +33,11 @@ import com.mikesu.horizontalexpcalendar.common.Marks;
 import com.wolfscore.CalenderListener;
 import com.wolfscore.R;
 import com.wolfscore.fragment.LiveFragment;
+import com.wolfscore.fragment.NavigationDrawerFragment;
 import com.wolfscore.fragment.NewsFragment;
 import com.wolfscore.fragment.SearchTeamFragment;
 import com.wolfscore.league.fragments.LeagueFragment;
+import com.wolfscore.league.fragments.leagueModel.Country;
 import com.wolfscore.matches.fragments.BlankFragment;
 import com.wolfscore.matches.fragments.CalenderFragment;
 import com.wolfscore.matches.fragments.MatchListFragment;
@@ -58,12 +62,12 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
     LinearLayout match_layout, live_score_layout, league_layout, news_layout, highlight_layout;
-    ImageView match_img, live_score_img, league_img, news_img, highlight_img;
+    ImageView match_img, live_score_img, league_img, news_img, highlight_img,navigation_icon;
     TextView match, live_score, league, news, highlight,current_date,title;
-  public   RelativeLayout rl_search,calander_layout;
+    public   RelativeLayout rl_search,calander_layout;
     FrameLayout search_fragment;
     private Typeface robotoregular;
-   public ImageView filter,calender;
+    public ImageView filter,calender;
     public static HomeActivity homeActivity;
     private HorizontalExpCalendar horizontalExpCalendar;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -75,15 +79,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     MatchListFragment matchListFragment = null;
     Context context;
     public int current_item=0;
-    public String league_id="",t_league_id="",y_league_id="";
+    public String league_id="",t_league_id="",y_league_id="",list_type="my",byTime="";
     public FilteredEvent event=new FilteredEvent();
 
     protected FragmentManager fragmentManager;
     protected FragmentTransaction fragmentTransaction;
     protected Bundle mSavedInstanceState;
-   public ArrayList<Matches> tomorrowMatchesArrayList =new ArrayList<>();
+    public List<Country> mLeagues = new ArrayList<>();
+    public ArrayList<Matches> tomorrowMatchesArrayList =new ArrayList<>();
    public ArrayList<Matches> yesterdayMatchesArrayList=new ArrayList<>();
    public ArrayList<Matches> todayMatchesArrayList=new ArrayList<>();
+   public ArrayList<Matches> my_todayMatchesArrayList=new ArrayList<>();
+   public ArrayList<Matches> my_tommorowMatchesArrayList=new ArrayList<>();
+   public ArrayList<Matches> my_yesterdayMatchesArrayList=new ArrayList<>();
+    NavigationDrawerFragment mNavigationDrawerFragment;
+    public DrawerLayout drawer_layout;
+    private boolean mSlideState=false;
+
    private RelativeLayout right_layout;
     private HorizontalExpCalendar.HorizontalExpCalListener horizontalExpCalListener;
     @Override
@@ -129,6 +141,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         calander_layout=findViewById(R.id.calander_layout);
         right_layout=findViewById(R.id.right_layout);
         title=findViewById(R.id.title);
+        drawer_layout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        navigation_icon=(ImageView)findViewById(R.id.navigation_icon);
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+        navigation_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(drawer_layout.isDrawerOpen(Gravity.START)) {
+                    drawer_layout.closeDrawer(Gravity.START);
+                   // mSlideState=false;
+                }
+                else {
+                    drawer_layout.openDrawer(Gravity.START);
+                //    mSlideState=true;
+
+                }
+            }
+        });
+
+
+      //  mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         calander_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,7 +411,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rl_search:
                 android.support.v4.app.FragmentManager manager1 = getSupportFragmentManager();
                 FragmentTransaction ft2 = manager1.beginTransaction();
-                Fragment frg= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+                Fragment frg= getSupportFragmentManager().findFragmentByTag("news");
                 Fragment frg1= getSupportFragmentManager().findFragmentByTag("League fragment");
                 if (frg!=null) {
                     ft2.remove(frg);
@@ -404,7 +438,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft1 = manager.beginTransaction();
-                Fragment fr= getSupportFragmentManager().findFragmentByTag("live fragmnet");
+                Fragment fr= getSupportFragmentManager().findFragmentByTag("news");
                 Fragment fr1= getSupportFragmentManager().findFragmentByTag("League fragment");
                 if (fr!=null) {
                     ft1.remove(fr);

@@ -70,7 +70,7 @@ public class LineUpFragment extends Fragment implements View.OnClickListener {
 */
         robotoMedium = ResourcesCompat.getFont(getActivity(), R.font.roboto_medium);
 
-        setCoachValue();
+      //  setCoachValue();
         setInjuredValue();
         setLineup();
 

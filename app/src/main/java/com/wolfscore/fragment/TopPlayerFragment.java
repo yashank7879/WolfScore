@@ -64,7 +64,6 @@ public class TopPlayerFragment extends Fragment implements PlayerOnClick {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isRunApi = false;
     }
 
     @Override

@@ -2,24 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_5sdp"
     android:background="@color/list_item_bg"
-    >
+    android:padding="@dimen/_5sdp">
+
+    <ImageView
+        android:id="@+id/iv_star"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/ic_active_star"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/_3sdp"
+        />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_player"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
-
+        android:layout_below="@id/iv_star"
+        android:padding="@dimen/_2sdp"
         />
+
     <TextView
         android:id="@+id/tv_player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_player"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/colorWhite"
         android:maxLength="10"
-        />
+        android:textColor="@color/colorWhite" />
 
 
 </RelativeLayout>

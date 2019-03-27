@@ -43,7 +43,7 @@ public class MatchFactsFragment extends Fragment {
                 binding.refrees.setText("" + AboutMatchActivity.aboutMatchActivity.emp.getData().getData1().getReferee().referyData.fullname);
             if (AboutMatchActivity.aboutMatchActivity.emp.getData().getData1().time != null) {
                 String convertedDate = Constant.getFormatedDateTime("" + AboutMatchActivity.aboutMatchActivity.emp.getData().getData1().time.startingAt.dateTime,
-                        "yyyy-mm-dd HH:MM:SS", "dd/mm/yyyy,hh:mm a");
+                        "yyyy-mm-dd HH:MM:SS", "dd/mm/yyyy,HH:mm");
                 binding.matchDate.setText("" +convertedDate);
             }
                 if (AboutMatchActivity.aboutMatchActivity.emp.getData().data.attendance != 0)

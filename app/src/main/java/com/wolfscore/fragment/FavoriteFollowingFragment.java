@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.wolfscore.adapter.FollowingFavoriteAdapter;
 import com.wolfscore.adapter.FollowingPlayerAdapter;
 import com.wolfscore.adapter.FollowingTeamAdapter;
 import com.wolfscore.databinding.FragmentFavoriteFollowingBinding;
+import com.wolfscore.listener.FavUnfavListener;
 import com.wolfscore.utils.Constant;
 import com.wolfscore.utils.PreferenceConnector;
 import com.wolfscore.utils.ProgressDialog;
@@ -36,9 +38,10 @@ import java.util.List;
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
 import static com.wolfscore.utils.ApiCollection.GET_MY_FAVORITE_LIST_API;
+import static com.wolfscore.utils.ApiCollection.SINGLE_FAVORITE_UNFAVORITE_API;
 
 
-public class FavoriteFollowingFragment extends Fragment {
+public class FavoriteFollowingFragment extends Fragment implements FavUnfavListener {
     FragmentFavoriteFollowingBinding binding;
     private Context mContext;
     private ProgressDialog progressDialog;
@@ -52,7 +55,6 @@ public class FavoriteFollowingFragment extends Fragment {
     public FavoriteFollowingFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,22 +79,21 @@ public class FavoriteFollowingFragment extends Fragment {
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         binding.rvPlayer.setLayoutManager(horizontalLayoutManager);
-        playerAdapter = new FollowingPlayerAdapter(playerList, mContext);
+        playerAdapter = new FollowingPlayerAdapter(playerList, mContext, this);
         binding.rvPlayer.setAdapter(playerAdapter);
 
         addTeamList();
 
         LinearLayoutManager horizontalLayout = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         binding.rvTeams.setLayoutManager(horizontalLayout);
-        teamAdapter = new FollowingTeamAdapter(teamList, mContext);
+        teamAdapter = new FollowingTeamAdapter(teamList, mContext,this);
         binding.rvTeams.setAdapter(teamAdapter);
 
 
         LinearLayoutManager favHorizontalLayout = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         binding.rvFav.setLayoutManager(favHorizontalLayout);
-        favoriteAdapter = new FollowingFavoriteAdapter(favList, mContext);
+        favoriteAdapter = new FollowingFavoriteAdapter(favList, mContext,this);
         binding.rvFav.setAdapter(favoriteAdapter);
-
 
         getFollowingFavorite();
     }
@@ -103,7 +104,7 @@ public class FavoriteFollowingFragment extends Fragment {
         getFollowingFavorite();
     }
 
-    private void addTeamList(){
+    private void addTeamList() {
 
         FavoriteFollowingResponce.DataBean.PlayerListBeanX.PlayerListBean playerListBean = new FavoriteFollowingResponce.DataBean.PlayerListBeanX.PlayerListBean();
         playerListBean.setFirst_name("Browse");
@@ -116,7 +117,6 @@ public class FavoriteFollowingFragment extends Fragment {
         FavoriteFollowingResponce.DataBean.FavoriteListBeanX.FavListBean fav = new FavoriteFollowingResponce.DataBean.FavoriteListBeanX.FavListBean();
         fav.setLeague_name("Browse");
         favList.add(fav);
-
 
     }
 
@@ -131,7 +131,7 @@ public class FavoriteFollowingFragment extends Fragment {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            if (progressDialog!=null&&progressDialog.isShowing())
+                            if (progressDialog != null && progressDialog.isShowing())
                                 progressDialog.dismiss();
                             try {
                                 String status = response.getString("status");
@@ -146,7 +146,7 @@ public class FavoriteFollowingFragment extends Fragment {
                                     playerList.addAll(responce1.getData().getPlayer_list().getPlayer_list());
                                     favList.addAll(responce1.getData().getLeague_list().getLeague_list());
 
-                                    setFavrouitCount(responce1);
+                                    setFavrouitCount();
                                     teamAdapter.notifyDataSetChanged();
                                     playerAdapter.notifyDataSetChanged();
                                     favoriteAdapter.notifyDataSetChanged();
@@ -170,17 +170,89 @@ public class FavoriteFollowingFragment extends Fragment {
 
     }
 
-    private void setFavrouitCount(FavoriteFollowingResponce responce1) {
-        binding.tvPlayerCount.setText("Player"+" ("+responce1.getData().getPlayer_list().getTotal_records()+")");
-        binding.tvTeamCount.setText("Team"+" ("+responce1.getData().getTeam_list().getTotal_records()+")");
-        binding.tvFavCount.setText("Favorite"+" ("+responce1.getData().getLeague_list().getTotal_records()+")");
+    private void setFavrouitCount() {
+        int playerCount = playerList.size() - 1;
+        int teamCount = teamList.size() - 1;
+        int leagueCount = favList.size() - 1;
+        binding.tvPlayerCount.setText("Player" + " (" + playerCount + ")");
+        binding.tvTeamCount.setText("Team" + " (" + teamCount + ")");
+        binding.tvFavCount.setText("League" + " (" + leagueCount + ")");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mContext = context;
+    }
 
+
+
+    @Override
+    public void playerFavUnfav(String playerId, int pos) {
+            favrouitApi(playerId, "player",pos);
+    }
+
+    @Override
+    public void teamFavUnfav(String teamId, int pos) {
+        favrouitApi(teamId, "team",pos);
+    }
+
+    @Override
+    public void leagueFavUnfav(String leagueId, int pos) {
+        favrouitApi(leagueId, "league", pos);
+    }
+
+
+    private void favrouitApi(String id, String type,int pos) {
+        if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {//http://dev.wolfscore.info/api_v1/users/single_favorite_unfavorite
+            progressDialog.show();
+            Log.d("auttoken", "getMatchData: auttoken...."+PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN,""));
+            AndroidNetworking.post(BASE_URL + SINGLE_FAVORITE_UNFAVORITE_API)
+                    .addBodyParameter("request_type", "0")
+                    .addBodyParameter("request_id", ""+id)//team id,player id,league id
+                    .addBodyParameter("type", type)// team || player ||league
+                    .addHeaders("Api-Key", APIKEY)
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            progressDialog.dismiss();
+                            String status = null;
+                            try {
+                                status = response.getString("status");
+                                String message = response.getString("message");
+                                if (status.equals("success")) {
+                                    if (type.equals("player")){// unfav player
+                                        playerList.remove(pos);
+                                        playerAdapter.notifyDataSetChanged();
+                                    }else if (type.equals("team")){//unfav team
+                                        teamList.remove(pos);
+                                        teamAdapter.notifyDataSetChanged();
+                                    }else {//unfav league
+                                        favList.remove(pos);
+                                        favoriteAdapter.notifyDataSetChanged();
+                                    }
+                                    setFavrouitCount();
+
+                                } else {
+                                    Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
+                                }
+                                //adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                progressDialog.dismiss();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
     }
 
 }

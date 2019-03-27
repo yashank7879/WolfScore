@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -38,6 +39,7 @@ import java.util.Set;
 import static com.wolfscore.utils.ApiCollection.ADD_FAVOURITES;
 import static com.wolfscore.utils.ApiCollection.APIKEY;
 import static com.wolfscore.utils.ApiCollection.BASE_URL;
+import static com.wolfscore.utils.ApiCollection.SINGLE_FAVORITE_UNFAVORITE_API;
 
 public class AddFavrouitTeamActivity extends AppCompatActivity implements LocalTeamAdapter.TeamOnClick, View.OnClickListener {
     ActivityAddFavrouitTeamBinding binding;
@@ -122,10 +124,6 @@ public class AddFavrouitTeamActivity extends AppCompatActivity implements LocalT
 
     private void getPopularTeam(String search) {
         if (Constant.isNetworkAvailable(this, binding.mainLayout)) {
-/*
-            AndroidNetworking.get(BASE_URL + "teams/get_popular_teams?search_term=" + this.search + "&limit=" + limit + "&offset=" + offset)
-*/
-
             AndroidNetworking.get(BASE_URL + "teams/get_popular_teams")
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(this, PreferenceConnector.AUTH_TOKEN, ""))
@@ -184,6 +182,7 @@ public class AddFavrouitTeamActivity extends AppCompatActivity implements LocalT
     @Override
     public void teamItemOnCLick(LocalTeamResponce.DataBean.TeamListBean bean, String value) {
         if (value.equals("1")) {
+            favrouitApi(bean,"1");
             binding.tvFavroitTeam.setVisibility(View.VISIBLE);
             binding.tvFavroitTeam.setText(MessageFormat.format("{0} {1}", bean.getName(), getString(R.string.added_as_favorite)));
             handler = new Handler();
@@ -194,15 +193,74 @@ public class AddFavrouitTeamActivity extends AppCompatActivity implements LocalT
                 }
             }, 3000);
 
-            tempList.add(bean);
-            bean.setIs_favorite("1");
-            adapter.notifyDataSetChanged();
+           // tempList.add(bean);
+          //  bean.setIs_favorite("1");
+         //   adapter.notifyDataSetChanged();
         } else {
-            tempList.remove(bean);
-            bean.setIs_favorite("0");
-            adapter.notifyDataSetChanged();
+            favrouitApi(bean,"0");
+            //tempList.remove(bean);
+         //   bean.setIs_favorite("0");
+        //    adapter.notifyDataSetChanged();
         }
     }
+
+
+
+
+    private void favrouitApi(LocalTeamResponce.DataBean.TeamListBean bean, String value) {
+        if ( Constant.isNetworkAvailable(this, binding.mainLayout)) {//http://dev.wolfscore.info/api_v1/users/single_favorite_unfavorite
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            AndroidNetworking.post(BASE_URL + SINGLE_FAVORITE_UNFAVORITE_API)
+                    .addBodyParameter("request_type", value)
+                    .addBodyParameter("request_id", ""+bean.getTeam_id())//team id,player id,league id
+                    .addBodyParameter("type", "team")// team || player ||league
+                    .addHeaders("Api-Key", APIKEY)
+                    .addHeaders("Auth-Token", PreferenceConnector.readString(this, PreferenceConnector.AUTH_TOKEN, ""))
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            String status = null;
+                            try {
+                                status = response.getString("status");
+                                String message = response.getString("message");
+                                if (status.equals("success")) {
+
+                                    if (value.equals("0")){
+                                        bean.setIs_favorite("0");
+                                        adapter.notifyDataSetChanged();
+                                    }else {
+                                        bean.setIs_favorite("1");
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    if (value.equals("0")){
+                                        bean.setIs_favorite("1");
+                                    }else {
+                                        bean.setIs_favorite("0");
+                                    }  adapter.notifyDataSetChanged();
+
+                                    Toast.makeText(AddFavrouitTeamActivity.this, "" + message, Toast.LENGTH_SHORT).show();
+                                }
+                                //adapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                progressDialog.dismiss();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -211,8 +269,9 @@ public class AddFavrouitTeamActivity extends AppCompatActivity implements LocalT
                 onBackPressed();
                 break;
             case R.id.btn_done:
-                getSelectedteam();
-                selectFavrouitApi();
+                onBackPressed();
+              //  getSelectedteam();
+              //  selectFavrouitApi();
                 break;
 
         }

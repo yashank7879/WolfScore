@@ -29,6 +29,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
 import com.wolfscore.R;
 import com.wolfscore.activity.AboutLeagueActivity;
+import com.wolfscore.activity.HomeActivity;
 import com.wolfscore.adapter.SearchTeamAdapter;
 import com.wolfscore.databinding.ActivitySearchBinding;
 import com.wolfscore.databinding.FragmentLeagueLayoutBinding;
@@ -49,6 +50,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,22 +64,22 @@ import static com.wolfscore.utils.ApiCollection.SINGLE_FAVORITE_UNFAVORITE_API;
  * Created by mindiii on 27/2/19.
  */
 
-public class LeagueFragment  extends Fragment implements AllLeagueAdapter.FavrouitTeamSelect ,View.OnClickListener {
+public class LeagueFragment extends Fragment implements AllLeagueAdapter.FavrouitTeamSelect, View.OnClickListener {
     FragmentLeagueLayoutBinding binding;
     private ProgressDialog progressDialog;
-   /* private SearchTeamAdapter adapter;
-    private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
-    private List<LocalTeamResponce.DataBean.TeamListBean> noRepeatList;
+    /* private SearchTeamAdapter adapter;
+     private List<LocalTeamResponce.DataBean.TeamListBean> teamList;
+     private List<LocalTeamResponce.DataBean.TeamListBean> noRepeatList;
 
-    private int offset = 0;
-    private String search = "";
-    private int limit = 50;*/
-    private ArrayList<Country> countriesLeagueList=new ArrayList<>();
-    private List<Country> mLeagues = new ArrayList<>();
+     private int offset = 0;
+     private String search = "";
+     private int limit = 50;*/
+    private ArrayList<Country> countriesLeagueList = new ArrayList<>();
     private List<Country.League> fav_leagueArrayList = new ArrayList<>();
     private List<Country.League> popularLeagueList = new ArrayList<>();
-    private AllLeagueAdapter allLeagueAdapter ;
-    private FavPopularAdapter favPopularAdapter,popularAdapter;
+    private AllLeagueAdapter allLeagueAdapter;
+    private FavPopularAdapter favPopularAdapter;
+    private FavPopularAdapter popularAdapter;
     private Context mContext;
 
     @Override
@@ -108,8 +110,8 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(mContext);
         binding.favoriteListView.setLayoutManager(layoutManager);
         binding.popularListView.setLayoutManager(layoutManager1);
-        favPopularAdapter=new FavPopularAdapter(mContext,fav_leagueArrayList);
-        popularAdapter=new FavPopularAdapter(mContext,popularLeagueList);
+        favPopularAdapter = new FavPopularAdapter(mContext, fav_leagueArrayList, binding.favLayout, this);
+        popularAdapter = new FavPopularAdapter(mContext, popularLeagueList,  binding.popularLayout,this);
         binding.favoriteListView.setAdapter(favPopularAdapter);
         binding.popularListView.setAdapter(popularAdapter);
 
@@ -118,9 +120,9 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-              Country.League league=(Country.League)allLeagueAdapter.getChild(groupPosition,childPosition);
-              league.getLeague_id();
-                startActivity(new Intent(mContext, AboutLeagueActivity.class).putExtra("League",  league));
+                Country.League league = (Country.League) allLeagueAdapter.getChild(groupPosition, childPosition);
+                league.getLeague_id();
+                startActivity(new Intent(mContext, AboutLeagueActivity.class).putExtra("League", league));
                 getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 return false;
             }
@@ -129,7 +131,7 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
         binding.expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-              //  setListViewHeight(parent, groupPosition);
+                //  setListViewHeight(parent, groupPosition);
 
                 return false;
             }
@@ -164,7 +166,6 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
         getAllLeauge();
     }
 
-
     public int GetPixelFromDips(float pixels) {
         // Get the screen's density scale
         final float scale = getResources().getDisplayMetrics().density;
@@ -177,22 +178,17 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
         if (value.equals("1")) {
             if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
                 ivStar.setEnabled(false);
-                league.setIs_favorite(1);
-                allLeagueAdapter.notifyDataSetChanged();
+                // league.setIs_favorite(1);
                 favrouitApi(league, value, ivStar);
             }
         } else {
             if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {
                 ivStar.setEnabled(false);
-                league.setIs_favorite(0);
-                allLeagueAdapter.notifyDataSetChanged();
-                favrouitApi(league, value,ivStar);
+                //  league.setIs_favorite(0);
+                favrouitApi(league, value, ivStar);
             }
         }
     }
-
-
-
 
 /*
     private void setListViewHeight(ExpandableListView listView, int group) {
@@ -232,16 +228,15 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
 */
 
 
-
     //""""" Single favorite selct and un select """""""""//
     private void favrouitApi(Country.League league, String value, final ImageView star) {
         if (Constant.isNetworkAvailable(mContext, binding.mainLayout)) {//http://dev.wolfscore.info/api_v1/users/single_favorite_unfavorite
 
-            Log.d("auttoken", "getMatchData: auttoken...."+PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN,""));
+            Log.d("auttoken", "getMatchData: auttoken...." + PreferenceConnector.readString(getActivity(), PreferenceConnector.AUTH_TOKEN, ""));
 
             AndroidNetworking.post(BASE_URL + SINGLE_FAVORITE_UNFAVORITE_API)
                     .addBodyParameter("request_type", value)
-                    .addBodyParameter("request_id", ""+league.getLeague_id())//team id,player id,league id
+                    .addBodyParameter("request_id", "" + league.getLeague_id())//team id,player id,league id
                     .addBodyParameter("type", "league")// team || player ||league
                     .addHeaders("Api-Key", APIKEY)
                     .addHeaders("Auth-Token", PreferenceConnector.readString(mContext, PreferenceConnector.AUTH_TOKEN, ""))
@@ -256,11 +251,41 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
                                 status = response.getString("status");
                                 String message = response.getString("message");
                                 if (status.equals("success")) {
-                                    star.setEnabled(true);
-                                } else {
-                                    Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
+                                    if (value.equals("1")) {
+                                        league.setIs_favorite(1);
+                                        fav_leagueArrayList.add(league);
+                                    } else {
+                                        league.setIs_favorite(0);
+                                        for (int i = 0; i < fav_leagueArrayList.size(); i++) {
+                                            if (fav_leagueArrayList.get(i).getLeague_id() == league.getLeague_id()) {
+                                                fav_leagueArrayList.remove(i);
+                                                break;
+                                            }
+                                        }
+                                    }
 
+                                    if (fav_leagueArrayList.size() == 0)
+                                        binding.favLayout.setVisibility(View.GONE);
+                                    else
+                                        binding.favLayout.setVisibility(View.VISIBLE);
+
+                                    star.setEnabled(true);
+
+                                } else {
+
+                                    if (fav_leagueArrayList.size() == 0)
+                                        binding.favLayout.setVisibility(View.GONE);
+                                    else
+                                        binding.favLayout.setVisibility(View.VISIBLE);
+
+                                    star.setEnabled(true);
+
+                                    Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
                                 }
+
+                                allLeagueAdapter.notifyDataSetChanged();
+                                popularAdapter.notifyDataSetChanged();
+                                favPopularAdapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -309,33 +334,35 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
                                 if (status.equals("success")) {
                                     //  Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
                                     countriesLeagueList.clear();
+                                    fav_leagueArrayList.clear();
+                                    popularLeagueList.clear();
 
-                                    JSONObject data_obj= response.getJSONObject("data");
-                                    JSONArray country_list_array=new JSONArray();
-                                    JSONArray favorite_list_array=new JSONArray();
-                                    JSONArray popular_list_array=new JSONArray();
+                                    JSONObject data_obj = response.getJSONObject("data");
+                                    JSONArray country_list_array = new JSONArray();
+                                    JSONArray favorite_list_array = new JSONArray();
+                                    JSONArray popular_list_array = new JSONArray();
 
                                     if (data_obj.has("favorite_league"))
-                                        favorite_list_array= data_obj.getJSONArray("favorite_league");
+                                        favorite_list_array = data_obj.getJSONArray("favorite_league");
 
-                                    if (favorite_list_array.length()>0) {
+                                    if (favorite_list_array.length() > 0) {
                                         for (int i = 0; i < favorite_list_array.length(); i++) {
                                             JSONObject league_list_object = favorite_list_array.getJSONObject(i);
-                                            Country.League league=new Country.League();
+                                            Country.League league = new Country.League();
 
-                                                    if (league_list_object.has("league_id"))
-                                                        league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
-                                                    if (league_list_object.has("country_id"))
-                                                        league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
-                                                    if (league_list_object.has("league_name"))
-                                                        league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
-                                                    if (league_list_object.has("league_flag"))
-                                                        league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
-                                                    if (league_list_object.has("is_selected"))
-                                                        league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
-                                                    if (league_list_object.has("is_favorite"))
-                                                        league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
-                                                    fav_leagueArrayList.add(league);
+                                            if (league_list_object.has("league_id"))
+                                                league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
+                                            if (league_list_object.has("country_id"))
+                                                league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
+                                            if (league_list_object.has("league_name"))
+                                                league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
+                                            if (league_list_object.has("league_flag"))
+                                                league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
+                                            if (league_list_object.has("is_selected"))
+                                                league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
+                                            if (league_list_object.has("is_favorite"))
+                                                league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
+                                            fav_leagueArrayList.add(league);
 
 
                                         }
@@ -344,53 +371,47 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
 
                                     }
 
-                                        if (data_obj.has("popular_league"))
-                                            popular_list_array= data_obj.getJSONArray("popular_league");
+                                    if (data_obj.has("popular_league"))
+                                        popular_list_array = data_obj.getJSONArray("popular_league");
 
-                                    if (popular_list_array.length()>0) {
+                                    if (popular_list_array.length() > 0) {
                                         for (int i = 0; i < popular_list_array.length(); i++) {
                                             JSONObject league_list_object = popular_list_array.getJSONObject(i);
-                                            Country.League league=new Country.League();
+                                            Country.League league = new Country.League();
 
-                                                    if (league_list_object.has("league_id"))
-                                                        league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
-                                                    if (league_list_object.has("country_id"))
-                                                        league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
-                                                    if (league_list_object.has("league_name"))
-                                                        league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
-                                                    if (league_list_object.has("league_flag"))
-                                                        league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
-                                                    if (league_list_object.has("is_selected"))
-                                                        league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
-                                                    if (league_list_object.has("is_favorite"))
-                                                        league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
+                                            if (league_list_object.has("league_id"))
+                                                league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
+                                            if (league_list_object.has("country_id"))
+                                                league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
+                                            if (league_list_object.has("league_name"))
+                                                league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
+                                            if (league_list_object.has("league_flag"))
+                                                league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
+                                            if (league_list_object.has("is_selected"))
+                                                league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
+                                            if (league_list_object.has("is_favorite"))
+                                                league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
                                             popularLeagueList.add(league);
-
-
                                         }
                                         binding.popularLayout.setVisibility(View.VISIBLE);
                                         popularAdapter.notifyDataSetChanged();
-
                                     }
 
 
-
-
-
                                     if (data_obj.has("country_list"))
-                                        country_list_array= data_obj.getJSONArray("country_list");
+                                        country_list_array = data_obj.getJSONArray("country_list");
 
-                                    if (country_list_array.length()>0) {
+                                    if (country_list_array.length() > 0) {
                                         for (int i = 0; i < country_list_array.length(); i++) {
                                             JSONObject object = country_list_array.getJSONObject(i);
-                                          //  tableDTOS.clear();
+                                            //  tableDTOS.clear();
+                                            JSONArray league_list_array = null;
+                                            if (object.has("league_list"))
+                                                league_list_array = object.getJSONArray("league_list");
 
-                                            if (object.has("league_list"));
-                                            JSONArray league_list_array=object.getJSONArray("league_list");
+                                            ArrayList<Country.League> leagueArrayList = new ArrayList<>();
 
-                                            ArrayList<Country.League> leagueArrayList=new ArrayList<>();
-
-                                            if (league_list_array.length()>0) {
+                                            if (league_list_array.length() > 0) {
 
                                                 Country country = new Country();
 
@@ -402,37 +423,39 @@ public class LeagueFragment  extends Fragment implements AllLeagueAdapter.Favrou
                                                     country.setCountry_flag(!object.isNull("country_flag") ? object.getString("country_flag") : "");
 
 
-
                                                 for (int j = 0; j < league_list_array.length(); j++) {
-                                                    Country.League league=new Country.League();
+                                                    Country.League league = new Country.League();
                                                     JSONObject league_list_object = league_list_array.getJSONObject(j);
 
-                                                     if (league_list_object.has("league_id"))
-                                                         league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
-                                                     if (league_list_object.has("country_id"))
-                                                         league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
-                                                     if (league_list_object.has("league_name"))
-                                                         league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
-                                                     if (league_list_object.has("league_flag"))
-                                                         league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
-                                                     if (league_list_object.has("is_selected"))
-                                                         league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
-                                                     if (league_list_object.has("is_favorite"))
-                                                         league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
+                                                    if (league_list_object.has("league_id"))
+                                                        league.setLeague_id(!league_list_object.isNull("league_id") ? league_list_object.getInt("league_id") : 0);
+                                                    if (league_list_object.has("country_id"))
+                                                        league.setCountry_id(!league_list_object.isNull("country_id") ? league_list_object.getInt("country_id") : 0);
+                                                    if (league_list_object.has("league_name"))
+                                                        league.setLeague_name(!league_list_object.isNull("league_name") ? league_list_object.getString("league_name") : "");
+                                                    if (league_list_object.has("league_flag"))
+                                                        league.setLeague_flag(!league_list_object.isNull("league_flag") ? league_list_object.getString("league_flag") : "");
+                                                    if (league_list_object.has("is_selected"))
+                                                        league.setIs_selected(!league_list_object.isNull("is_selected") ? league_list_object.getInt("is_selected") : 0);
+                                                    if (league_list_object.has("is_favorite"))
+                                                        league.setIs_favorite(!league_list_object.isNull("is_favorite") ? league_list_object.getInt("is_favorite") : 0);
+
                                                     leagueArrayList.add(league);
                                                 }
-
                                                 country.setLeagueArrayList(leagueArrayList);
                                                 countriesLeagueList.add(country);
-                                                mLeagues.addAll(countriesLeagueList);
 
                                             }
-                                         }
+                                        }
                                         binding.countryLayout.setVisibility(View.VISIBLE);
+                                        //  HomeActivity.homeActivity.mLeagues.clear();
+                                        //   HomeActivity.homeActivity.mLeagues.addAll(countriesLeagueList);
+                                        //HomeActivity.homeActivity.mLeagues=new ArrayList<>();
+                                        //Collections.copy(countriesLeagueList,HomeActivity.homeActivity.mLeagues);
 
-                                        allLeagueAdapter = new AllLeagueAdapter(mContext,countriesLeagueList,LeagueFragment.this );
+                                        allLeagueAdapter = new AllLeagueAdapter(mContext, countriesLeagueList, binding.countryLayout,LeagueFragment.this);
                                         binding.expListView.setAdapter(allLeagueAdapter);
-                                     //   setListViewHeight(binding.expListView);
+                                        //   setListViewHeight(binding.expListView);
 
                                     }
                                 } else {

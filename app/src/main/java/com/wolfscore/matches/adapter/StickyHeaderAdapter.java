@@ -70,7 +70,7 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
             holder.visitor_icon=convertView.findViewById(R.id.visitor_icon);
             holder.score=convertView.findViewById(R.id.score);
             holder.score_layout=convertView.findViewById(R.id.score_layout);
-            holder.status=convertView.findViewById(R.id.status);
+            holder.status=convertView.findViewById(R.id.status_txt);
             holder.time=convertView.findViewById(R.id.time);
             convertView.setTag(holder);
         } else {
@@ -100,7 +100,8 @@ public class StickyHeaderAdapter extends BaseAdapter implements StickyListHeader
         if (matchesArrayList.get(position).getTime()!=null)
         {
           // String time=  getFormatedDateTime(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a");
-            String time= Constant.getServerFormattedDate(matchesArrayList.get(position).getTime().getTime(),"HH:mm:ss", "hh:mm a",context);
+            String time= Constant.getServerFormattedDate(matchesArrayList.get(position).getTime().getTime(),"hh:mm:ss", "HH:mm",context);
+         //   String time1= Constant.getServerFormattedDate("3:30 PM","HH:mm:ss", "hh:mm",context);
 
             if (matchesArrayList.get(position).getTime().getStatus().equals("NS")){
                 holder.score_layout.setVisibility(View.GONE);

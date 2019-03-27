@@ -220,6 +220,10 @@ public class LeagueFilteringActivity extends AppCompatActivity implements View.O
                                 if (status.equals("success")) {
 
                                     if (value.equals("remove_all")) {
+                                        HomeActivity.homeActivity.league_id="";
+                                        tempList.clear();
+                                        HomeActivity.homeActivity.todayMatchesArrayList.clear();
+                                        HomeActivity.homeActivity.my_todayMatchesArrayList.clear();
                                         getLeagueList();
                                     }
                                     //  Toast.makeText(SetupWolfScoreScreenOne.this, "" + message, Toast.LENGTH_SHORT).show();

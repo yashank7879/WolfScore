@@ -9,9 +9,9 @@ import android.widget.ExpandableListView;
  * Created by mindiii on 6/3/19.
  */
 
-public class NonScrollExpandableListView{
+public class NonScrollExpandableListView extends ExpandableListView {
 
-   /* public NonScrollExpandableListView(Context context) {
+    public NonScrollExpandableListView(Context context) {
         super(context);
     }
 
@@ -27,8 +27,8 @@ public class NonScrollExpandableListView{
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int heightMeasureSpec_custom = MeasureSpec.makeMeasureSpec(
                 Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec_custom);
         ViewGroup.LayoutParams params = getLayoutParams();
         params.height = getMeasuredHeight();
-    }*/
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec_custom);
+    }
 }

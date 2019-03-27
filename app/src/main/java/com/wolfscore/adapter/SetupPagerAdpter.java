@@ -24,7 +24,7 @@ private GetTeamListener listener;
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -37,9 +37,9 @@ private GetTeamListener listener;
         else if (i == 2){
             return new TopPlayerFragment();
         }
-       /* else if (i == 3){
-            return new LeagueListFragment();
-        }*/
+        else if (i == 3){
+            return new  LeagueListFragment();
+        }
         else{
             return new NotificationTypesFragment();
         }
